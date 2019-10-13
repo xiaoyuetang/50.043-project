@@ -1,0 +1,66 @@
+.button-center {
+  text-align: center;
+}
+
+.bookDetails {
+  margin: auto;
+  padding: 100px 0;
+  height: 400px;
+}
+
+.bookCover {
+  height: 400px;
+  display: block;
+  margin: auto;
+}
+
+.bookDesc {
+  height: 400px;
+  text-align: justify;
+  padding: 20px;
+  margin-right: 50px;
+  margin-left: 0;
+}
+
+.btnGroup {
+  margin: auto;
+  display: block;
+}
+
+.reviewButton {
+  margin: 20px;
+}
+
+.tagList {
+  text-align: center;
+}
+
+.relatedBook {
+  height: 150px;
+}
+
+.relatedDesc {
+  padding: 20px;
+}
+.reviewerImg {
+  height: 100px;
+  width: 100px;
+  margin: auto;
+  display: block;
+}
+
+h1 {
+  color: #a6d0e4;
+}
+
+h2 {
+  color: #a6d0e4;
+}
+
+h3 {
+  color: #a6d0e4;
+}
+
+h4 {
+  color: #a6d0e4;
+}

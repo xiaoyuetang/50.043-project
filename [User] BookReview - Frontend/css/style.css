@@ -1,76 +1,75 @@
 body {
-    /* background-color: #FFECDA */
+  /* background-color: #FFECDA */
 }
 
 .row-adjust {
-    margin: 20px
+  margin: 20px;
 }
 
 a {
-    color: #D4A5A5
+  color: #d4a5a5;
 }
 
 a:hover {
-    color: #A6D0E4
+  color: #a6d0e4;
 }
 
 h3 {
-    color: #D4A5A5;
-    margin: 30px auto;
+  color: #d4a5a5;
+  margin: 30px auto;
 }
 
 h4 {
-    color: gray;
-    margin: 30px auto
+  color: gray;
+  margin: 30px auto;
 }
 
 h5 {
-    color: gray;
-    margin-top: 40px
+  color: gray;
+  margin-top: 40px;
 }
 
 p {
-    color: gray;
+  color: gray;
 }
 
-.logoCenter  {
-    margin: auto
+.logoCenter {
+  margin: auto;
 }
 
 .navsCenter {
-    margin: auto
+  margin: auto;
 }
 
 .searchCenter {
-    margin: auto
+  margin: auto;
 }
 
 .mainHeader {
-    margin: auto
+  margin: auto;
 }
 
 .bookCover {
-    width: 175px;
-    margin: auto;
-    background-color: transparent;
-    border-style: hidden;
+  width: 175px;
+  margin: auto;
+  background-color: transparent;
+  border-style: hidden;
 }
 
-
-.carousel{
-    margin: auto
+.carousel {
+  margin: auto;
 }
 
-.carousel-inner{
-    height: 250px;
+.carousel-inner {
+  height: 250px;
 }
 
-.carousel-caption{
-    top: 50%;
+.carousel-caption {
+  top: 50%;
 }
 
 .Footer {
-    background-color: #A6D0E4;
-    height: 60px;
-    margin: auto
+  background-color: #a6d0e4;
+  height: 60px;
+  margin: auto;
 }
