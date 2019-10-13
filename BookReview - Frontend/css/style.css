@@ -1,0 +1,76 @@
+body {
+    /* background-color: #FFECDA */
+}
+
+.row-adjust {
+    margin: 20px
+}
+
+a {
+    color: #D4A5A5
+}
+
+a:hover {
+    color: #A6D0E4
+}
+
+h3 {
+    color: #D4A5A5;
+    margin: 30px auto;
+}
+
+h4 {
+    color: gray;
+    margin: 30px auto
+}
+
+h5 {
+    color: gray;
+    margin-top: 40px
+}
+
+p {
+    color: gray;
+}
+
+.logoCenter  {
+    margin: auto
+}
+
+.navsCenter {
+    margin: auto
+}
+
+.searchCenter {
+    margin: auto
+}
+
+.mainHeader {
+    margin: auto
+}
+
+.bookCover {
+    width: 175px;
+    margin: auto;
+    background-color: transparent;
+    border-style: hidden;
+}
+
+
+.carousel{
+    margin: auto
+}
+
+.carousel-inner{
+    height: 250px;
+}
+
+.carousel-caption{
+    top: 50%;
+}
+
+.Footer {
+    background-color: #A6D0E4;
+    height: 60px;
+    margin: auto
+}
