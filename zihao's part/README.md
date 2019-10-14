@@ -28,9 +28,9 @@ To view the book review page, use http://127.0.0.1:5000/bookreviews
 
 <p>users = User.query.all() </p>
 <p>>>> users </p>
-<p>[<User john>, <User susan>] </p>
+[<User john>, <User susan>]
 <p>>>> for u in users: </p>
 <p>...     print(u.id, u.username) </p>
-<p>... </p>
-<p>1 john </p>
-<p>2 susan </p>
+...
+1 john
+2 susan
