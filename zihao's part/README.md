@@ -1,9 +1,11 @@
 ## Run program
 
 1. In terminal, run
-$ source venv/bin/activate
-(venv) $ export FLASK_APP=50043-project.py
-(venv) $ flask run
+<p>$ source venv/bin/activate </p>
+<p>$ (venv) $ export FLASK_APP=50043-project.py </p>
+<p>$ (venv) $ flask run </p>
+
+
 
 You would see this: xxx running on http://127.0.0.1:5000/
 to view the book review page, use http://127.0.0.1:5000/bookreviews
