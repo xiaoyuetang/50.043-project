@@ -26,12 +26,15 @@ Go inside the Zihao's Part folder, run python terminal
 Once in the Python prompt, let's import the database instance and the models:
 
 ` from app import db`
+
 ` from app.models import User, Post, Trial`
 
 Start by creating a new user:
 
 ` u = User(username='john', email='john@example.com')`
+
 ` db.session.add(u)`
+
 ` db.session.commit()`
 
 Basic Queries:
