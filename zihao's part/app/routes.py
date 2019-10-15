@@ -49,3 +49,7 @@ def logout():
 @app.route('/bookreviews')
 def bookreviews():
 	return render_template('bookreview.html')
+	
+@app.route('/addbook')
+def addbook():
+	return render_template('addbook.html')

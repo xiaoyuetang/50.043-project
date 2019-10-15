@@ -28,7 +28,35 @@ class Post(db.Model):
 	
 	def __repr__(self):
 		return '<Post {}>'.format(self.body)
-		
+
+class ReviewerInfomation(db.Model):
+	reviewerID = db.Column(db.String(64), index=True)
+	reviewerName = db.Column(db.String(64), index=True)
+	
+	def __repr__(self):
+		return '<Reviewer: {}>'.format(self.reviewerName)
+
+class Review(db.Model):
+	reviewID = db.Column(db.Integer, primary_key=True)
+	helpful_1 = db.Column(db.String(64), index=True)
+	helpful_2 = db.Column(db.String(64), index=True)
+	overall = db.Column(db.Integer, index=True)
+	reviewText = db.Column(db.String(128), index=True)
+	summary = db.Column(db.String(64), index=True)
+	unixReviewTime = db.Column(db.Integer, index=True)
+
+	def __repr__(self):
+		return '<Review ID: {}>'.format(self.reviewID)
+
+class ReviewerReviews(db.Model):
+	reviewID = db.Column(db.Integer, primary_key=True)
+	asin = db.Column(db.String(64), index=True)
+	reviewerID = db.Column(db.String(64), index=True)
+	
+	def __repr__(self):
+		return '<Review ID: {}, Review product: {}, Reviewer ID: {}>'.format(self.reviewID, self.asin, self.reviewerID)
+
+
 @login.user_loader
 def load_user(id):
 	return User.query.get(int(id))
