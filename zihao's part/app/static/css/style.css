@@ -1,0 +1,79 @@
+body {
+  /* background-color: #FFECDA */
+}
+
+.row-adjust {
+  margin: 20px;
+}
+
+a {
+  color: #d4a5a5;
+}
+
+a:hover {
+  color: #a6d0e4;
+}
+
+h3 {
+  color: #d4a5a5;
+  margin: 30px auto;
+}
+
+h4 {
+  color: gray;
+  margin: 30px auto;
+}
+
+h5 {
+  color: gray;
+  margin-top: 40px;
+}
+
+p {
+  color: gray;
+}
+
+.logoCenter {
+  margin: auto;
+}
+
+.navsCenter {
+  margin: auto;
+}
+
+.searchCenter {
+  margin: auto;
+}
+
+.mainHeader {
+  margin: auto;
+}
+
+.bookCover {
+  width: 175px;
+  margin: auto;
+  background-color: transparent;
+  border-style: hidden;
+}
+
+.carousel {
+  margin: auto;
+}
+
+.carousel-inner {
+  height: 250px;
+}
+
+.carousel-caption {
+  top: 50%;
+}
+
+.Footer {
+  background-color: #a6d0e4;
+  height: 60px;
+  margin: auto;
+}
+
+.add-book-form {
+  margin: 30px 200px
+}
