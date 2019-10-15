@@ -57,13 +57,12 @@ class ReviewerReviews(db.Model):
 		return '<Review ID: {}, Review product: {}, Reviewer ID: {}>'.format(self.reviewID, self.asin, self.reviewerID)
 
 class Trial(db.Model):
+	id = db.Column(db.Integer, primary_key=True)
 	reviewID = db.Column(db.Integer, primary_key=True)
 	asin = db.Column(db.String(64), index=True)
-	helpful_1 = db.Column(db.String(64), index=True)
-	helpful_2 = db.Column(db.String(64), index=True)
 	overall = db.Column(db.Integer, index=True)
 	reviewText = db.Column(db.String(128), index=True)
-	reviewTime = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+	reviewTime = db.Column(db.String(128), index=True)
 	reviewerID = db.Column(db.String(64), index=True)
 	reviewerName = db.Column(db.String(64), index=True)
 	summary = db.Column(db.String(64), index=True)

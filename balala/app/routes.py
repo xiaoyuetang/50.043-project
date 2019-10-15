@@ -12,7 +12,6 @@ from flask_login import login_required
 @app.route('/index')
 @login_required
 def index():
-
 	return render_template('bookreview.html')
 
 @app.route('/login', methods=['GET', 'POST'])
