@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <title>Group9 Book Review System</title>
 
@@ -18,11 +18,35 @@
     <link rel="stylesheet" href="css/style.css" />
   </head>
   <body>
-    <div class="container" style="text-align:center">
-      <h1><em>Navbar here</em></h1>
-		</div>
-		<hr> 
     <div class="container-fluid">
+				<div class="row row-adjust" name="NavBar">
+						<div class="col-md-12">
+							<nav class="navbar navbar-light">
+								<a class="navbar-brand logoCenter" href="#">
+									<img src="imag/open-book.png" width="60" height="60" alt="">
+								</a>
+								<ul class="nav navsCenter">
+									<li class="nav-item">
+										<a class="nav-link" href="#">Add a new book</a>
+									</li>
+									<li class="nav-item">
+										<a class="nav-link" href="#">Recommended books</a>
+									</li>
+									<li class="nav-item">
+										<a class="nav-link" href="#">2019 best books</a>
+									</li>
+									<li class="nav-item">
+										<a class="nav-link" href="#" tabindex="-1" aria-disabled="true">Discover books</a>
+									</li>
+								</ul>
+								<form class="form-inline searchCenter">
+									<input class="form-control" type="search" placeholder="Search for books" aria-label="Search">
+									<button class="btn btn-outline-info" type="submit">Search</button>
+								</form>
+							</nav>
+						</div>
+					</div>
+					<hr>
       <div class="row">
         <div class="col-md-8">
           <div class="row">
@@ -54,7 +78,7 @@
               <div class="my-auto">
                 <img
                   alt="Bootstrap Image Preview"
-                  class="bookCover"
+                  class="bigBookCover"
 									src="https://www.booktopia.com.au/blog/wp-content/uploads/2018/12/the-arsonist.jpg"
                 />
               </div>
@@ -75,13 +99,11 @@
 					</div>
 					<hr>
             <h3 align="center">User Reviews</h3>
-					<div class="row" style="padding:20px">
+					<div class="row">
 						<div class="col-md-2">
 							<div class="reviewerProfile">
 							<img
 							alt="Bootstrap Image Preview"
-							height="100px"
-							width="100px"
 							src="https://media.istockphoto.com/photos/cheerful-smiling-young-man-portrait-picture-id624652254?k=6&m=624652254&s=612x612&w=0&h=mlv3Oc3u6OblRDpHKD6OdITrqiO43Dha6m5DAOnXvNQ="
 							class="rounded-circle reviewerImg"
 						/>
@@ -101,13 +123,11 @@
 							</div>
 							</div>
 				</div>
-				<div class="row" style="padding:20px">
+				<div class="row">
 						<div class="col-md-2">
 							<div class="reviewerProfile">
 							<img
 							alt="Bootstrap Image Preview"
-							height="100px"
-							width="100px"
 							src="https://media.istockphoto.com/photos/portrait-of-a-smiling-young-woman-picture-id905456806?k=6&m=905456806&s=612x612&w=0&h=PvYHS82wm1FlEh7_8Owj_OamqJfJ8g3igDrfbA4Xo7I="
 							class="rounded-circle reviewerImg"
 						/>
@@ -127,13 +147,11 @@
 							</div>
 							</div>
 				</div>
-				<div class="row" style="padding:20px">
+				<div class="row">
 						<div class="col-md-2">
 							<div class="reviewerProfile">
 							<img
 							alt="Bootstrap Image Preview"
-							height="100px"
-							width="100px"
 							src="https://avatars0.githubusercontent.com/u/52648553?s=460&v=4"
 							class="rounded-circle reviewerImg"
 						/>
@@ -153,13 +171,11 @@
 							</div>
 							</div>
 				</div>
-				<div class="row" style="padding:20px">
+				<div class="row">
 						<div class="col-md-2">
 							<div class="reviewerProfile">
 							<img
 							alt="Bootstrap Image Preview"
-							height="100px"
-							width="100px"
 							src="https://image.shutterstock.com/image-photo/portrait-young-beautiful-cute-cheerful-260nw-666258808.jpg"
 							class="rounded-circle reviewerImg"
 						/>
