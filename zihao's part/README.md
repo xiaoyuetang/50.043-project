@@ -1,34 +1,39 @@
-## Run program
+### Run program
 
-1. In terminal, run
-$ source venv/bin/activate
-(venv) $ export FLASK_APP=50043-project.py
-(venv) $ flask run
+Go inside the Zihao's Part folder, run in terminal:
 
-You would see this: xxx running on http://127.0.0.1:5000/
-to view the book review page, use http://127.0.0.1:5000/bookreviews
+` $ source venv/bin/activate`
+
+` (venv) $ export FLASK_APP=50043-project.py`
+
+` (venv) $ flask run`
 
 
-## Use database
+You would see this
+* Serving Flask app "50043-project"
+* Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
 
-1. Once in the Python prompt, let's import the database instance and the models:
+If required login, please use username: susan, password: cat
 
->>> from app import db
->>> from app.models import User, Post
++ For adding a new book, you could click the widget called "Add a bock" or you could also use http://127.0.0.1:5000/addbook
++ For adding a new review, you could find in the bottom of page http://127.0.0.1:5000/book_review or use http://127.0.0.1:5000/addreview
 
-2. Start by creating a new user:
 
-u = User(username='john', email='john@example.com')
->>> db.session.add(u)
->>> db.session.commit()
+### Database Query
 
-3. 
+Go inside the Zihao's Part folder, run python terminal
 
-users = User.query.all()
->>> users
-[<User john>, <User susan>]
->>> for u in users:
-...     print(u.id, u.username)
-...
-1 john
-2 susan
+Once in the Python prompt, let's import the database instance and the models:
+
+` from app import db`
+` from app.models import User, Post, Trial`
+
+Start by creating a new user:
+
+` u = User(username='john', email='john@example.com')`
+` db.session.add(u)`
+` db.session.commit()`
+
+Basic Queries:
+
+` users = User.query.all()`
