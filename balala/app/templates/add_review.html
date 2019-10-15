@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+	<h1>Submit a new review</h1>
+	<form action="" method="post" novalidate>
+		{{ form.hidden_tag() }}
+		<p>
+			{{ form.reviewID.label }}<br>
+			{{ form.reviewID(size=32) }}<br>
+			{% for error in form.reviewID.errors %}
+			<span style="color: red;">[{{ error }}]</span>
+			{% endfor %}
+		</p>
+		<p>
+			{{ form.overall.label }}<br>
+			{{ form.overall(size=32) }}<br>
+			{% for error in form.overall.errors %}
+			<span style="color: red;">[{{ error }}]</span>
+			{% endfor %}
+		</p>
+		<p>
+			{{ form.reviewText.label }}<br>
+			{{ form.reviewText(size=32) }}<br>
+			{% for error in form.reviewText.errors %}
+			<span style="color: red;">[{{ error }}]</span>
+			{% endfor %}
+		</p>
+		<p>{{ form.submit() }}</p>
+	</form>
+
+{% endblock %}
