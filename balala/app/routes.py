@@ -12,17 +12,8 @@ from flask_login import login_required
 @app.route('/index')
 @login_required
 def index():
-	posts = [
-		{
-			'author': {'username': 'John'},
-			'body': 'Beautiful day in Portland!'
-		},
-		{
-			'author': {'username': 'Susan'},
-			'body': 'The Avengers movie was so cool!'
-		}		
-	]
-	return render_template('index.html', title='home', posts=posts)
+
+	return render_template('bookreview.html')
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -46,9 +37,9 @@ def logout():
 	logout_user()
 	return redirect(url_for('index'))
 
-@app.route('/bookreviews')
-def bookreviews():
-	return render_template('bookreview.html')
+# @app.route('/bookreviews')
+# def bookreviews():
+# 	return render_template('bookreview.html')
 	
 @app.route('/addbook')
 def addbook():
