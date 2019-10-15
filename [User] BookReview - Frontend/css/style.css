@@ -86,12 +86,11 @@ p {
 
 .bigBookCover {
   width: 100%;
-  min-width: 100px;
-  max-width: 300px;
   height: auto;
+  max-width: 300px;
   max-height: 400px;
   display: block;
-  margin: auto auto;
+  margin: auto;
 }
 
 .bookDesc {
@@ -107,10 +106,6 @@ p {
 
 .reviewButton {
   margin: 20px;
-}
-
-.tagList {
-  text-align: center;
 }
 
 .relatedBook {
@@ -135,4 +130,9 @@ p {
 
 .add-book-form {
   margin: 30px 200px;
+}
+
+.reviewRow {
+  margin-top: 50px;
+  margin-bottom: 0px;
 }
