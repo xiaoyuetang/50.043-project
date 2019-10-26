@@ -1,25 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <title>Group9 Book Review System</title>
 
     <meta name="description" content="Book Review Page" />
     <meta name="author" content="Group9" />
-    <link
-      rel="stylesheet"
-      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
-      crossorigin="anonymous"
-    />
-    <link rel="stylesheet" href="css/style.css" />
+		<!--<link rel="stylesheet" href="css/style.css" /> -->
   </head>
   <body>
+			{% extends "template.html" %}
+		{% block content %}
     <div class="container-fluid">
-				<div class="row row-adjust" name="NavBar">
+				<!--<div class="row row-adjust" name="NavBar">
 						<div class="col-md-12">
 							<nav class="navbar navbar-light">
 								<a class="navbar-brand logoCenter" href="#">
@@ -46,7 +39,7 @@
 							</nav>
 						</div>
 					</div>
-					<hr>
+					<hr>-->
       <div class="row">
         <div class="col-md-8">
           <div class="row">
@@ -259,15 +252,17 @@
 		<hr>
 		<div class="form-group">
 			<div class="col-md-12">
-				<form class="text-center">
+				<form class="text-center" method="POST">
 					<h4>Write a Review</h4>
-					<input type="text" class="form-control mb-4" placeholder="Short description">
-					<textarea class="form-control" name="reviewTextInput" id="reviewTextInput" rows="5" placeholder="Review"></textarea>
-					<button class="btn btn-info btn-block mt-4">Submit</button>
+					<input type="text" class="form-control mb-4" name="reviewDesc" placeholder="Short description">
+					<textarea class="form-control" name="reviewTextInput" rows="5" placeholder="Review"></textarea>
+					<input class = "btn btn-info btn-block mt-4" type="submit" value="Submit Review">
+					<!-- <button class="btn btn-info btn-block mt-4">Submit</button> -->
 				</form>
 				
 			</div>
 		</div>
 		<div style="height: 80px; background-color: #A6D0E4;"></div>
+		{% endblock %}
   </body>
 </html>
