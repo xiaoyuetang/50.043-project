@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    {% block head %} 
+    <title>Introduce me as..</title>
+    {% endblock %}
+  </head>
+  <body>
+    {% extends "template.html" %}
+    {% block content %}
+      <div class="form-group">
+        <div class="col-md-12">
+          <form class="text-center" method="POST">
+              <h2><strong><em>your name is what</em></strong><h2>
+            <input name="name" type="text" class="form-control mb-4" placeholder="i.. said.. your.. name is what!!">
+            <input type="submit" value="Hullo">
+            <button type="button">Thats my name</button>
+          </form>
+        </div>
+      </div>
+    {% endblock %}
+  </body>
+</html>
