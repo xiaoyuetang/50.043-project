@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    {% extends 'template.html' %} {% block head %}
+    <title>Reading history</title>
+    {% endblock %}
+  </head>
+  <body>
+    {% block content %}
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-8">
+          <ul>
+            <li>Book1 {{ book1 }}</li>
+            <li>Book2 {{ book2 }}</li>
+          </ul>
+        </div>
+        <div class="col-md-4"></div>
+      </div>
+    </div>
+    {% endblock %}
+  </body>
+</html>

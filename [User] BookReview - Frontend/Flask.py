@@ -32,6 +32,13 @@ def submit_review():
     return "<strong>" + desc + "</strong>" + review
 
 
+@app.route("/history")
+def login():
+    b1 = "Harry Potter"
+    b2 = "Rich Dad Poor Dad"
+    return render_template("history.html", book1=b1, book2=b2)
+
+
 if __name__ == "__main__":
     app.run(debug=True)
 else:
