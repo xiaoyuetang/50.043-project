@@ -1,7 +1,3 @@
-body {
-  /* background-color: #ffecda; */
-}
-
 .row-adjust {
   margin: 20px;
 }
@@ -130,6 +126,19 @@ p {
 
 .add-book-form {
   margin: 30px 200px;
+}
+
+.hCover {
+  width: 100%;
+  height: auto;
+  max-width: 200px;
+  padding: 30px 0;
+  margin: auto;
+  display: block;
+}
+
+.hDetails {
+  padding: 150px 0;
 }
 
 .reviewRow {

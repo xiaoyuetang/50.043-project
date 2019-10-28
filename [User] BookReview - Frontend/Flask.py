@@ -35,8 +35,11 @@ def submit_review():
 @app.route("/history")
 def login():
     b1 = "Harry Potter"
+    c1 = "https://img1-placeit-net.s3-accelerate.amazonaws.com/uploads/stage/stage_image/39885/large_thumb_book-cover-horror-novel-527.jpg"
     b2 = "Rich Dad Poor Dad"
-    return render_template("history.html", book1=b1, book2=b2)
+    b3 = "Lord of The Rings"
+    return render_template("history.html", book1=b1, book2=b2, book3=b3,
+                           cover1=c1)
 
 
 if __name__ == "__main__":
