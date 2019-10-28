@@ -34,12 +34,30 @@ def submit_review():
 
 @app.route("/history")
 def login():
+    ''' 
+    Using dummy data for now. Fetch from DB next time.
+    '''
     b1 = "Harry Potter"
     c1 = "https://img1-placeit-net.s3-accelerate.amazonaws.com/uploads/stage/stage_image/39885/large_thumb_book-cover-horror-novel-527.jpg"
+    a1 = "A. Dinh"
+    tags1 = ["Art", "Cookbooks"]
+
     b2 = "Rich Dad Poor Dad"
+    c2 = "https://img2-placeit-net.s3-accelerate.amazonaws.com/uploads/stage/stage_image/37837/large_thumb_stage.jpg"
+    a2 = "B. Dinh"
+    tags2 = ["Self Help", "Thriller", "Graphic Novels"]
+
     b3 = "Lord of The Rings"
-    return render_template("history.html", book1=b1, book2=b2, book3=b3,
-                           cover1=c1)
+    c3 = "https://i.pinimg.com/236x/82/79/74/827974d98ed5dabfbeecbdae890caebf.jpg"
+    a3 = "C. Dinh"
+    tags3 = ["Business", "Fiction", "Nonfiction"]
+
+    books = [b1, b2, b3]
+    covers = [c1, c2, c3]
+    author = [a1, a2, a3]
+    tags = [tags1, tags2, tags3]
+
+    return render_template("history.html", count=len(books), books=books, covers=covers, author=author, tags=tags)
 
 
 if __name__ == "__main__":

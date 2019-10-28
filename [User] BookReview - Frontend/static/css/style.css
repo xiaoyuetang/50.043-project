@@ -132,16 +132,48 @@ p {
   width: 100%;
   height: auto;
   max-width: 200px;
-  padding: 30px 0;
-  margin: auto;
+  margin-right: 0;
+  margin-left: auto;
   display: block;
 }
 
 .hDetails {
-  padding: 150px 0;
+  padding: 100px 0;
+}
+
+.hScroller {
+  overflow: scroll;
+  height: 1000px;
 }
 
 .reviewRow {
   margin-top: 50px;
   margin-bottom: 0px;
+}
+
+.rScroller {
+  overflow: scroll;
+  height: 600px;
+}
+
+.fDropdown {
+  /* display: none;
+  overflow: scroll;
+  width: 200px; */
+  display: none;
+  position: absolute;
+  background-color: #f6f6f6;
+  min-width: 230px;
+  overflow: auto;
+  border: 1px solid #ddd;
+  z-index: 1;
+}
+
+.show {
+  display: block;
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
 }

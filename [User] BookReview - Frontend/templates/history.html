@@ -12,23 +12,47 @@
         <div class="col-md-8">
           <h2 align="center">Your Reading History</h2>
           <hr />
-          <div class="row">
+          <div class="hScroller">
+            {% for i in range(count) %}
+            <div class="row">
+              <div class="col-md-4">
+                <img class="hCover" src="{{ covers[i] }}" />
+              </div>
+              <div class="hDetails col-md-8">
+                <h4>{{ books[i] }}</h4>
+                <h6>
+                  <em>{{ author[i] }}</em>
+                </h6>
+                {% for t in tags[i] %}
+                <span class="badge badge-info">{{ t }}</span>
+                {% endfor %}
+              </div>
+            </div>
+            <hr />
+            {% endfor %}
+          </div>
+          <!-- <div class="row">
             <div class="col-md-4">
               <img class="hCover" src="{{ cover1 }}" />
             </div>
             <div class="hDetails col-md-8">
               <div class="">
-                <h3>It waits in the dark</h3>
+                <h4>{{ book1 }}</h4>
+                <h6>
+                  <em>{{ author1 }}</em>
+                </h6>
                 <span class="badge badge-info">Art</span>
                 <span class="badge badge-info">Cookbooks</span>
               </div>
             </div>
           </div>
+          <hr />
+
           <ul>
             <li>Book1 {{ book1 }}</li>
             <li>Book2 {{ book2 }}</li>
             <li>Book3 {{ book3 }}</li>
-          </ul>
+          </ul> -->
         </div>
         <div class="col-md-4">
           <div class="row row-adjust" name="HotTags">

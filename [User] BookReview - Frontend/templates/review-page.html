@@ -90,7 +90,16 @@
             </div>
 					</div>
 					<hr>
-            <h3 align="center">User Reviews</h3>
+					<h3 align="center">User Reviews</h3>
+					<div class="dropdown">
+						<!-- <button class="btn btn-outline-primary" onclick="toggleFilters()">Filter by..</button> -->
+						<p>Filter by:</p>
+						<select>
+							<option><a href="#helpful">Most Helpful</a></option>
+							<option>Most Recent</option>
+						</select>
+					</div>
+					<div class="rScroller">
 					<div class="row reviewRow">
 						<div class="col-md-2">
 							<div class="reviewerProfile">
@@ -191,6 +200,7 @@
 							</div>
 							</div>
 				</div>
+			</div>
         </div>
         <div class="col-md-4">
           <h4 style="text-align: center;">
@@ -264,5 +274,13 @@
 		</div>
 		<div style="height: 80px; background-color: #A6D0E4;"></div>
 		{% endblock %}
+
+		<script>
+		 function toggleFilters(){
+			 document.getElementById("filtersDropdown").classList.toggle("show");
+		 }
+		</script>
+
+
   </body>
 </html>
