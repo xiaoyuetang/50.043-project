@@ -22,14 +22,52 @@ def get_name():
 
 @app.route("/review")
 def review():
-    return render_template("review-page.html")
+    '''
+    Using dummy data for now. Fetch from DB next time.
+    '''
+
+    ''' Dummy Main Book '''
+    title = "The Arsonist"
+    cover = "https://www.booktopia.com.au/blog/wp-content/uploads/2018/12/the-arsonist.jpg"
+    desc = "Sed iaculis posuere diam ut cursus. assa magna, vulputate nec bibendum nec, posuere nec lacus. Sed iaculis posuere diam ut cursus. assa magna, vulputate nec bibendum nec, posuere nec lacus. Sed iaculis posuere diam ut cursus. assa magna, vulputate nec bibendum nec, posuere nec lacus. Sed iaculis posuere diam ut cursus. assa magna, vulputate nec bibendum nec, posuere nec lacus."
+    author = "Chloe Hooper"
+    tags = ["Fantasy", "Romance", "Cookbooks"]
+
+    main_book = {"title": title, "cover": cover,
+                 "desc": desc, "author": author, "tags": tags}
+
+    ''' Dummy reviews '''
+    name1 = "Jane P."
+    img1 = "https://media.istockphoto.com/photos/portrait-of-a-smiling-young-woman-picture-id905456806?k=6&m=905456806&s=612x612&w=0&h=PvYHS82wm1FlEh7_8Owj_OamqJfJ8g3igDrfbA4Xo7I="
+    text1 = "Good Book!"
+    summary1 = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam eget sapien sapien. Curabitur in metus urna. In hac habitasse platea dictumst. Phasellus eu sem sapien, sed vestibulum velit. Nam purus nibh, lacinia non faucibus"
+    overall1 = 4
+    review1 = {"name": name1, "img": img1, "text": text1,
+               "summary": summary1, "overall": overall1}
+
+    reviews = [review1, review1, review1, review1, review1, review1]
+
+    ''' Dummy Related books '''
+    cover1 = "https://marketplace.canva.com/MADSMNPt8uA/3/0/thumbnail_large/canva-green-beach-photo-book-cover-MADSMNPt8uA.jpg"
+    title1 = "The Sun in His Eyes"
+    author1 = "Eleanor Fitzgerald"
+    tags1 = ["Sports", "Cookbooks", "Psychology", "Biography"]
+    related1 = {"cover": cover1, "title": title1,
+                "author": author1, "tags": tags1}
+
+    relateds = [related1, related1, related1]
+
+    return render_template("review-page.html", main=main_book, reviews=reviews, relateds=relateds)
 
 
 @app.route("/review", methods=["POST"])
 def submit_review():
-    desc = request.form['reviewDesc']
-    review = request.form['reviewTextInput']
-    return "<strong>" + desc + "</strong>" + review
+    '''
+    Get the header and review from review form and do something upon submit
+    '''
+    text = request.form['reviewText']  # the short one
+    summary = request.form['reviewSummary']  # the long one
+    pass  # do something here
 
 
 @app.route("/history")
