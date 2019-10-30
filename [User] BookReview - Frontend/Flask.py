@@ -98,6 +98,11 @@ def login():
     return render_template("history.html", count=len(books), books=books, covers=covers, author=author, tags=tags)
 
 
+@app.route("/profile")
+def profile():
+    return render_template("profile.html")
+
+
 @app.route("/add-a-book")
 def add_a_book():
     return render_template("add-a-book.html")

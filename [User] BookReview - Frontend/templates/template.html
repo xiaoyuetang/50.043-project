@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <!-- Below is the css file static/css/style.css used as stylesheet -->
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+  <link rel="stylesheet" href="static/css/style.css" />
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
     crossorigin="anonymous" /> {% block head %} {% endblock %}
 </head>
@@ -18,7 +18,7 @@
         <a class="navbar-brand logoCenter" href="{{ url_for('home') }}">
           <img src="static/imag/open-book.png" width="60" height="60" alt="" />
         </a>
-        <ul class="nav navsCenter">
+        <ul class="nav">
           <li class="nav-item">
             <a class="nav-link" href="/add-a-book">Add a new book</a>
           </li>
@@ -36,6 +36,20 @@
           <input class="form-control" type="search" placeholder="Search for books" aria-label="Search" />
           <button class="btn btn-outline-info" type="submit">Search</button>
         </form>
+        <div class="dropdown">
+          <a class="navbar-brand logoCenter" href="/profile">
+            <img src="static/imag/profile.png" class="rounded-circle dropbtn" width="60" height="60" alt="" />
+          </a>
+          <div class="dropdown-content dropdown-menu">
+            <a class="dropdown-item" href="/profile">Personal Profile</a>
+            <a class="dropdown-item" href="/history">History</a>
+            <a class="dropdown-item" href="#">Collection</a>
+          </div>
+        </div>
+        <div class="btn-group" role="group">
+          <button type="button" class="btn btn-info">Login</button>
+          <button type="button" class="btn btn-info">Signup</button>
+        </div>
       </nav>
     </div>
   </div>
