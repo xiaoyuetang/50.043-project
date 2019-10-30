@@ -2,111 +2,61 @@
 <html lang="en">
 
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
+    {% extends "template.html" %}
     <title>Group9 Book Review System</title>
-
-    <meta name="description" content="Created by Group9">
-    <meta name="author" content="SUTD ISTD Group9">
-
-    <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
-        crossorigin="anonymous"></script>
-
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
-        crossorigin="anonymous" />
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
-        crossorigin="anonymous"></script>
-
-    <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/css/bootstrap-select.min.css">
-
-    <!-- Latest compiled and minified JavaScript -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/js/bootstrap-select.min.js"></script>
-
-    <script src="js/script.js"></script>
-    <link rel="stylesheet" href="css/style.css" />
-
+    <meta name="description" content="Add a Book Page" />
+    <meta name="author" content="Group9" />
 </head>
 
 <body>
-
+    {% block content %}
     <div class="container-fluid">
-        <div class="row row-adjust" name="NavBar">
-            <div class="col-md-12">
-                <nav class="navbar navbar-light">
-                    <a class="navbar-brand logoCenter" href="#">
-                        <img src="imag/open-book.png" width="60" height="60" alt="">
-                    </a>
-                    <ul class="nav navsCenter">
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Add a new book</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Recommended books</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">2019 best books</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#" tabindex="-1" aria-disabled="true">Discover books</a>
-                        </li>
-                    </ul>
-                    <form class="form-inline searchCenter">
-                        <input class="form-control" type="search" placeholder="Search for books" aria-label="Search">
-                        <button class="btn btn-outline-info" type="submit">Search</button>
-                    </form>
-                </nav>
-            </div>
-        </div>
         <div class="row add-book-form" name="BookForm">
             <div class="col-md-12">
                 <!-- Default form contact -->
-                <form class="text-center border border-light p-5" action="#!">
+                <form class="text-center border border-light p-5" method="POST">
 
                     <h4>Add a Book</h4>
-
                     <!-- Name -->
-                    <input type="text" id="defaultContactFormName" class="form-control mb-4" placeholder="Your Name">
+                    <input name="ClientName" type="text" class="form-control mb-4" placeholder="Your Name">
 
                     <!-- Email -->
-                    <input type="email" id="defaultContactFormEmail" class="form-control mb-4" placeholder="Your E-mail">
+                    <input name="ClientEmail" type="email" class="form-control mb-4" placeholder="Your E-mail">
 
-                    <!-- Book Cat -->
                     <label>Book Information</label>
-                    <select class="browser-default custom-select mb-4">
+                    <!-- Book Cat -->
+                    <select name="BookCat" class="browser-default custom-select mb-4">
                         <option value="" disabled selected>Choose Categories</option>
-                        <option value="1">Art</option>
-                        <option value="2">Literature</option>
-                        <option value="3">Fiction</option>
-                        <option value="4">Education</option>
+                        <option value="Art">Art</option>
+                        <option value="Literature">Literature</option>
+                        <option value="Fiction">Fiction</option>
+                        <option value="Education">Education</option>
                     </select>
 
                     <!-- Book Name -->
-                    <input type="text" id="defaultContactFormBookName" class="form-control mb-4" placeholder="Book Name">
+                    <input name="BookName" type="text" class="form-control mb-4" placeholder="Book Name">
                     <!-- Author -->
-                    <input type="text" id="defaultContactFormAuthor" class="form-control mb-4" placeholder="Author">
+                    <input name="BookAuthor" type="text" id="defaultContactFormAuthor" class="form-control mb-4" placeholder="Author">
                     <!-- More? -->
                     <div class="form-group">
-                        <textarea class="form-control rounded-0" id="exampleFormControlTextarea2" rows="3" placeholder="More?"></textarea>
+                        <textarea name="MoreAbtBook" class="form-control rounded-0" id="exampleFormControlTextarea2" rows="3" placeholder="More?"></textarea>
                     </div>
 
                     <!-- Copy -->
-                    <div class="custom-control custom-checkbox mb-4">
-                        <input type="checkbox" class="custom-control-input" id="defaultContactFormCopy">
+                    <!-- <div class="custom-control custom-checkbox mb-4">
+                        <input type="checkbox" class="custom-control-input">
                         <label class="custom-control-label" for="defaultContactFormCopy">Send me a copy of this message</label>
-                    </div>
+                    </div> -->
 
                     <!-- Send button -->
-                    <button class="btn btn-info btn-block" type="submit">Send</button>
+                    <input class="btn btn-info btn-block mt-4" type="submit" value="Send" />
 
                 </form>
                 <!-- Default form contact -->
             </div>
         </div>
     </div>
+    {% endblock %}
 </body>
 
 </html>

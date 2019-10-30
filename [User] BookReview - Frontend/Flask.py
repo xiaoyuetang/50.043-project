@@ -98,6 +98,29 @@ def login():
     return render_template("history.html", count=len(books), books=books, covers=covers, author=author, tags=tags)
 
 
+@app.route("/add-a-book")
+def add_a_book():
+    return render_template("add-a-book.html")
+
+
+@app.route("/add-a-book", methods=['POST'])
+def submit_book_info():
+    '''
+    Get the book info from add-a-book form and do something upon submit
+    '''
+    ClientName = request.form['ClientName']
+    ClientEmail = request.form['ClientEmail']
+    BookCat = request.form["BookCat"]
+    BookName = request.form["BookName"]
+    BookAuthor = request.form["BookAuthor"]
+    MoreAbtBook = request.form["MoreAbtBook"]
+
+    # print(MoreAbtBook)
+
+    pass  # do something here
+    return render_template("thank-you.html")
+
+
 if __name__ == "__main__":
     app.run(debug=True)
 else:
