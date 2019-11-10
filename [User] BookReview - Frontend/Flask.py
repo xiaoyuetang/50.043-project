@@ -8,18 +8,6 @@ def home():
     return render_template("index.html")
 
 
-@app.route("/form")
-def form():
-    return render_template("randomForm.html")
-
-
-@app.route("/form", methods=['POST'])
-def get_name():
-    name = request.form['name']
-    print("This idiot's name is", name)
-    return render_template("randomForm.html")
-
-
 @app.route("/review")
 def review():
     '''
@@ -65,13 +53,19 @@ def submit_review():
     '''
     Get the header and review from review form and do something upon submit
     '''
-    text = request.form['reviewText']  # the short one
-    summary = request.form['reviewSummary']  # the long one
-    pass  # do something here
+    if request.form['button'] == "Log In":
+        return render_template("index.html")
+    elif request.form['button'] == "Submit Review":
+        text = request.form['reviewText']  # the short one
+        summary = request.form['reviewSummary']  # the long one
+        pass  # do something here
+        return render_template("thank-you.html")
+    else:
+        return "Hello"
 
 
 @app.route("/history")
-def login():
+def history():
     ''' 
     Using dummy data for now. Fetch from DB next time.
     '''
@@ -79,23 +73,23 @@ def login():
     c1 = "https://img1-placeit-net.s3-accelerate.amazonaws.com/uploads/stage/stage_image/39885/large_thumb_book-cover-horror-novel-527.jpg"
     a1 = "A. Dinh"
     tags1 = ["Art", "Cookbooks"]
+    book1 = {"title": b1, "cover": c1, "author": a1, "tags": tags1}
 
     b2 = "Rich Dad Poor Dad"
     c2 = "https://img2-placeit-net.s3-accelerate.amazonaws.com/uploads/stage/stage_image/37837/large_thumb_stage.jpg"
     a2 = "B. Dinh"
     tags2 = ["Self Help", "Thriller", "Graphic Novels"]
+    book2 = {"title": b2, "cover": c2, "author": a2, "tags": tags2}
 
     b3 = "Lord of The Rings"
     c3 = "https://i.pinimg.com/236x/82/79/74/827974d98ed5dabfbeecbdae890caebf.jpg"
     a3 = "C. Dinh"
     tags3 = ["Business", "Fiction", "Nonfiction"]
+    book3 = {"title": b3, "cover": c3, "author": a3, "tags": tags3}
 
-    books = [b1, b2, b3]
-    covers = [c1, c2, c3]
-    author = [a1, a2, a3]
-    tags = [tags1, tags2, tags3]
+    books = [book1, book2, book3]
 
-    return render_template("history.html", count=len(books), books=books, covers=covers, author=author, tags=tags)
+    return render_template("history.html", books=books)
 
 
 @app.route("/profile")

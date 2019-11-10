@@ -13,17 +13,17 @@
           <h2 align="center">Your Reading History</h2>
           <hr />
           <div class="hScroller">
-            {% for i in range(count) %}
+            {% for b in books %}
             <div class="row">
               <div class="col-md-4">
-                <img class="hCover" src="{{ covers[i] }}" />
+                <img class="hCover" src="{{ b.cover }}" />
               </div>
               <div class="hDetails col-md-8">
-                <h4>{{ books[i] }}</h4>
+                <h4>{{ b.title }}</h4>
                 <h6>
-                  <em>{{ author[i] }}</em>
+                  <em>{{ b.author }}</em>
                 </h6>
-                {% for t in tags[i] %}
+                {% for t in b.tags %}
                 <span class="badge badge-info">{{ t }}</span>
                 {% endfor %}
               </div>

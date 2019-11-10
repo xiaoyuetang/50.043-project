@@ -164,11 +164,6 @@ p {
   display: inline-block;
   margin: 8px 16px;
 }
-/* 
-.dropdown p {
-  display: inline;
-  margin-right: 8px;
-} */
 
 .dropdown-content {
   display: none;
@@ -202,6 +197,6 @@ p {
   color: orange;
 }
 
-profile {
-  margin: auto
+.profile {
+  margin: auto;
 }
