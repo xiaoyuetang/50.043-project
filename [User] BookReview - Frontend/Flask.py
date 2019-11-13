@@ -47,19 +47,29 @@ def review():
 
     return render_template("review-page.html", main=main_book, reviews=reviews, relateds=relateds)
 
+# JenYang's
+@app.route("/review", methods=["POST", 'GET'])
+def review():
+    reviews = ''
+    if request.method == 'POST':
+        submit_review()
+    review = db.get_all()
+    return render_template('review.html', reviews=reviews)
+
 
 @app.route("/review", methods=["POST"])
 def submit_review():
     '''
     Get the header and review from review form and do something upon submit
     '''
-    if request.form['button'] == "Log In":
+    return request.form
+    if request.form['loginbutton'] == "Log In":
         return render_template("index.html")
-    elif request.form['button'] == "Submit Review":
+    elif request.form['reviewbutton'] == "Submit Review":
         text = request.form['reviewText']  # the short one
         summary = request.form['reviewSummary']  # the long one
         pass  # do something here
-        return render_template("thank-you.html")
+        return render_template("review.html", reviews=reviews)
     else:
         return "Hello"
 
