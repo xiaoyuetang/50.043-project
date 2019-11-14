@@ -10,6 +10,8 @@ class User(UserMixin, db.Model):
 	email = db.Column(db.String(120), index=True, unique=True)
 	password_bash = db.Column(db.String(128))
 	posts = db.relationship('Post', backref='author', lazy='dynamic')
+	about_me = db.Column(db.String(140))
+	last_seen = db.Column(db.DateTime, default=datetime.utcnow)
 	
 	def __repr__(self):
 		return '<User {}>'.format(self.username)
@@ -52,7 +54,7 @@ class ReviewerReviews(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
 	reviewID = db.Column(db.Integer, primary_key=True)
 	asin = db.Column(db.String(64), index=True)
-	reviewerID = db.Column(db.String(64), db.ForeignKey('reviewerinformation.reviewerID'))
+	reviewerID = db.Column(db.String(64))
 	
 	def __repr__(self):
 		return '<Review ID: {}, Review product: {}, Reviewer ID: {}>'.format(self.reviewID, self.asin, self.reviewerID)

@@ -1,6 +1,6 @@
 from app import app
 from flask import render_template, flash, redirect, url_for
-from app.forms import LoginForm, ReviewForm, RegistrationForm
+from app.forms import LoginForm, ReviewForm
 from flask_login import current_user, login_user
 from app import db
 from app.models import User, Trial, Review, ReviewerReviews, ReviewerInformation
@@ -8,29 +8,6 @@ from flask_login import logout_user
 from flask import request
 from werkzeug.urls import url_parse
 from flask_login import login_required
-from datetime import datetime
-
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-	if current_user.is_authenticated:
-		return redirect(url_for('index'))
-	form = LoginForm()
-	if form.validate_on_submit():
-		user = User.query.filter_by(username=form.username.data).first()
-		if user is None or not user.check_password(form.password.data):
-			flash('Invalid username or password')
-			return redirect(url_for('login'))
-		login_user(user, remember=form.remember_me.data)
-		next_page = request.args.get('next')
-		if not next_page or url_parse(next_page).netloc != '':
-			next_page = url_for('index')
-		return redirect(next_page)
-	return render_template('login.html', title='Sign In', form=form)
-
-@app.route('/logout')
-def logout():
-	logout_user()
-	return redirect(url_for('index'))
 
 #@app.route('/bookreviews')
 #def bookreviews():
@@ -140,7 +117,7 @@ def review():
 	
 	return render_template("review-page.html", main=main_book, reviews=reviews, relateds=relateds)
 
-# need to combine with 猫姐姐's Login Form
+# combined with 猫姐姐's Login Form
 @app.route("/review", methods=["POST"])
 @login_required
 def submit_review():
@@ -153,9 +130,11 @@ def submit_review():
 		text = request.form['reviewText']
 		summary = request.form['reviewSummary']
 		
-		# store the review into database
-		new_review = Review(reviewID='20', reviewText=text, summary=summary)
+		print (type(text))
+		print (type(summary))
 		
+		# store the review into database
+		new_review = Review(reviewID='20')
 		db.session.add(new_review)
 		db.session.commit()
 		
@@ -163,40 +142,33 @@ def submit_review():
 	else:
 		return "Hello"
 
-@app.route('/register', methods=['GET', 'POST'])
-def register():
+@app.route('/login', methods=['GET', 'POST'])
+def login():
 	if current_user.is_authenticated:
 		return redirect(url_for('index'))
-	form = RegistrationForm()
-	if form.validate_on_submit():
-		user = User(username=form.username.data, email=form.email.data)
-		user.set_password(form.password.data)
-		db.session.add(user)
-		db.session.commit()
-		flash('Congratulations, you are now a registered user!')
-		return redirect(url_for('index'))
-	return render_template('register.html', title='Register', form=form)
-
-# save the latest log records to database
-@app.before_request 
-def before_request():
-	if current_user.is_authenticated:
-		current_user.last_seen = datetime.utcnow()
-		db.session.commit()
-		
-# edit user profile
-@app.route('/edit_profile', methods=['GET', 'POST'])
-@login_required
-def edit_profile():
-	form = EditProfileForm(current_user.username)
-	if form.validate_on_submit():
-		current_user.username = form.username.data
-		current_user.about_me = form.about_me.data
-		db.session.commit()
-		flash('Your changes have been saved.')
-		return redirect(url_for('edit_profile'))
-	elif request.method == 'GET':
-		form.username.data = current_user.username
-		form.about_me.data = current_user.about_me
-	return render_template('edit_profile.html', title='Edit Profile', form=form)
 	
+	
+	# form = LoginForm()
+	# if form.validate_on_submit():
+	if True: # 这边是检测到输入了用户名 / 密码以后提交了
+		
+		username = 'susan' # 从form中得到的
+		password = 'cat' # 从form中得到的
+		
+		user = User.query.filter_by(username=username).first()
+		if user is None or not user.check_password(password):
+			flash('Invalid username or password')
+			return redirect(url_for('login'))
+		# 这边是remember me 选项, 不知道猫姐姐的有没有
+		# login_user(user, remember=form.remember_me.data)
+		next_page = request.args.get('next')
+		if not next_page or url_parse(next_page).netloc != '':
+			next_page = url_for('index')
+		return redirect(next_page)
+		
+	return render_template('login.html', title='Sign In', form=form) # 不知道form这边怎么搞
+
+@app.route('/logout')
+def logout():
+	logout_user()
+	return redirect(url_for('index'))
