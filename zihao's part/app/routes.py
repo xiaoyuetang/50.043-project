@@ -3,7 +3,8 @@ from flask import render_template, flash, redirect, url_for
 from app.forms import LoginForm, ReviewForm, RegistrationForm
 from flask_login import current_user, login_user
 from app import db
-from app.models import User, Trial, Review, ReviewerReviews, ReviewerInformation
+from app import log
+from app.models import User, Trial, Review, ReviewerReviews, ReviewerInformation, Book
 from flask_login import logout_user
 from flask import request
 from werkzeug.urls import url_parse
@@ -98,6 +99,8 @@ def book_review():
 @app.route('/')
 @app.route('/index')
 def index():
+	dive = Book(title='Flipped', year=2000)
+	dive.save()
 	return render_template('index.html')
 	
 # 看到书的 Description / 可以 write a review

@@ -2,13 +2,15 @@
 
 Go inside the Zihao's Part folder, run in terminal:
 
-`$ source venv/bin/activate`
-`(venv) $ export FLASK_APP=50043-project.py`
-`(venv) $ flask run`
+` $ source venv/bin/activate`
+
+` (venv) $ export FLASK_APP=50043-project.py`
+
+` (venv) $ flask run`
 
 To activate the debug mode, run in terminal:
 
-`(venv) $ export FLASK_DEBUG=1`
+` (venv) $ export FLASK_DEBUG=1 ` 
 
 You would see this
 * Serving Flask app "50043-project"
@@ -16,29 +18,28 @@ You would see this
 
 If required login, please use username: susan, password: cat
 
++ For adding a new book, you could click the widget called "Add a bock" or you could also use http://127.0.0.1:5000/addbook
++ For adding a new review, you could find in the bottom of page http://127.0.0.1:5000/book_review or use http://127.0.0.1:5000/addreview
+
 
 ### Database Query
+
 Go inside the Zihao's Part folder, run python terminal
 
 Once in the Python prompt, let's import the database instance and the models:
 
-`from app import db`
-`from app.models import Review`
+` from app import db`
 
-Start by creating a new review:
+` from app.models import User, Post, Trial`
 
-`review = Review(col_name1= , col_name2= )`
-`db.session.add(review)`
-`db.session.commit()`
+Start by creating a new user:
+
+` u = User(username='john', email='john@example.com')`
+
+` db.session.add(u)`
+
+` db.session.commit()`
 
 Basic Queries:
 
-`users = User.query.all()`
-
-### Database Migrate
-
-Once the database configuration has been changed (models.py modified)
-
-Run in terminal, 
-`flask db migrate -m "comments"`
-`flask db upgrade`
+` users = User.query.all()`

@@ -1,5 +1,6 @@
 from datetime import datetime
 from app import db
+from app import log
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 from app import login
@@ -77,3 +78,7 @@ class Trial(db.Model):
 @login.user_loader
 def load_user(id):
 	return User.query.get(int(id))
+
+class Book(log.Document):
+	title = log.StringField()
+	year = log.IntField()
