@@ -8,8 +8,21 @@ def home():
     return render_template("index.html")
 
 
-@app.route("/review")
+@app.route("/review", methods=["POST", "GET"])
 def review():
+    '''
+    Get the header and review from review form and do something upon submit
+    '''
+    form = request.form
+    if 'loginbutton' in form:
+        username = form['username']
+        password = form['password']
+        pass  # do something
+    elif 'reviewbutton' in form:
+        text = form['reviewText']
+        summary = form['reviewSummary']
+        pass  # do something
+
     '''
     Using dummy data for now. Fetch from DB next time.
     '''
@@ -48,30 +61,38 @@ def review():
     return render_template("review-page.html", main=main_book, reviews=reviews, relateds=relateds)
 
 # JenYang's
-@app.route("/review", methods=["POST", 'GET'])
-def review():
-    reviews = ''
-    if request.method == 'POST':
-        submit_review()
-    review = db.get_all()
-    return render_template('review.html', reviews=reviews)
+# @app.route("/review", methods=["POST", 'GET'])
+# def review():
+#     reviews = ''
+#     if request.method == 'POST':
+#         submit_review()
+#     review = db.get_all()
+#     return render_template('review.html', reviews=reviews)
 
 
-@app.route("/review", methods=["POST"])
-def submit_review():
-    '''
-    Get the header and review from review form and do something upon submit
-    '''
-    return request.form
-    if request.form['loginbutton'] == "Log In":
-        return render_template("index.html")
-    elif request.form['reviewbutton'] == "Submit Review":
-        text = request.form['reviewText']  # the short one
-        summary = request.form['reviewSummary']  # the long one
-        pass  # do something here
-        return render_template("review.html", reviews=reviews)
-    else:
-        return "Hello"
+# @app.route("/review", methods=["POST"])
+# def submit_review():
+#     '''
+#     Get the header and review from review form and do something upon submit
+#     '''
+#     form = request.form
+#     if 'loginbutton' in form:
+#         username = form['username']
+#         password = form['password']
+#         pass  # do something
+#     elif 'reviewbutton' in form:
+#         text = form['reviewText']
+#         summary = form['reviewSummary']
+#         pass
+
+#     return render_template("review-page.html")
+
+#     # elif request.form['reviewbutton'] == "Submit Review":
+#     #     text = request.form['reviewText']  # the short one
+#     #     summary = request.form['reviewSummary']  # the long one
+#     #     pass  # do something here
+#     # else:
+#     #     return "Hello"
 
 
 @app.route("/history")
