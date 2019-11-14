@@ -8,6 +8,9 @@ Go inside the Zihao's Part folder, run in terminal:
 
 ` (venv) $ flask run`
 
+To activate the debug mode, run in terminal:
+
+` (venv) $ export FLASK_DEBUG=1 ` 
 
 You would see this
 * Serving Flask app "50043-project"
@@ -18,9 +21,6 @@ If required login, please use username: susan, password: cat
 + For adding a new book, you could click the widget called "Add a bock" or you could also use http://127.0.0.1:5000/addbook
 + For adding a new review, you could find in the bottom of page http://127.0.0.1:5000/book_review or use http://127.0.0.1:5000/addreview
 
-### Load data into database
-
-Directly run `database_loadin.py`, the data stored in csv will be loaded into app.db
 
 ### Database Query
 

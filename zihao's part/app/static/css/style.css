@@ -1,5 +1,5 @@
 body {
-  /* background-color: #FFECDA */
+  /* background-color: #ffecda; */
 }
 
 .row-adjust {
@@ -74,6 +74,65 @@ p {
   margin: auto;
 }
 
+.button-center {
+  text-align: center;
+}
+
+.bookDetails {
+  margin: auto;
+  padding: 100px 0;
+  height: 100%;
+}
+
+.bigBookCover {
+  width: 100%;
+  height: auto;
+  max-width: 300px;
+  max-height: 400px;
+  display: block;
+  margin: auto;
+}
+
+.bookDesc {
+  height: 100%;
+  width: 100%;
+  text-align: justify;
+}
+
+.btnGroup {
+  margin: auto;
+  display: block;
+}
+
+.reviewButton {
+  margin: 20px;
+}
+
+.relatedBook {
+  width: 100%;
+  max-width: 150px;
+  height: auto;
+  margin: 20px auto;
+}
+
+.relatedDesc {
+  width: 50%;
+  margin: 20px auto;
+}
+.reviewerImg {
+  width: 100%;
+  max-width: 100px;
+  max-height: 100px;
+  height: auto;
+  margin: auto;
+  display: block;
+}
+
 .add-book-form {
-  margin: 30px 200px
+  margin: 30px 200px;
+}
+
+.reviewRow {
+  margin-top: 50px;
+  margin-bottom: 0px;
 }

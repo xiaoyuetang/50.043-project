@@ -29,7 +29,8 @@ class Post(db.Model):
 	def __repr__(self):
 		return '<Post {}>'.format(self.body)
 
-class ReviewerInfomation(db.Model):
+class ReviewerInformation(db.Model):
+	id = db.Column(db.Integer, primary_key=True)
 	reviewerID = db.Column(db.String(64), primary_key=True)
 	reviewerName = db.Column(db.String(64), index=True)
 	
@@ -37,9 +38,8 @@ class ReviewerInfomation(db.Model):
 		return '<Reviewer: {}>'.format(self.reviewerName)
 
 class Review(db.Model):
+	id = db.Column(db.Integer, primary_key=True)
 	reviewID = db.Column(db.Integer, primary_key=True)
-	helpful_1 = db.Column(db.String(64), index=True)
-	helpful_2 = db.Column(db.String(64), index=True)
 	overall = db.Column(db.Integer, index=True)
 	reviewText = db.Column(db.String(128), index=True)
 	summary = db.Column(db.String(64), index=True)
@@ -49,6 +49,7 @@ class Review(db.Model):
 		return '<Review ID: {}>'.format(self.reviewID)
 
 class ReviewerReviews(db.Model):
+	id = db.Column(db.Integer, primary_key=True)
 	reviewID = db.Column(db.Integer, primary_key=True)
 	asin = db.Column(db.String(64), index=True)
 	reviewerID = db.Column(db.String(64), db.ForeignKey('reviewerinformation.reviewerID'))
@@ -70,7 +71,6 @@ class Trial(db.Model):
 	
 	def __repr__(self):
 		return '<Review ID: {}>'.format(self.reviewID)
-	
 
 @login.user_loader
 def load_user(id):
