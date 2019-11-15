@@ -1,45 +1,11 @@
 from app import app
-from flask import render_template, flash, redirect, url_for
+from flask import render_template, flash, redirect, url_for, request
+from flask_login import current_user, login_user, logout_user, login_required
 from app.forms import LoginForm, ReviewForm, RegistrationForm
-from flask_login import current_user, login_user
-from app import db
-from app import log
+from app import db, log
 from app.models import User, Trial, Review, ReviewerReviews, ReviewerInformation, Book
-from flask_login import logout_user
-from flask import request
 from werkzeug.urls import url_parse
-from flask_login import login_required
 from datetime import datetime
-
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-	if current_user.is_authenticated:
-		return redirect(url_for('index'))
-	form = LoginForm()
-	if form.validate_on_submit():
-		user = User.query.filter_by(username=form.username.data).first()
-		if user is None or not user.check_password(form.password.data):
-			flash('Invalid username or password')
-			return redirect(url_for('login'))
-		login_user(user, remember=form.remember_me.data)
-		next_page = request.args.get('next')
-		if not next_page or url_parse(next_page).netloc != '':
-			next_page = url_for('index')
-		return redirect(next_page)
-	return render_template('login.html', title='Sign In', form=form)
-
-@app.route('/logout')
-def logout():
-	logout_user()
-	return redirect(url_for('index'))
-
-#@app.route('/bookreviews')
-#def bookreviews():
-#	return render_template('bookreview.html')
-	
-@app.route('/addbook')
-def addbook():
-	return render_template('addbook.html')
 
 @app.route('/addreview', methods=['GET', 'POST'])
 @login_required
@@ -66,31 +32,6 @@ def addreview():
 		return redirect(next_page)
 	return render_template('add_review.html', title='Add a Review', form=form)
 
-@app.route('/book_review', methods=['GET', 'POST'])
-@login_required
-def book_review():
-	form = ReviewForm()
-	if form.validate_on_submit():
-		reviewID = Trial.query.filter_by(reviewID=form.reviewID.data).first()
-		if reviewID is not None:
-			flash('reviewerID already existed')
-			return redirect(url_for('book_review'))
-
-		reviewID = form.reviewID.data
-		overall = form.overall.data
-		reviewText = form.reviewText.data
-		
-		# add review to database
-		review = Trial(reviewID=reviewID, overall=overall, reviewText=reviewText)
-		db.session.add(review)
-		db.session.commit()
-		
-		next_page = request.args.get('next')
-		if not next_page or url_parse(next_page).netloc != '':
-			next_page = url_for('index')
-		return redirect(next_page)
-	return render_template('book_review.html', title='Add a Review', form=form)
-
 ####################### below are revisited version ########################
 
 # main page
@@ -102,6 +43,89 @@ def index():
 	dive = Book(title='Flipped', year=2000)
 	dive.save()
 	return render_template('index.html')
+
+# need to combine with 猫姐姐's Login Form
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+	if current_user.is_authenticated:
+		return redirect(url_for('index'))
+	form = LoginForm()
+	if form.validate_on_submit():
+		user = User.query.filter_by(username=form.username.data).first()
+		if user is None or not user.check_password(form.password.data):
+			flash('Invalid username or password')
+			return redirect(url_for('login'))
+		login_user(user, remember=form.remember_me.data)
+		next_page = request.args.get('next')
+		if not next_page or url_parse(next_page).netloc != '':
+			next_page = url_for('index')
+		return redirect(next_page)
+	return render_template('login.html', title='Sign In', form=form)
+
+# 这边猫姐姐需要在login的基础上, 加一个logout的选项
+@app.route('/logout')
+def logout():
+	logout_user()
+	return redirect(url_for('index'))
+
+# add a review to the database
+@app.route("/review", methods=["POST"])
+@login_required
+def submit_review():
+	
+	if request.form['button'] == "Log In":
+		return render_template("index.html")
+	elif request.form['button'] == "Submit Review":
+		text = request.form['reviewText']
+		summary = request.form['reviewSummary']
+		
+		# store the review into database
+		new_review = Review(reviewID='20', reviewText=text, summary=summary)
+		
+		db.session.add(new_review)
+		db.session.commit()
+		
+		return render_template("thank-you.html")
+	else:
+		return "Hello"
+
+# need to combine with 猫姐姐's Signup Form
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+	if current_user.is_authenticated:
+		return redirect(url_for('index'))
+	form = RegistrationForm()
+	if form.validate_on_submit():
+		user = User(username=form.username.data, email=form.email.data)
+		user.set_password(form.password.data)
+		db.session.add(user)
+		db.session.commit()
+		flash('Congratulations, you are now a registered user!')
+		return redirect(url_for('index'))
+	return render_template('register.html', title='Register', form=form)
+
+# save the latest log records to database
+@app.before_request 
+def before_request():
+	if current_user.is_authenticated:
+		current_user.last_seen = datetime.utcnow()
+		db.session.commit()
+
+# edit user profile
+@app.route('/edit_profile', methods=['GET', 'POST'])
+@login_required
+def edit_profile():
+	form = EditProfileForm(current_user.username)
+	if form.validate_on_submit():
+		current_user.username = form.username.data
+		current_user.about_me = form.about_me.data
+		db.session.commit()
+		flash('Your changes have been saved.')
+		return redirect(url_for('edit_profile'))
+	elif request.method == 'GET':
+		form.username.data = current_user.username
+		form.about_me.data = current_user.about_me
+	return render_template('edit_profile.html', title='Edit Profile', form=form)
 	
 # 看到书的 Description / 可以 write a review
 @app.route("/review")
@@ -143,63 +167,61 @@ def review():
 	
 	return render_template("review-page.html", main=main_book, reviews=reviews, relateds=relateds)
 
-# need to combine with 猫姐姐's Login Form
-@app.route("/review", methods=["POST"])
+# add-a-book page
+@app.route("/add-a-book")
 @login_required
-def submit_review():
-	'''
-	Get the header and review from review form and do something upon submit
-	'''
-	if request.form['button'] == "Log In":
-		return render_template("index.html")
-	elif request.form['button'] == "Submit Review":
-		text = request.form['reviewText']
-		summary = request.form['reviewSummary']
-		
-		# store the review into database
-		new_review = Review(reviewID='20', reviewText=text, summary=summary)
-		
-		db.session.add(new_review)
-		db.session.commit()
-		
-		return render_template("thank-you.html")
-	else:
-		return "Hello"
+def add_a_book():
+	return render_template("add-a-book.html")
 
-@app.route('/register', methods=['GET', 'POST'])
-def register():
-	if current_user.is_authenticated:
-		return redirect(url_for('index'))
-	form = RegistrationForm()
-	if form.validate_on_submit():
-		user = User(username=form.username.data, email=form.email.data)
-		user.set_password(form.password.data)
-		db.session.add(user)
-		db.session.commit()
-		flash('Congratulations, you are now a registered user!')
-		return redirect(url_for('index'))
-	return render_template('register.html', title='Register', form=form)
-
-# save the latest log records to database
-@app.before_request 
-def before_request():
-	if current_user.is_authenticated:
-		current_user.last_seen = datetime.utcnow()
-		db.session.commit()
-		
-# edit user profile
-@app.route('/edit_profile', methods=['GET', 'POST'])
+# add a new book upon submit
+@app.route("/add-a-book", methods=['POST'])
 @login_required
-def edit_profile():
-	form = EditProfileForm(current_user.username)
-	if form.validate_on_submit():
-		current_user.username = form.username.data
-		current_user.about_me = form.about_me.data
-		db.session.commit()
-		flash('Your changes have been saved.')
-		return redirect(url_for('edit_profile'))
-	elif request.method == 'GET':
-		form.username.data = current_user.username
-		form.about_me.data = current_user.about_me
-	return render_template('edit_profile.html', title='Edit Profile', form=form)
+def submit_book_info():
 	
+	# Get the book info from add-a-book form
+	ClientName = request.form['ClientName']
+	ClientEmail = request.form['ClientEmail']
+	BookCat = request.form["BookCat"]
+	BookName = request.form["BookName"]
+	BookAuthor = request.form["BookAuthor"]
+	MoreAbtBook = request.form["MoreAbtBook"]
+
+	# Save book information to the mongoDB
+	# 格式是这样但是Book的metadata gyy还没弄好
+	# new_book = Book(title='Flipped', year=2000)
+	# new_book.save()
+	
+	return render_template("thank-you.html")
+
+@app.route("/history")
+@login_required
+def history():
+	''' 
+	Using dummy data for now. Fetch from DB next time.
+	'''
+	b1 = "Harry Potter"
+	c1 = "https://img1-placeit-net.s3-accelerate.amazonaws.com/uploads/stage/stage_image/39885/large_thumb_book-cover-horror-novel-527.jpg"
+	a1 = "A. Dinh"
+	tags1 = ["Art", "Cookbooks"]
+	book1 = {"title": b1, "cover": c1, "author": a1, "tags": tags1}
+
+	b2 = "Rich Dad Poor Dad"
+	c2 = "https://img2-placeit-net.s3-accelerate.amazonaws.com/uploads/stage/stage_image/37837/large_thumb_stage.jpg"
+	a2 = "B. Dinh"
+	tags2 = ["Self Help", "Thriller", "Graphic Novels"]
+	book2 = {"title": b2, "cover": c2, "author": a2, "tags": tags2}
+
+	b3 = "Lord of The Rings"
+	c3 = "https://i.pinimg.com/236x/82/79/74/827974d98ed5dabfbeecbdae890caebf.jpg"
+	a3 = "C. Dinh"
+	tags3 = ["Business", "Fiction", "Nonfiction"]
+	book3 = {"title": b3, "cover": c3, "author": a3, "tags": tags3}
+
+	books = [book1, book2, book3]
+
+	return render_template("history.html", books=books)
+
+@app.route("/profile")
+@login_required
+def profile():
+	return render_template("profile.html")
