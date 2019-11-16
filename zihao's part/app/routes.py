@@ -3,7 +3,7 @@ from flask import render_template, flash, redirect, url_for, request
 from flask_login import current_user, login_user, logout_user, login_required
 from app.forms import LoginForm, ReviewForm, RegistrationForm
 from app import db, log
-from app.models import User, Trial, Review, ReviewerReviews, ReviewerInformation, Book
+from app.models import User, Trial, Review, ReviewerReviews, ReviewerInformation
 from werkzeug.urls import url_parse
 from datetime import datetime
 
@@ -40,27 +40,55 @@ def addreview():
 @app.route('/')
 @app.route('/index')
 def index():
-	dive = Book(title='Flipped', year=2000)
-	dive.save()
 	return render_template('index.html')
 
 # need to combine with 猫姐姐's Login Form
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-	if current_user.is_authenticated:
-		return redirect(url_for('index'))
-	form = LoginForm()
-	if form.validate_on_submit():
-		user = User.query.filter_by(username=form.username.data).first()
-		if user is None or not user.check_password(form.password.data):
-			flash('Invalid username or password')
-			return redirect(url_for('login'))
-		login_user(user, remember=form.remember_me.data)
-		next_page = request.args.get('next')
-		if not next_page or url_parse(next_page).netloc != '':
-			next_page = url_for('index')
-		return redirect(next_page)
-	return render_template('login.html', title='Sign In', form=form)
+	# if current_user.is_authenticated:
+	#     return redirect(url_for('index'))
+	if request.method == 'POST':
+		# print(request.form['loginbutton'])
+		# print(request.form['loginbutton'] == 'Log In')
+		if request.form['loginbutton'] == 'Log In':
+			print(request.form)
+			userid = request.form['userid']
+			password = request.form['password']
+			print(userid)
+			print(password)
+
+			user = User.query.filter_by(username=userid).first()
+
+			if user is None or not user.check_password(password):
+				flash('Invalid username or password')
+				return redirect(url_for('login'))
+
+			remember = request.form["loginsavepw"]
+			login_user(user, remember=remember)
+			next_page = request.args.get('next')
+			if not next_page or url_parse(next_page).netloc != '':
+				next_page = url_for('index')
+			return redirect(next_page)
+		else:
+			pass  # unknown
+	# elif request.method == 'GET':
+	#     pass
+	return render_template('login.html')
+
+	# if current_user.is_authenticated:
+	#     return redirect(url_for('index'))
+	# form = LoginForm()
+	# if form.validate_on_submit():
+	#     user = User.query.filter_by(username=form.username.data).first()
+	#     if user is None or not user.check_password(form.password.data):
+	#         flash('Invalid username or password')
+	#         return redirect(url_for('login'))
+	#     login_user(user, remember=form.remember_me.data)
+	#     next_page = request.args.get('next')
+	#     if not next_page or url_parse(next_page).netloc != '':
+	#         next_page = url_for('index')
+	#     return redirect(next_page)
+	# return render_template('login.html', title='Sign In', form=form)
 
 # 这边猫姐姐需要在login的基础上, 加一个logout的选项
 @app.route('/logout')
