@@ -165,12 +165,6 @@ p {
   margin: 8px 16px;
 }
 
-.dropdown-content {
-  display: none;
-  position: absolute;
-  min-width: 200px;
-}
-
 .dropdown-content a {
   display: block;
   padding: 12px 16px;
@@ -191,6 +185,7 @@ p {
 
 .stars {
   font-size: 28px;
+  color: gainsboro;
 }
 
 .lit {
@@ -199,4 +194,12 @@ p {
 
 .profile {
   margin: auto;
+}
+
+.signup-form {
+  padding: 0 500px;
+}
+
+.signup-form h2 {
+  text-align: center;
 }
