@@ -151,6 +151,23 @@ def submit_book_info():
     return render_template("thank-you.html")
 
 
+@app.route("/signup", methods=["POST", "GET"])
+def signup():
+    form = request.form
+    if 'loginbutton' in form:
+        username = form['username']
+        password = form['password']
+        pass  # do something
+    elif 'signupbutton' in form:
+        new_username = form['new_username']
+        new_email = form['new_email']
+        new_password = form['new_password']
+        confim_password = form['confirm_password']
+        pass  # do something
+
+    return render_template("signup.html")
+
+
 if __name__ == "__main__":
     app.run(debug=True)
 else:
