@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    {% extends "template.html" %} {% block head %}
+    {% extends "template.html" %}
+    <title>Group9 Book Review System</title>
     <meta name="description" content="Book Review Page" />
     <meta name="author" content="Group9" />
-    <title>Book Review of (Title)</title>
-    {% endblock %}
   </head>
 
   <body>
@@ -127,15 +126,8 @@
     <!-- Review form -->
     <div class="form-group">
       <div class="col-md-12">
-        <form class="" method="POST">
-          <h4 class="text-center mb-4">Write a Review</h4>
-          <select class="form-control mb-4" id="rating" name="rating">
-            <option>&#x2605;</option>
-            <option>&#x2605; &#x2605;</option>
-            <option>&#x2605;&#x2605;&#x2605;</option>
-            <option>&#x2605;&#x2605;&#x2605;&#x2605;</option>
-            <option>&#x2605;&#x2605;&#x2605;&#x2605;&#x2605;</option>
-          </select>
+        <form class="text-center" method="POST">
+          <h4 class="mb-4">Write a Review</h4>
           <input
             type="text"
             class="form-control mb-4"
