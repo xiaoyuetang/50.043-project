@@ -261,7 +261,7 @@ def profile():
 def get_review_time():
     today = date.today()
     year = str(today.year)
-    month = "{:02d}".format(str(today.month))
-    day = "{:02d}".format(str(today.day))
+    month = str(today.month)
+    day = str(today.day)
 
     return month + " " + day + ", " + year
