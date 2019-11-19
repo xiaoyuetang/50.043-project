@@ -139,32 +139,6 @@ def edit_profile():
     return render_template('edit_profile.html', title='Edit Profile', form=form)
 
 
-@app.route('/addreview', methods=['GET', 'POST'])
-@login_required
-def addreview():
-    form = ReviewForm()
-    if form.validate_on_submit():
-        reviewID = Trial.query.filter_by(reviewID=form.reviewID.data).first()
-        if reviewID is not None:
-            flash('reviewerID already existed')
-            return redirect(url_for('addreview'))
-
-        reviewID = form.reviewID.data
-        overall = form.overall.data
-        reviewText = form.reviewText.data
-
-        # add review to database
-        review = Trial(reviewID=reviewID, overall=overall,
-                       reviewText=reviewText)
-        db.session.add(review)
-        db.session.commit()
-
-        next_page = request.args.get('next')
-        if not next_page or url_parse(next_page).netloc != '':
-            next_page = url_for('index')
-        return redirect(next_page)
-    return render_template('add_review.html', title='Add a Review', form=form)
-
 # 看到书的 Description / 可以 write a review
 @app.route("/review", methods=["POST", "GET"])
 def review():
