@@ -46,7 +46,7 @@ def index():
     dive.save()
 
     asin = "SD21398D"
-    return render_template('index.html', asin="SD21398D")
+    return render_template('index.html', asin=asin)
 
 # need to combine with 猫姐姐's Login Form
 @app.route('/login', methods=['GET', 'POST'])
