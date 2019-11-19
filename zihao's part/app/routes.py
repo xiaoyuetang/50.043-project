@@ -3,7 +3,7 @@ from flask import render_template, flash, redirect, url_for, request
 from flask_login import current_user, login_user, logout_user, login_required
 from app.forms import LoginForm, ReviewForm, RegistrationForm
 from app import db, log, meta
-from app.models import User, Trial, Review, ReviewerReviews, ReviewerInformation
+from app.models import User, Review, ReviewerReviews, ReviewerInformation
 from werkzeug.urls import url_parse
 from datetime import datetime
 
@@ -37,6 +37,18 @@ def addreview():
 @app.route('/')
 @app.route('/index')
 def index():
+	
+	############
+	
+	top10_review = Review.query.filter_by(overall=5).limit(25).all()
+	top10_review_asin = []
+	for i in top10_review:
+		reviewerReviews = ReviewerReviews.query.filter_by(reviewID=i.reviewID).first()
+		top10_review_asin.append(reviewerReviews.asin)
+	top10_review_asin = list(dict.fromkeys(top10_review_asin))
+	
+	############
+	
 	res = meta.db.metaKindleStore.find({'imUrl':{'$exists': True},'description':{'$exists': True},'categories':{'$exists':True}},{'asin':1,'categories':1,'imUrl':1,'title':1,'description':1,'_id':0}).limit(6)
 	BookInfoList = []
 	for i in res:
@@ -69,7 +81,6 @@ def login():
 			return redirect(next_page)
 	return render_template('login.html')
 
-# 猫姐姐需要写一个Sign Up的页面并且表单的格式和下面的一样
 @app.route('/register', methods=['GET', 'POST'])
 def register():
 	if current_user.is_authenticated:
@@ -89,13 +100,11 @@ def register():
 			return redirect(url_for('index'))
 	return render_template('signup.html', title='Register')
 
-# 这边猫姐姐需要在login的基础上, 加一个logout的选项
 @app.route('/logout')
 def logout():
 	logout_user()
 	return redirect(url_for('index'))
 
-# add a review to the database
 @app.route("/review", methods=["POST"])
 @login_required
 def submit_review():
@@ -138,10 +147,10 @@ def edit_profile():
 		form.about_me.data = current_user.about_me
 	return render_template('edit_profile.html', title='Edit Profile', form=form)
 
-# 看到书的 Description / 可以 write a review
+# Description / write a review
 @app.route("/review", methods = ['GET'])
 def review():
-	asin=request.args.get('asin')
+	asin = request.args.get('asin')
 	book = meta.db.metaKindleStore.find_one({"asin":asin})
 	title = book['asin']
 	cover = book['imUrl']
@@ -172,16 +181,24 @@ def review():
 	if len(relatedlist)!=0:
 		relateds = bookinfo(relatedlist)
 
+	#################
+	review_reviews = ReviewerReviews.query.filter_by(asin=asin).limit(10).all()
+	review_ids = []
+	for i in review_reviews:
+		review_ids.append(i.reviewID)
+	records = Review.query.filter(Review.reviewID.in_(review_ids)).all()
 
-	name1 = "Jane P."
-	img1 = "https://media.istockphoto.com/photos/portrait-of-a-smiling-young-woman-picture-id905456806?k=6&m=905456806&s=612x612&w=0&h=PvYHS82wm1FlEh7_8Owj_OamqJfJ8g3igDrfbA4Xo7I="
-	text1 = "Good Book!"
-	summary1 = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam eget sapien sapien. Curabitur in metus urna. In hac habitasse platea dictumst. Phasellus eu sem sapien, sed vestibulum velit. Nam purus nibh, lacinia non faucibus"
-	overall1 = 4
-	review1 = {"name": name1, "img": img1, "text": text1,
-			   "summary": summary1, "overall": overall1}
-
-	reviews = [review1, review1, review1, review1, review1, review1]
+	reviews = []
+	for i in records:
+		name = 'Small Bling Bling'
+		img = 'https://media.istockphoto.com/photos/portrait-of-a-smiling-young-woman-picture-id905456806?k=6&m=905456806&s=612x612&w=0&h=PvYHS82wm1FlEh7_8Owj_OamqJfJ8g3igDrfbA4Xo7I='
+		summary = i.summary
+		text = i.reviewText
+		overall = i.overall
+		
+		review = {"name": name, "img": img, "text": text, "summary": summary, "overall": overall}
+		reviews.append(review)
+	##################
 
 	return render_template("review-page.html", main=main_book, reviews=reviews, relateds=relateds)
 
@@ -239,10 +256,6 @@ def submit_book_info():
 	'BookAuthor':BookAuthor,
 	'MoreAbtBook':MoreAbtBook}
 	meta.db.newbooks.insert(mydict)
-	# Save book information to the mongoDB
-	# 格式是这样但是Book的metadata gyy还没弄好
-	# new_book = Book(title='Flipped', year=2000)
-	# new_book.save()
 
 	return render_template("thank-you.html")
 

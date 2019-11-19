@@ -59,26 +59,6 @@ class ReviewerReviews(db.Model):
 	def __repr__(self):
 		return '<Review ID: {}, Review product: {}, Reviewer ID: {}>'.format(self.reviewID, self.asin, self.reviewerID)
 
-class Trial(db.Model):
-	id = db.Column(db.Integer, primary_key=True)
-	reviewID = db.Column(db.Integer, primary_key=True)
-	asin = db.Column(db.String(64), index=True)
-	overall = db.Column(db.Integer, index=True)
-	reviewText = db.Column(db.String(128), index=True)
-	reviewTime = db.Column(db.String(128), index=True)
-	reviewerID = db.Column(db.String(64), index=True)
-	reviewerName = db.Column(db.String(64), index=True)
-	summary = db.Column(db.String(64), index=True)
-	unixReviewTime = db.Column(db.Integer, index=True)
-	
-	def __repr__(self):
-		return '<Review ID: {}>'.format(self.reviewID)
-
 @login.user_loader
 def load_user(id):
 	return User.query.get(int(id))
-
-class SystemLog(log.Document):
-	timestamp = log.DateTimeField(required=True, default=datetime.utcnow())
-	request = log.StringField()
-	response = log.StringField()

@@ -1,29 +1,33 @@
 from flask import Flask
 from config import Config
 from flask_sqlalchemy import SQLAlchemy
-from flask_mongoalchemy import MongoAlchemy
+from datetime import datetime
 from flask_migrate import Migrate
 from flask_login import LoginManager
 from flask_pymongo import PyMongo
 
 import logging
 import logging.handlers
-
-ssh_address='ec2-52-42-232-25.us-west-2.compute.amazonaws.com'
+from urllib import parse
+pwd = parse.quote("123456789@")
+ssh_address1='ec2-52-42-232-25.us-west-2.compute.amazonaws.com'
+ssh_address2="ec2-54-227-63-130.compute-1.amazonaws.com"
 app = Flask(__name__, static_url_path='/static')
 app.config.from_object(Config)
-app.config['MONGOALCHEMY_DATABASE'] = 'log'
-app.config["MONGO_URI"] = "mongodb://books:123456789@"+ssh_address+":27017/books"
+
+
+meta = PyMongo(app,uri="mongodb://books:123456789@"+ssh_address1+":27017/books")
+log = PyMongo(app,uri="mongodb://logadmin:"+pwd+"@"+ssh_address2+":27017/log")
 
 db = SQLAlchemy(app)
-log = MongoAlchemy(app)
+
 migrate = Migrate(app, db)
-meta = PyMongo(app)
+
 login = LoginManager(app)
 login.login_view = 'login'
 
 from app import routes, models, errors
-from app.models import SystemLog
+
 
 class MongoAlchemyHandler(logging.Handler):
 	def emit(self, record):
@@ -44,10 +48,17 @@ class MongoAlchemyHandler(logging.Handler):
 
 			response_index = req.find('"')
 
-		log = SystemLog(
-	        request = req[0:response_index],
-	        response = req[response_index+1:-1])
-		log.save()
+		mydict= {
+			"timestamp" : datetime.utcnow(),
+	        "request" : req[0:response_index],
+	        "response" : req[response_index+1:-1]}
+
+		log.db.systemLog.insert(mydict)
+
+		
+
+		
+
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)

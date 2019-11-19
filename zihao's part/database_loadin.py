@@ -38,9 +38,12 @@ class reviewerReviews(Base):
 	
 engine = create_engine('sqlite:///app.db')
 Base.metadata.create_all(engine)
-file_name = 'kindle_reviews.csv'
+file_name = 'kindle_reviews_big.csv'
 
 df = pd.read_csv(file_name)
+print (df.shape)
+df = df.iloc[:3000]
+df.columns = ['reviewID', 'asin', 'helpful', 'overall', 'reviewText', 'reviewTime', 'reviewerID', 'reviewerName', 'summary', 'unixReviewTime']
 table1_col = ['reviewerID', 'reviewerName']
 table2_col = ['reviewID', 'overall', 'reviewText', 'summary', 'unixReviewTime']
 table3_col = ['reviewID', 'asin', 'reviewerID']
