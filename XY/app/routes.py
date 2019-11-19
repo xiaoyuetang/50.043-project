@@ -44,7 +44,9 @@ def addreview():
 def index():
     dive = Book(title='Flipped', year=2000)
     dive.save()
-    return render_template('index.html')
+
+    asin = "SD21398D"
+    return render_template('index.html', asin="SD21398D")
 
 # need to combine with 猫姐姐's Login Form
 @app.route('/login', methods=['GET', 'POST'])
@@ -140,13 +142,12 @@ def edit_profile():
 
 
 # 看到书的 Description / 可以 write a review
-@app.route("/review", methods=["POST", "GET"])
-def review():
+@app.route("/review/<asin>", methods=["POST", "GET"])
+def review(asin):
+    print(asin)
     '''
     Get the header and review from review form and do something upon submit
     '''
-    x = Trial.query.filter_by(reviewID=10).all()
-    print(x)
     form = request.form
     if request.method == "POST":
         if 'reviewbutton' in form:
@@ -165,7 +166,6 @@ def review():
                            reviewerName=reviewerName, summary=summary, unixReviewTime=unixReviewTime)
             # db.session.add(review)
             # db.session.commit()
-            print(review)
 
             next_page = request.args.get('next')
             if not next_page or url_parse(next_page).netloc != '':
