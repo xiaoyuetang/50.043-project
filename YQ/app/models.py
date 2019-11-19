@@ -1,12 +1,11 @@
 from datetime import datetime
-from app import db
-from app import log
+from app import db, log
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 from app import login
 
 class User(UserMixin, db.Model):
-	id = db.Column(db.Integer, primary_key=True)
+	id = db.Column(db.Integer, primary_key=True, autoincrement=True)
 	username = db.Column(db.String(64), index=True, unique=True)
 	email = db.Column(db.String(120), index=True, unique=True)
 	password_bash = db.Column(db.String(128))
@@ -33,7 +32,7 @@ class Post(db.Model):
 		return '<Post {}>'.format(self.body)
 
 class ReviewerInformation(db.Model):
-	id = db.Column(db.Integer, primary_key=True)
+	id = db.Column(db.Integer, primary_key=True, autoincrement=True)
 	reviewerID = db.Column(db.String(64), primary_key=True)
 	reviewerName = db.Column(db.String(64), index=True)
 	
@@ -41,7 +40,7 @@ class ReviewerInformation(db.Model):
 		return '<Reviewer: {}>'.format(self.reviewerName)
 
 class Review(db.Model):
-	id = db.Column(db.Integer, primary_key=True)
+	id = db.Column(db.Integer, primary_key=True, autoincrement=True)
 	reviewID = db.Column(db.Integer, primary_key=True)
 	overall = db.Column(db.Integer, index=True)
 	reviewText = db.Column(db.String(128), index=True)
@@ -52,7 +51,7 @@ class Review(db.Model):
 		return '<Review ID: {}>'.format(self.reviewID)
 
 class ReviewerReviews(db.Model):
-	id = db.Column(db.Integer, primary_key=True)
+	id = db.Column(db.Integer, primary_key=True, autoincrement=True)
 	reviewID = db.Column(db.Integer, primary_key=True)
 	asin = db.Column(db.String(64), index=True)
 	reviewerID = db.Column(db.String(64))
@@ -78,8 +77,3 @@ class Trial(db.Model):
 @login.user_loader
 def load_user(id):
 	return User.query.get(int(id))
-
-class SystemLog(log.Document):
-	timestamp = log.DateTimeField(required=True, default=datetime.utcnow())
-	request = log.StringField()
-	response = log.StringField()
