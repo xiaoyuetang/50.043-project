@@ -5,7 +5,7 @@ from app.forms import LoginForm, ReviewForm, RegistrationForm
 from app import db, log
 from app.models import User, Trial, Review, ReviewerReviews, ReviewerInformation, Book
 from werkzeug.urls import url_parse
-from datetime import datetime
+from datetime import datetime, date
 
 
 @app.route('/addreview', methods=['GET', 'POST'])
@@ -100,27 +100,6 @@ def logout():
     logout_user()
     return redirect(url_for('index'))
 
-# add a review to the database
-@app.route("/review", methods=["POST"])
-@login_required
-def submit_review():
-
-    if request.form['button'] == "Log In":
-        return render_template("index.html")
-    elif request.form['button'] == "Submit Review":
-        text = request.form['reviewText']
-        summary = request.form['reviewSummary']
-
-        # store the review into database
-        new_review = Review(reviewID='20', reviewText=text, summary=summary)
-
-        db.session.add(new_review)
-        db.session.commit()
-
-        return render_template("thank-you.html")
-    else:
-        return "Hello"
-
 # need to combine with 猫姐姐's Signup Form
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -159,9 +138,52 @@ def edit_profile():
         form.about_me.data = current_user.about_me
     return render_template('edit_profile.html', title='Edit Profile', form=form)
 
+
+@app.route('/addreview', methods=['GET', 'POST'])
+@login_required
+def addreview():
+    form = ReviewForm()
+    if form.validate_on_submit():
+        reviewID = Trial.query.filter_by(reviewID=form.reviewID.data).first()
+        if reviewID is not None:
+            flash('reviewerID already existed')
+            return redirect(url_for('addreview'))
+
+        reviewID = form.reviewID.data
+        overall = form.overall.data
+        reviewText = form.reviewText.data
+
+        # add review to database
+        review = Trial(reviewID=reviewID, overall=overall,
+                       reviewText=reviewText)
+        db.session.add(review)
+        db.session.commit()
+
+        next_page = request.args.get('next')
+        if not next_page or url_parse(next_page).netloc != '':
+            next_page = url_for('index')
+        return redirect(next_page)
+    return render_template('add_review.html', title='Add a Review', form=form)
+
 # 看到书的 Description / 可以 write a review
-@app.route("/review")
+@app.route("/review", methods=["POST", "GET"])
 def review():
+    '''
+    Get the header and review from review form and do something upon submit
+    '''
+    form = request.form
+    if request.method == "POST":
+        if 'reviewbutton' in form:
+            reviewID = 0  # NEED HELP HERE
+            overall = form['overall'].count("\u2605")  # count number of stars
+            reviewText = form['reviewText']
+            summary = form['summary']
+            reviewTime = get_review_time()
+            review = Trial(reviewID=reviewID, overall=overall,
+                           reviewText=reviewText, reviewTime=reviewTime, summary=summary)
+            pass  # do something
+            return reviewTime
+
     '''
     Using dummy data for now. Fetch from DB next time.
     '''
@@ -260,3 +282,12 @@ def history():
 @login_required
 def profile():
     return render_template("profile.html")
+
+
+def get_review_time():
+    today = date.today()
+    year = str(today.year)
+    month = "{0:0=2d}".format(str(today.month))
+    day = "{0:0=2d}".format(str(today.day))
+
+    return month + " " + day + ", " + year

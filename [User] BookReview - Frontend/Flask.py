@@ -19,9 +19,12 @@ def review():
         password = form['password']
         pass  # do something
     elif 'reviewbutton' in form:
+        overall = str(form['overall'].count("\u2605"))
         text = form['reviewText']
-        summary = form['reviewSummary']
+        summary = form['summary']
+
         pass  # do something
+        return overall
 
     '''
     Using dummy data for now. Fetch from DB next time.
