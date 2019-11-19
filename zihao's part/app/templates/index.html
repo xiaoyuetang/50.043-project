@@ -64,17 +64,65 @@
 							<hr/>
 						</div>
 						<div class="row">
-							{% for i in BookInfoList %}
 							<div class="card bookCover">
-								<a href="{{url_for('review',asin=i['asin'])}}">
-								<img src="{{i['imUrl']}}" class="card-img-top " alt="...">
-								</a>
+								<img src="static/imag/cover1.jpeg" class="card-img-top " alt="...">
 								<div>
-									<p class="card-text">{{i['asin']}}
+									<p class="card-text">Book Title
 										<br/>Author</p>
 								</div>
 							</div>
-							{% endfor %}
+							<div class="card bookCover">
+								<a href="{{ url_for('review') }}">
+									<img src="static/imag/cover2.jpeg" class="card-img-top " alt="...">
+								</a>
+								<div>
+									<p class="card-text">Book Title
+										<br/>Author</p>
+								</div>
+							</div>
+							<div class="card bookCover">
+								<img src="static/imag/cover3.jpeg" class="card-img-top " alt="...">
+								<div>
+									<p class="card-text">Book Title
+										<br/>Author</p>
+								</div>
+							</div>
+							<div class="card bookCover">
+								<img src="static/imag/cover4.jpeg" class="card-img-top " alt="...">
+								<div>
+									<p class="card-text">Book Title
+										<br/>Author</p>
+								</div>
+							</div>
+							<div class="card bookCover">
+								<img src="static/imag/cover5.jpeg" class="card-img-top " alt="...">
+								<div>
+									<p class="card-text">Book Title
+										<br/>Author</p>
+								</div>
+							</div>
+							<div class="card bookCover">
+								<img src="static/imag/cover6.jpeg" class="card-img-top " alt="...">
+								<div>
+									<p class="card-text">Book Title
+										<br/>Author</p>
+								</div>
+							</div>
+							<div class="card bookCover">
+								<img src="static/imag/cover7.jpeg" class="card-img-top " alt="...">
+								<div>
+									<p class="card-text">Book Title
+										<br/>Author</p>
+								</div>
+							</div>
+							<div class="card bookCover">
+								<img src="static/imag/cover8.jpeg" class="card-img-top " alt="...">
+								<div>
+									<p class="card-text">Book Title
+										<br/>Author</p>
+								</div>
+							</div>
+
 						</div>
 					</div>
 				</div>

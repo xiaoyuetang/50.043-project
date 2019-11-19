@@ -15,7 +15,7 @@
   <div class="row row-adjust" name="NavBar">
     <div class="col-md-12">
       <nav class="navbar navbar-light">
-        <a class="navbar-brand logoCenter" href="{{ url_for('review') }}">
+        <a class="navbar-brand logoCenter" href="{{ url_for('index') }}">
           <img src="static/imag/open-book.png" width="60" height="60" alt="" />
         </a>
         <ul class="nav">
@@ -55,7 +55,7 @@
             Login
           </button>
           {% block modal %} {% endblock %}
-          <button type="button" class="btn btn-info">Signup</button>
+          <button type="button" class="btn btn-info" onclick="location.href='/register'">Signup</button>
         </div>
       </nav>
     </div>
