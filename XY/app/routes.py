@@ -148,6 +148,7 @@ def review():
     form = request.form
     if request.method == "POST":
         if 'reviewbutton' in form:
+            id = 000000  # NEED HELP HERE
             reviewID = 0  # NEED HELP HERE
             asin = 0000  # NEED TO GET FROM KINDLE METADATA DB
             overall = form['overall'].count("\u2605")  # count number of stars
@@ -160,8 +161,9 @@ def review():
             review = Trial(reviewID=reviewID, asin=asin, overall=overall,
                            reviewText=reviewText, reviewTime=reviewTime, reviewerID=reviewerID,
                            reviewerName=reviewerName, summary=summary, unixReviewTime=unixReviewTime)
-            db.session.add(review)
-            db.session.commit()
+            # db.session.add(review)
+            # db.session.commit()
+            print(review)
 
             next_page = request.args.get('next')
             if not next_page or url_parse(next_page).netloc != '':
