@@ -156,7 +156,7 @@ def review():
             review = Trial(reviewID=reviewID, overall=overall,
                            reviewText=reviewText, reviewTime=reviewTime, summary=summary)
             pass  # do something
-            return reviewTime
+            print(reviewTime)
 
     '''
     Using dummy data for now. Fetch from DB next time.
@@ -261,7 +261,7 @@ def profile():
 def get_review_time():
     today = date.today()
     year = str(today.year)
-    month = "{0:0=2d}".format(str(today.month))
-    day = "{0:0=2d}".format(str(today.day))
+    month = "{:02d}".format(str(today.month))
+    day = "{:02d}".format(str(today.day))
 
     return month + " " + day + ", " + year
