@@ -37,26 +37,25 @@ def addreview():
 @app.route('/')
 @app.route('/index')
 def index():
-	
+
 	############
-	
-	top10_review = Review.query.filter_by(overall=5).limit(25).all()
+
+	top10_review = Review.query.filter_by(overall=5).limit(35).all()
 	top10_review_asin = []
 	for i in top10_review:
 		reviewerReviews = ReviewerReviews.query.filter_by(reviewID=i.reviewID).first()
 		top10_review_asin.append(reviewerReviews.asin)
 	top10_review_asin = list(dict.fromkeys(top10_review_asin))
-	
+
 	############
-	
-	res = meta.db.metaKindleStore.find({'imUrl':{'$exists': True},'description':{'$exists': True},'categories':{'$exists':True}},{'asin':1,'categories':1,'imUrl':1,'title':1,'description':1,'_id':0}).limit(6)
 	BookInfoList = []
-	for i in res:
-		for j in i["categories"]:
-			for k in j:
-				if 'Books' in k or 'Kindle eBooks' in k:
-					if i not in BookInfoList:
-						BookInfoList.append(i)
+	BookList=[]
+	for i in range(len(top10_review_asin)):
+		booki = meta.db.metaKindleStoreClean.find_one({"asin":top10_review_asin[i],'imUrl':{'$exists': True},'description':{'$exists': True},'categories':{'$exists':True}})
+
+		if booki != None and len(BookInfoList) <=10:
+			BookInfoList.append(booki)
+
 	return render_template('index.html',BookInfoList = BookInfoList)
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -151,7 +150,7 @@ def edit_profile():
 @app.route("/review", methods = ['GET'])
 def review():
 	asin = request.args.get('asin')
-	book = meta.db.metaKindleStore.find_one({"asin":asin})
+	book = meta.db.metaKindleStoreClean.find_one({"asin":asin})
 	title = book['asin']
 	cover = book['imUrl']
 	desc = book['description']
@@ -195,7 +194,7 @@ def review():
 		summary = i.summary
 		text = i.reviewText
 		overall = i.overall
-		
+
 		review = {"name": name, "img": img, "text": text, "summary": summary, "overall": overall}
 		reviews.append(review)
 	##################
@@ -204,11 +203,9 @@ def review():
 
 def bookinfo(relatedlist):
 	relateds=[]
-	print(relatedlist)
 	count=0
 	for i in relatedlist:
-		print(i)
-		book = meta.db.metaKindleStore.find_one({"asin":i})
+		book = meta.db.metaKindleStoreClean.find_one({"asin":i})
 		if book is not None:
 
 			if 'imUrl' in book:

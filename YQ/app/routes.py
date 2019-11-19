@@ -37,7 +37,7 @@ def addreview():
 @app.route('/')
 @app.route('/index')
 def index():
-	res = meta.db.metaKindleStore.find({'imUrl':{'$exists': True},'description':{'$exists': True},'categories':{'$exists':True}},{'asin':1,'categories':1,'imUrl':1,'title':1,'description':1,'_id':0}).limit(6)
+	res = meta.db.metaKindleStoreClean.find({'imUrl':{'$exists': True},'description':{'$exists': True},'categories':{'$exists':True}},{'asin':1,'categories':1,'imUrl':1,'title':1,'description':1,'_id':0}).limit(6)
 	BookInfoList = []
 	for i in res:
 		for j in i["categories"]:
@@ -142,7 +142,7 @@ def edit_profile():
 @app.route("/review", methods = ['GET'])
 def review():
 	asin=request.args.get('asin')
-	book = meta.db.metaKindleStore.find_one({"asin":asin})
+	book = meta.db.metaKindleStoreClean.find_one({"asin":asin})
 	title = book['asin']
 	cover = book['imUrl']
 	desc = book['description']
@@ -187,11 +187,11 @@ def review():
 
 def bookinfo(relatedlist):
 	relateds=[]
-	print(relatedlist)
+
 	count=0
 	for i in relatedlist:
-		print(i)
-		book = meta.db.metaKindleStore.find_one({"asin":i})
+
+		book = meta.db.metaKindleStoreClean.find_one({"asin":i})
 		if book is not None:
 
 			if 'imUrl' in book:
