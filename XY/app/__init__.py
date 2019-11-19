@@ -16,3 +16,6 @@ login = LoginManager(app)
 login.login_view = 'login'
 
 from app import routes, models, errors
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=80)
