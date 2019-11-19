@@ -2,7 +2,7 @@ from app import app
 from flask import render_template, flash, redirect, url_for, request
 from flask_login import current_user, login_user, logout_user, login_required
 from app.forms import LoginForm, ReviewForm, RegistrationForm
-from app import db, log
+from app import db, log, meta
 from app.models import User, Trial, Review, ReviewerReviews, ReviewerInformation
 from werkzeug.urls import url_parse
 from datetime import datetime
@@ -20,12 +20,12 @@ def addreview():
 		reviewID = form.reviewID.data
 		overall = form.overall.data
 		reviewText = form.reviewText.data
-		
+
 		# add review to database
 		review = Trial(reviewID=reviewID, overall=overall, reviewText=reviewText)
 		db.session.add(review)
 		db.session.commit()
-		
+
 		next_page = request.args.get('next')
 		if not next_page or url_parse(next_page).netloc != '':
 			next_page = url_for('index')
@@ -37,16 +37,24 @@ def addreview():
 @app.route('/')
 @app.route('/index')
 def index():
-	return render_template('index.html')
+	res = meta.db.metaKindleStore.find({'imUrl':{'$exists': True},'description':{'$exists': True},'categories':{'$exists':True}},{'asin':1,'categories':1,'imUrl':1,'title':1,'description':1,'_id':0}).limit(6)
+	BookInfoList = []
+	for i in res:
+		for j in i["categories"]:
+			for k in j:
+				if 'Books' in k or 'Kindle eBooks' in k:
+					if i not in BookInfoList:
+						BookInfoList.append(i)
+	return render_template('index.html',BookInfoList = BookInfoList)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
 	if current_user.is_authenticated:
 		return redirect(url_for('index'))
-	
+
 	if request.method == 'POST':
 		if request.form['loginbutton'] == 'Log In':
-			
+
 			userid = request.form['userid']
 			password = request.form['password']
 			user = User.query.filter_by(username=userid).first()
@@ -66,13 +74,13 @@ def login():
 def register():
 	if current_user.is_authenticated:
 		return redirect(url_for('index'))
-		
+
 	if request.method == 'POST':
 		if request.form['signupbutton'] == 'Sign up':
 			userid = request.form['new_username']
 			email = request.form['new_email']
 			password = request.form['new_password']
-			
+
 			user = User(username=userid, email=email)
 			user.set_password(password)
 			db.session.add(user)
@@ -91,24 +99,24 @@ def logout():
 @app.route("/review", methods=["POST"])
 @login_required
 def submit_review():
-	
+
 	if request.form['button'] == "Log In":
 		return render_template("index.html")
 	elif request.form['button'] == "Submit Review":
 		text = request.form['reviewText']
 		summary = request.form['reviewSummary']
-		
+
 		# store the review into database
 		new_review = Review(reviewID='20', reviewText=text, summary=summary)
 		db.session.add(new_review)
 		db.session.commit()
-		
+
 		return render_template("thank-you.html")
 	else:
 		return "Hello"
 
 # save the latest log records to database
-@app.before_request 
+@app.before_request
 def before_request():
 	if current_user.is_authenticated:
 		current_user.last_seen = datetime.utcnow()
@@ -129,25 +137,42 @@ def edit_profile():
 		form.username.data = current_user.username
 		form.about_me.data = current_user.about_me
 	return render_template('edit_profile.html', title='Edit Profile', form=form)
-	
-# 看到书的 Description / 可以 write a review
-@app.route("/review")
-def review():
-	'''
-	Using dummy data for now. Fetch from DB next time.
-	'''
 
-	''' Dummy Main Book '''
-	title = "The Arsonist"
-	cover = "https://www.booktopia.com.au/blog/wp-content/uploads/2018/12/the-arsonist.jpg"
-	desc = "Sed iaculis posuere diam ut cursus. assa magna, vulputate nec bibendum nec, posuere nec lacus. Sed iaculis posuere diam ut cursus. assa magna, vulputate nec bibendum nec, posuere nec lacus. Sed iaculis posuere diam ut cursus. assa magna, vulputate nec bibendum nec, posuere nec lacus. Sed iaculis posuere diam ut cursus. assa magna, vulputate nec bibendum nec, posuere nec lacus."
-	author = "Chloe Hooper"
-	tags = ["Fantasy", "Romance", "Cookbooks"]
+# 看到书的 Description / 可以 write a review
+@app.route("/review", methods = ['GET'])
+def review():
+	asin=request.args.get('asin')
+	book = meta.db.metaKindleStore.find_one({"asin":asin})
+	title = book['asin']
+	cover = book['imUrl']
+	desc = book['description']
+	tagslist = book['categories']
+	author = '2333'
+	tags=[]
+	for i in tagslist:
+		for j in i:
+			if j in tags:
+				i.remove(j)
+		tags.extend(i)
 
 	main_book = {"title": title, "cover": cover,
 				 "desc": desc, "author": author, "tags": tags}
+	relateds=[]
+	relatedlist=[]
 
-	''' Dummy reviews '''
+	if 'also_viewed' in book['related']:
+		relatedlist = book['related']['also_viewed']
+		# relateds = bookinfo(relatedlist)
+	elif book['related']['also_bought'] is not None:
+		relatedlist = book['related']['also_bought']
+		# relateds = bookinfo(relatedlist)
+	elif 'buy_after_viewing' in book['related']:
+		relatedlist = book['related']['buy_after_viewing']
+
+	if len(relatedlist)!=0:
+		relateds = bookinfo(relatedlist)
+
+
 	name1 = "Jane P."
 	img1 = "https://media.istockphoto.com/photos/portrait-of-a-smiling-young-woman-picture-id905456806?k=6&m=905456806&s=612x612&w=0&h=PvYHS82wm1FlEh7_8Owj_OamqJfJ8g3igDrfbA4Xo7I="
 	text1 = "Good Book!"
@@ -158,17 +183,35 @@ def review():
 
 	reviews = [review1, review1, review1, review1, review1, review1]
 
-	''' Dummy Related books '''
-	cover1 = "https://marketplace.canva.com/MADSMNPt8uA/3/0/thumbnail_large/canva-green-beach-photo-book-cover-MADSMNPt8uA.jpg"
-	title1 = "The Sun in His Eyes"
-	author1 = "Eleanor Fitzgerald"
-	tags1 = ["Sports", "Cookbooks", "Psychology", "Biography"]
-	related1 = {"cover": cover1, "title": title1,
-				"author": author1, "tags": tags1}
-
-	relateds = [related1, related1, related1]
-	
 	return render_template("review-page.html", main=main_book, reviews=reviews, relateds=relateds)
+
+def bookinfo(relatedlist):
+	relateds=[]
+	print(relatedlist)
+	count=0
+	for i in relatedlist:
+		print(i)
+		book = meta.db.metaKindleStore.find_one({"asin":i})
+		if book is not None:
+
+			if 'imUrl' in book:
+				title=book['asin']
+				cover=book['imUrl']
+				author='2333'
+				tagslist = book['categories']
+				tags=[]
+				for j in tagslist:
+					for k in j:
+						if k in tags:
+							j.remove(k)
+					tags.extend(j)
+				related = {"cover": cover, "title": title,
+						"author": author, "tags": tags}
+				relateds.append(related)
+				count+=1
+		if count==5:
+			break
+	return relateds
 
 # add-a-book page
 @app.route("/add-a-book")
@@ -180,7 +223,7 @@ def add_a_book():
 @app.route("/add-a-book", methods=['POST'])
 @login_required
 def submit_book_info():
-	
+
 	# Get the book info from add-a-book form
 	ClientName = request.form['ClientName']
 	ClientEmail = request.form['ClientEmail']
@@ -188,18 +231,25 @@ def submit_book_info():
 	BookName = request.form["BookName"]
 	BookAuthor = request.form["BookAuthor"]
 	MoreAbtBook = request.form["MoreAbtBook"]
-
+	# Save book information to the mongoDB
+	mydict = {'ClientName':ClientName,
+	'ClientEmail':ClientEmail,
+	'BookCat':BookCat,
+	'BookName':BookName,
+	'BookAuthor':BookAuthor,
+	'MoreAbtBook':MoreAbtBook}
+	meta.db.newbooks.insert(mydict)
 	# Save book information to the mongoDB
 	# 格式是这样但是Book的metadata gyy还没弄好
 	# new_book = Book(title='Flipped', year=2000)
 	# new_book.save()
-	
+
 	return render_template("thank-you.html")
 
 @app.route("/history")
 @login_required
 def history():
-	''' 
+	'''
 	Using dummy data for now. Fetch from DB next time.
 	'''
 	b1 = "Harry Potter"
@@ -227,12 +277,12 @@ def history():
 @app.route("/profile")
 # @app.route("/profile/<username>")
 @login_required
-def profile():	
+def profile():
 # def profile(username):
-	
+
 	#user = User.query.filter_by(username=username).first_or_404()
 	# 相关的信息需要什么
-	# posts = 
-	# reviews = 
+	# posts =
+	# reviews =
 
 	return render_template("profile.html")

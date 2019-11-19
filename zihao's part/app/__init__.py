@@ -4,17 +4,21 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_mongoalchemy import MongoAlchemy
 from flask_migrate import Migrate
 from flask_login import LoginManager
+from flask_pymongo import PyMongo
 
 import logging
 import logging.handlers
 
+ssh_address='ec2-52-42-232-25.us-west-2.compute.amazonaws.com'
 app = Flask(__name__, static_url_path='/static')
 app.config.from_object(Config)
 app.config['MONGOALCHEMY_DATABASE'] = 'log'
+app.config["MONGO_URI"] = "mongodb://books:123456789@"+ssh_address+":27017/books"
 
 db = SQLAlchemy(app)
 log = MongoAlchemy(app)
 migrate = Migrate(app, db)
+meta = PyMongo(app)
 login = LoginManager(app)
 login.login_view = 'login'
 
@@ -49,7 +53,7 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
 ch = MongoAlchemyHandler()
-ch.setLevel(logging.INFO) 
+ch.setLevel(logging.INFO)
 
 loggers = [logger, logging.getLogger('werkzeug'), logging.getLogger('flask.app')]
 
