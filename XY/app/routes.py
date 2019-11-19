@@ -145,8 +145,8 @@ def review():
     '''
     Get the header and review from review form and do something upon submit
     '''
-    reviewID = Trial.query.filter_by().all()
-    print(reviewID)
+    x = Trial.query.filter_by(reviewID < 10).all()
+    print(x)
     form = request.form
     if request.method == "POST":
         if 'reviewbutton' in form:
