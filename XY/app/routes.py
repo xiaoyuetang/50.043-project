@@ -149,12 +149,17 @@ def review():
     if request.method == "POST":
         if 'reviewbutton' in form:
             reviewID = 0  # NEED HELP HERE
+            asin = 0000
             overall = form['overall'].count("\u2605")  # count number of stars
             reviewText = form['reviewText']
-            summary = form['summary']
             reviewTime = get_review_time()
+            summary = form['summary']
+            reviewerID = "A29cDXC"
+            reviewerName = "ASDADS"
             review = Trial(reviewID=reviewID, overall=overall,
                            reviewText=reviewText, reviewTime=reviewTime, summary=summary)
+            db.session.add(review)
+            db.session.commit()
             pass  # do something
             print(reviewTime)
 
