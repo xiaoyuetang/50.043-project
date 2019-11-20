@@ -5,7 +5,7 @@ from app.forms import LoginForm, ReviewForm, RegistrationForm
 from app import db, log, meta
 from app.models import User, Review, ReviewerReviews, ReviewerInformation
 from werkzeug.urls import url_parse
-from datetime import datetime
+from datetime import datetime, date
 
 @app.route('/addreview', methods=['GET', 'POST'])
 @login_required
