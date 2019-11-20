@@ -183,31 +183,31 @@ def review():
 	##### Review submission #####
 	form = request.form
 	if request.method == "POST":
-			if 'reviewbutton' in form:
-					id = 000000  # NEED HELP HERE
-					reviewID = 0  # NEED HELP HERE
-					# asin is pulled already
-					print("ASIN IS ", asin)
-					overall = form['overall'].count("\u2605")  # count number of stars
-					reviewText = form['reviewText']
-					reviewTime = get_review_time()
-					reviewerID = "A29cDXC"  # NEED TO GET FROM DB
-					reviewerName = "ASDADS"  # NEED TO GET FROM DB
-					summary = form['summary']
-					unixReviewTime = int(datetime.utcnow().timestamp())
-					review = Trial(reviewID=reviewID, asin=asin, overall=overall,
-													reviewText=reviewText, reviewTime=reviewTime, reviewerID=reviewerID,
-													reviewerName=reviewerName, summary=summary, unixReviewTime=unixReviewTime)
-					db.session.add(review)
-					db.session.commit()
-					print("DONE PUShING")
+		if not user.is_authenticated:
+			redirect(url_for('login'))
+		if 'reviewbutton' in form:
+			id = 000000  # NEED HELP HERE
+			reviewID = 0  # NEED HELP HERE
+			# asin is pulled already
+			print("ASIN IS ", asin)
+			overall = form['overall'].count("\u2605")  # count number of stars
+			reviewText = form['reviewText']
+			reviewTime = get_review_time()
+			reviewerID = "A29cDXC"  # NEED TO GET FROM DB
+			reviewerName = "ASDADS"  # NEED TO GET FROM DB
+			summary = form['summary']
+			unixReviewTime = int(datetime.utcnow().timestamp())
+			'''
+			Push to DB here !!!
+			'''
+			print("DONE PUShING")
 
-					next_page = request.args.get('next')
-					if not next_page or url_parse(next_page).netloc != '':
-							next_page = url_for('index')
-					return redirect(next_page)
-			else:
-					pass  # something else
+			next_page = request.args.get('next')
+			if not next_page or url_parse(next_page).netloc != '':
+					next_page = url_for('index')
+			return redirect(next_page)
+		else:
+				pass  # something else
 	#### #### 
 
 	#### Load Reviews from DB ####
