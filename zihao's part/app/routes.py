@@ -183,7 +183,7 @@ def review():
 	##### Review submission #####
 	form = request.form
 	if request.method == "POST":
-		if not user.is_authenticated:
+		if not current_user.is_authenticated:
 			redirect(url_for('login'))
 		if 'reviewbutton' in form:
 			id = 000000  # NEED HELP HERE
