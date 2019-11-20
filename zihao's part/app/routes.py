@@ -200,6 +200,7 @@ def review():
 													reviewerName=reviewerName, summary=summary, unixReviewTime=unixReviewTime)
 					db.session.add(review)
 					db.session.commit()
+					print("DONE PUShING")
 
 					next_page = request.args.get('next')
 					if not next_page or url_parse(next_page).netloc != '':
@@ -325,3 +326,11 @@ def profile():
 	# reviews =
 
 	return render_template("profile.html")
+
+def get_review_time():
+    today = date.today()
+    year = str(today.year)
+    month = str(today.month)
+    day = str(today.day)
+
+    return month + " " + day + ", " + year
