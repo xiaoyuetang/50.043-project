@@ -1,68 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='css/style.css') }}"
-    />
-    <link
-      rel="stylesheet"
-      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
-      crossorigin="anonymous"
-    />
-    {% block head %} {% endblock %}
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
   </head>
-  <body>
-    <!--<div class="container">
-      <ul>
-        <li><a href="{{ url_for('home') }}">Home</a></li>
-        <li><a href="{{ url_for('review') }}">Review</a></li>
-      </ul>
-    </div>-->
-    <div class="row row-adjust" name="NavBar">
-      <div class="col-md-12">
-        <nav class="navbar navbar-light">
-          <a class="navbar-brand logoCenter" href="{{ url_for('home') }}">
-            <img
-              src="static/imag/open-book.png"
-              width="60"
-              height="60"
-              alt=""
-            />
-          </a>
-          <ul class="nav navsCenter">
-            <li class="nav-item">
-              <a class="nav-link" href="#">Add a new book</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Recommended books</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">2019 best books</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#" tabindex="-1" aria-disabled="true"
-                >Discover books</a
-              >
-            </li>
-          </ul>
-          <form class="form-inline searchCenter">
-            <input
-              class="form-control"
-              type="search"
-              placeholder="Search for books"
-              aria-label="Search"
-            />
-            <button class="btn btn-outline-info" type="submit">Search</button>
-          </form>
-        </nav>
-      </div>
-    </div>
-    <hr />
-    {% block content %} {% endblock %}
-  </body>
+  <body></body>
 </html>

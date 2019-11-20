@@ -1,23 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    {% block head %} 
-    <title>Introduce me as..</title>
-    {% endblock %}
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
   </head>
   <body>
-    {% extends "template.html" %}
-    {% block content %}
-      <div class="form-group">
-        <div class="col-md-12">
-          <form class="text-center" method="POST">
-              <h2><strong><em>your name is what</em></strong><h2>
-            <input name="name" type="text" class="form-control mb-4" placeholder="i.. said.. your.. name is what!!">
-            <input type="submit" value="Hullo">
-            <button type="button">Thats my name</button>
-          </form>
-        </div>
-      </div>
-    {% endblock %}
+    <h2>asin = {{asin}}</h2>
   </body>
 </html>
