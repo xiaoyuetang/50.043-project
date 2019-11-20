@@ -183,8 +183,11 @@ def review():
 	##### Review submission #####
 	form = request.form
 	if request.method == "POST":
+		'''
+		Check for login. Not sure if this is correct.
+		'''
 		if not current_user.is_authenticated:
-			redirect(url_for('login'))
+			return redirect(url_for('login'))
 		if 'reviewbutton' in form:
 			id = 000000  # NEED HELP HERE
 			reviewID = 0  # NEED HELP HERE
@@ -201,13 +204,6 @@ def review():
 			Push to DB here !!!
 			'''
 			print("DONE PUShING")
-
-			next_page = request.args.get('next')
-			if not next_page or url_parse(next_page).netloc != '':
-					next_page = url_for('index')
-			return redirect(next_page)
-		else:
-				pass  # something else
 	#### #### 
 
 	#### Load Reviews from DB ####
