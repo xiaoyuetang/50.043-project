@@ -104,24 +104,24 @@ def logout():
 	logout_user()
 	return redirect(url_for('index'))
 
-@app.route("/review", methods=["POST"])
-@login_required
-def submit_review():
+# @app.route("/review", methods=["POST"])
+# @login_required
+# def submit_review():
 
-	if request.form['button'] == "Log In":
-		return render_template("index.html")
-	elif request.form['button'] == "Submit Review":
-		text = request.form['reviewText']
-		summary = request.form['reviewSummary']
+# 	if request.form['button'] == "Log In":
+# 		return render_template("index.html")
+# 	elif request.form['button'] == "Submit Review":
+# 		text = request.form['reviewText']
+# 		summary = request.form['reviewSummary']
 
-		# store the review into database
-		new_review = Review(reviewID='20', reviewText=text, summary=summary)
-		db.session.add(new_review)
-		db.session.commit()
+# 		# store the review into database
+# 		new_review = Review(reviewID='20', reviewText=text, summary=summary)
+# 		db.session.add(new_review)
+# 		db.session.commit()
 
-		return render_template("thank-you.html")
-	else:
-		return "Hello"
+# 		return render_template("thank-you.html")
+# 	else:
+# 		return "Hello"
 
 # save the latest log records to database
 @app.before_request
@@ -147,7 +147,7 @@ def edit_profile():
 	return render_template('edit_profile.html', title='Edit Profile', form=form)
 
 # Description / write a review
-@app.route("/review", methods = ['GET'])
+@app.route("/review", methods = ['GET', 'POST'])
 def review():
 	asin = request.args.get('asin')
 	book = meta.db.metaKindleStoreClean.find_one({"asin":asin})
@@ -180,7 +180,35 @@ def review():
 	if len(relatedlist)!=0:
 		relateds = bookinfo(relatedlist)
 
-	#################
+	##### Review submission #####
+	form = request.form
+	if request.method == "POST":
+			if 'reviewbutton' in form:
+					id = 000000  # NEED HELP HERE
+					reviewID = 0  # NEED HELP HERE
+					# asin is pulled already
+					overall = form['overall'].count("\u2605")  # count number of stars
+					reviewText = form['reviewText']
+					reviewTime = get_review_time()
+					reviewerID = "A29cDXC"  # NEED TO GET FROM DB
+					reviewerName = "ASDADS"  # NEED TO GET FROM DB
+					summary = form['summary']
+					unixReviewTime = int(datetime.utcnow().timestamp())
+					review = Trial(reviewID=reviewID, asin=asin, overall=overall,
+													reviewText=reviewText, reviewTime=reviewTime, reviewerID=reviewerID,
+													reviewerName=reviewerName, summary=summary, unixReviewTime=unixReviewTime)
+					db.session.add(review)
+					db.session.commit()
+
+					next_page = request.args.get('next')
+					if not next_page or url_parse(next_page).netloc != '':
+							next_page = url_for('index')
+					return redirect(next_page)
+			else:
+					pass  # something else
+	#### #### 
+
+	#### Load Reviews from DB ####
 	review_reviews = ReviewerReviews.query.filter_by(asin=asin).limit(10).all()
 	review_ids = []
 	for i in review_reviews:
