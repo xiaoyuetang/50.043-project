@@ -187,6 +187,7 @@ def review():
 					id = 000000  # NEED HELP HERE
 					reviewID = 0  # NEED HELP HERE
 					# asin is pulled already
+					print("ASIN IS ", asin)
 					overall = form['overall'].count("\u2605")  # count number of stars
 					reviewText = form['reviewText']
 					reviewTime = get_review_time()
