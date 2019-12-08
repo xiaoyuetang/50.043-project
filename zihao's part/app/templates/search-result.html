@@ -18,7 +18,7 @@
                 </div>
 
                 <div class="row" name="SearchResult" style="margin:40px 50px;">
-                    {% for i in BookInfoList %}
+                    {% for i in search_results %}
                     <div class="card bookCover">
                         <a href="{{url_for('review',asin=i['asin'])}}">
                         <img src="{{i['imUrl']}}" class="card-img-top " alt="...">

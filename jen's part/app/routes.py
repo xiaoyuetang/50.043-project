@@ -35,8 +35,8 @@ def addreview():
 
 ####################### below are revisited version ########################
 
-@app.route('/')
-@app.route('/index')
+@app.route('/',methods=['GET', 'POST'])
+# @app.route('/index')
 def index():
 
 	############
@@ -56,8 +56,31 @@ def index():
 
 		if booki != None and len(BookInfoList) <=10:
 			BookInfoList.append(booki)
+	################search here#########
+	search_input = None
+	if request.method == 'POST' and request.form['search-btn'] == 'Search':
+		search_input = request.form['search-input']
+		return redirect(url_for('search', search_input=search_input))
 
 	return render_template('index.html',BookInfoList = BookInfoList)
+
+
+@app.route('/search-result')
+def search():
+    search_input = request.args['search_input']
+    results = search_book(search_input)
+    return render_template('search-result.html', search_input=search_input, search_results = results)
+
+def search_book(keyword):
+	query = {'$or':[{'title':{"$regex":keyword,"$options":"i"}},{'author':{"$regex":keyword,"$options":"i"}},
+
+			{'brand':{"$regex":keyword, "$options":"i"}},{'asin':{"$regex":keyword, "$options":"i"}},
+
+			{'categories': {'$elemMatch': {'$elemMatch': {"$regex":keyword, "$options":"i"}}}}]}
+	cursor = meta.db.metaKindleStoreClean.find(query)
+	results = [book for book in cursor]
+	print(results)
+	return results
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -109,7 +132,7 @@ def logout():
 def insert_review(id,asin,helpful,overall,reviewText,reviewTime,reviewerID,reviewerName,summary,unixReviewTime):
 	query1 = "INSERT INTO reviews(id,asin,helpful,overall,reviewText,reviewTime,reviewerID,reviewerName,summary,unixReviewTime) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
 	try:
-		conn = mysql.connection.cursor()		
+		conn = mysql.connection.cursor()
 		conn.execute(query1,[id,asin,helpful,overall,reviewText,reviewTime,reviewerID,reviewerName,summary,unixReviewTime])
 		mysql.connection.commit()
 		print("Record inserted successfully into reviews table")
@@ -184,7 +207,7 @@ def edit_profile():
 def catch_reviews(asin):
 	myresult=[]
 	try:
-		conn = mysql.connection.cursor()		
+		conn = mysql.connection.cursor()
 		conn.execute("SELECT * FROM reviews where asin = %s",[asin])
 		myresult = conn.fetchall()
 		print("Records for asin " + asin + " fetched from reviews table")
@@ -195,7 +218,7 @@ def catch_reviews(asin):
 	except Error as error:
 	    print(error)
 	return myresult
-		
+
 # Description / write a review
 @app.route("/review", methods = ['GET'])
 def review():

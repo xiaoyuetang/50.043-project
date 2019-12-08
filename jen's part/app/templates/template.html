@@ -6,16 +6,16 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <!-- Below is the css file static/css/style.css used as stylesheet -->
-  <link rel="stylesheet" href="static/css/style.css" />
+  <link rel="stylesheet" href="static/css/style.css" type="text/css" />
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
     crossorigin="anonymous" /> {% block head %} {% endblock %}
 </head>
 
 <body>
   <div class="row row-adjust" name="NavBar">
-    <div class="col-md-12">
-      <nav class="navbar navbar-light">
-        <a class="navbar-brand logoCenter" href="{{ url_for('index') }}">
+    <div class="col-md-12" style="margin: auto">
+      <nav class="navbar navbar-light" style="margin: 0px 50px">
+        <a class="navbar-brand" href="{{ url_for('index') }}">
           <img src="static/imag/open-book.png" width="60" height="60" alt="" />
         </a>
         <ul class="nav">
@@ -32,10 +32,10 @@
             <a class="nav-link" href="#" tabindex="-1" aria-disabled="true">Discover books</a>
           </li>
         </ul>
-        <form class="form-inline searchCenter">
-          <input class="form-control" type="search" placeholder="Search for books" aria-label="Search" />
+        <!-- <form class="form-inline searchCenter">
+          <input name=search-bar class="form-control" type="search" placeholder="Search for books" aria-label="Search" />
           <button class="btn btn-outline-info" type="submit">Search</button>
-        </form>
+        </form> -->
         <!-- User Profile -->
         <div class="dropdown">
           <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
@@ -71,34 +71,6 @@
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        <!-- <div class="modal-body"> -->
-        <!-- Login form -->
-        <!-- <div class="form-group">
-            <div class="col-md-12">
-              <form class="text-center" method="POST">
-                <label name="userid">User ID</label>
-                <input id="userid" type="text" class="form-control mb-4" />
-                <label for="password">Password</label>
-                <input name="password" type="password" class="form-control mb-4" />
-                <div class="checkbox">
-                  <label>
-                    <input name="loginsavepw" type="checkbox" value="True">&nbsp;&nbsp;Save password?</label>
-                </div>
-                <input name="loginbutton" class="btn btn-info btn-block mt-4" type="submit" value="Log In" />
-              </form>
-            </div>
-          </div>
-        </div> -->
-        <!-- <div class="modal-footer">
-            <button
-              type="button"
-              class="btn btn-secondary"
-              data-dismiss="modal"
-            >
-              Close
-            </button>
-            <button type="button" class="btn btn-primary">Save changes</button>
-          </div> -->
       </div>
     </div>
   </div>

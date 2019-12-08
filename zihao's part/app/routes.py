@@ -34,8 +34,8 @@ def addreview():
 
 ####################### below are revisited version ########################
 
-@app.route('/')
-@app.route('/index',methods=['GET', 'POST'])
+@app.route('/',methods=['GET', 'POST'])
+# @app.route('/index')
 def index():
 
 	############
@@ -59,8 +59,7 @@ def index():
 	search_input = None
 	if request.method == 'POST' and request.form['search-btn'] == 'Search':
 		search_input = request.form['search-input']
-		results = search_book(search_input)
-		return redirect(url_for('search', search_input=search_input,search_results = results))
+		return redirect(url_for('search', search_input=search_input))
 
 	return render_template('index.html',BookInfoList = BookInfoList)
 
