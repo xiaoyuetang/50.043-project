@@ -35,7 +35,7 @@ def addreview():
 ####################### below are revisited version ########################
 
 @app.route('/')
-@app.route('/index')
+@app.route('/index',methods=['GET', 'POST'])
 def index():
 
 	############
@@ -55,8 +55,32 @@ def index():
 
 		if booki != None and len(BookInfoList) <=10:
 			BookInfoList.append(booki)
+	################search here#########
+	search_input = None
+	if request.method == 'POST' and request.form['search-btn'] == 'Search':
+		search_input = request.form['search-input']
+		results = search_book(search_input)
+		return redirect(url_for('search', search_input=search_input,search_results = results))
 
 	return render_template('index.html',BookInfoList = BookInfoList)
+
+
+@app.route('/search-result')
+def search():
+    search_input = request.args['search_input']
+    results = search_book(search_input)
+    return render_template('search-result.html', search_input=search_input, search_results = results)
+
+def search_book(keyword):
+	query = {'$or':[{'title':{"$regex":keyword,"$options":"i"}},{'author':{"$regex":keyword,"$options":"i"}},
+
+			{'brand':{"$regex":keyword, "$options":"i"}},{'asin':{"$regex":keyword, "$options":"i"}},
+
+			{'categories': {'$elemMatch': {'$elemMatch': {"$regex":keyword, "$options":"i"}}}}]}
+	cursor = meta.db.metaKindleStoreClean.find(query)
+	results = [book for book in cursor]
+	print(results)
+	return results
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -204,7 +228,7 @@ def review():
 			Push to DB here !!!
 			'''
 			print("DONE PUShING")
-	#### #### 
+	#### ####
 
 	#### Load Reviews from DB ####
 	review_reviews = ReviewerReviews.query.filter_by(asin=asin).limit(10).all()

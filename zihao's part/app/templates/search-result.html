@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {% extends "template.html" %}
+    <title>Group9 Book Review System</title>
+    <meta name="description" content="Home Page" />
+    <meta name="author" content="Group9" />
+</head>
+
+<body>
+    {% block content %}
+    <div class="container-fluid">
+        <div class="row row-adjust">
+            <div class="col-md-12">
+                <div class="row" style="background-image: url('static/imag/search-result.jpg'); background-size: cover;">
+                    <h1 style="margin:160px 50px;color:aliceblue">Search Result for '{{ search_input }}':</h1>
+                </div>
+
+                <div class="row" name="SearchResult" style="margin:40px 50px;">
+                    {% for i in BookInfoList %}
+                    <div class="card bookCover">
+                        <a href="{{url_for('review',asin=i['asin'])}}">
+                        <img src="{{i['imUrl']}}" class="card-img-top " alt="...">
+                        </a>
+                        <div>
+                            <p class="card-text">{{i['asin']}}
+                                <br/>Author</p>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endblock %}
+</body>
+
+</html>

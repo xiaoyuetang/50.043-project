@@ -67,9 +67,9 @@ class MongoAlchemyHandler(logging.Handler):
 
 		log.db.systemLog.insert(mydict)
 
-		
 
-		
+
+
 
 
 logger = logging.getLogger(__name__)
