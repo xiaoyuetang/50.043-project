@@ -1,8 +1,6 @@
-import pyspark
-sc = pyspark.SparkContext('local[*]')
+from pyspark.sql import SparkSession
 
-txt = sc.textFile('file:////usr/share/doc/python/copyright')
-print(txt.count())
+sparkSession = SparkSession.builder.appName("testSpark").getOrCreate()
 
-python_lines = txt.filter(lambda line: 'python' in line.lower())
-print(python_lines.count())
+df_load = sparkSession.read.csv('hdfs://localhost:9000')
+df_load.show()
