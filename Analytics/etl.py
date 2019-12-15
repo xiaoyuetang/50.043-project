@@ -16,7 +16,7 @@ with open(f"{OUTFILE}", mode="w") as f:
     data = cur.fetchall()
     result = []
     for i in data:
-        result.append(i[0])
+        f.write(i[0])
     con.commit()
 
 
