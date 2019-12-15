@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        {% extends "template.html" %} {% block head %}
+        <meta name="description" content="Book Review Page" />
+        <meta name="author" content="Group9" />
+        <title>Book Review of (Title)</title>
+        {% endblock %}
+    </head>
+
+  <body>
+    {% block content %}
+    <table border="1" width="60%"background-color="#A6D0E4" cellpadding="2">
+        <caption>History for today</caption>
+        <tr align="center">
+            <td>Time</td>
+            <td>RequestSummary</td>
+            <td>RequestType</td>
+            <td>RequestContent</td>
+            <td>Response</td>
+            <td>UserName</td>
+            <td>Year</td>
+            <td>Month</td>
+            <td>Day</td>
+        </tr>
+
+        {% for i in logInfoToday %}
+        
+        <tr align="center">
+            <td>{{i.TimeStamp}}</td>
+            <td>{{i.RequestSummary}}</td>
+            <td>{{i.RequestType}}</td>
+            <td>{{i.RequestContent}}</td>
+            <td>{{i.Response}}</td>
+            <td>{{i.UserName}}</td>
+            <td>{{i.Year}}</td>
+            <td>{{i.Month}}</td>
+            <td>{{i.Day}}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% endblock%}
+  </body>
+</html>
