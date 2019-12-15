@@ -16,3 +16,4 @@ asin_rText_price = rText.join(price).select('*')
 
 reviewLengths = asin_rText_price.select('reviewText').map(lambda x: len(x))
 
+asin_rText_price = asin_rText_price.join(reviewLengths).select('*')
