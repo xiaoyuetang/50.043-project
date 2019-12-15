@@ -5,7 +5,8 @@ from app.forms import LoginForm, ReviewForm, RegistrationForm
 from app import db, log, meta
 from app.models import User, Review, ReviewerReviews, ReviewerInformation
 from werkzeug.urls import url_parse
-from datetime import datetime, date
+from datetime import datetime, date, time
+import matplotlib.pyplot as plt
 
 @app.route('/addreview', methods=['GET', 'POST'])
 @login_required
@@ -20,7 +21,7 @@ def addreview():
 		reviewID = form.reviewID.data
 		overall = form.overall.data
 		reviewText = form.reviewText.data
-
+		
 		# add review to database
 		review = Trial(reviewID=reviewID, overall=overall, reviewText=reviewText)
 		db.session.add(review)
@@ -29,7 +30,10 @@ def addreview():
 		next_page = request.args.get('next')
 		if not next_page or url_parse(next_page).netloc != '':
 			next_page = url_for('index')
+		# add request to log
+
 		return redirect(next_page)
+
 	return render_template('add_review.html', title='Add a Review', form=form)
 
 ####################### below are revisited version ########################
@@ -39,7 +43,6 @@ def addreview():
 def index():
 
 	############
-
 	top10_review = Review.query.filter_by(overall=5).limit(35).all()
 	top10_review_asin = []
 	for i in top10_review:
@@ -66,9 +69,10 @@ def index():
 
 @app.route('/search-result')
 def search():
-    search_input = request.args['search_input']
-    results = search_book(search_input)
-    return render_template('search-result.html', search_input=search_input, search_results = results)
+	search_input = request.args['search_input']
+	results = search_book(search_input)
+	add_log("searchbook", "", search_input,  "search book successfully", current_user.username)
+	return render_template('search-result.html', search_input=search_input, search_results = results)
 
 def search_book(keyword):
 	query = {'$or':[{'title':{"$regex":keyword,"$options":"i"}},{'author':{"$regex":keyword,"$options":"i"}},
@@ -78,7 +82,7 @@ def search_book(keyword):
 			{'categories': {'$elemMatch': {'$elemMatch': {"$regex":keyword, "$options":"i"}}}}]}
 	cursor = meta.db.metaKindleStoreClean.find(query)
 	results = [book for book in cursor]
-	print(results)
+	#print(results)
 	return results
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -151,6 +155,7 @@ def logout():
 def before_request():
 	if current_user.is_authenticated:
 		current_user.last_seen = datetime.utcnow()
+		#add_log("login", None, None, "login successfully", current_user.username)
 		db.session.commit()
 
 # edit user profile
@@ -227,6 +232,7 @@ def review():
 			Push to DB here !!!
 			'''
 			print("DONE PUShING")
+			add_log("addreview",request.method, asin, "add review successfully", current_user.username)
 	#### ####
 
 	#### Load Reviews from DB ####
@@ -238,7 +244,7 @@ def review():
 
 	reviews = []
 	for i in records:
-		name = 'Small Bling Bling'
+		name = 'Small Bling'
 		img = 'https://media.istockphoto.com/photos/portrait-of-a-smiling-young-woman-picture-id905456806?k=6&m=905456806&s=612x612&w=0&h=PvYHS82wm1FlEh7_8Owj_OamqJfJ8g3igDrfbA4Xo7I='
 		summary = i.summary
 		text = i.reviewText
@@ -302,7 +308,7 @@ def submit_book_info():
 	'BookAuthor':BookAuthor,
 	'MoreAbtBook':MoreAbtBook}
 	meta.db.newbooks.insert(mydict)
-
+	add_log("addbook",request.method, request.url, "add book successfully", current_user.username)
 	return render_template("thank-you.html")
 
 @app.route("/history")
@@ -353,3 +359,75 @@ def get_review_time():
     day = str(today.day)
 
     return month + " " + day + ", " + year
+
+
+def add_log(request_summary, request_type, request_content, response, user_name, time_stamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S'), year = str(date.today().year), month = str(date.today().month), day= str(date.today().day)):
+	logInfo = {'TimeStamp':time_stamp,
+	'RequestSummary': request_summary,
+	'RequestType':request_type,
+	'RequestContent':request_content,
+	'Response':response,
+	'UserName':user_name,
+	'Year':year,
+	'Month':month,
+	'Day':day}
+	log.db.systemLog.insert(logInfo)
+
+@app.route("/TodayHistory")
+@login_required
+def log_page():
+	logIT = log.db.systemLog.find({"Day": {'$eq':str(date.today().day)},"Year": {'$eq':str(date.today().year)}, "Month":{'$eq':str(date.today().month)}})
+
+	logInfoToday =[]
+	for i in logIT:
+		logInfoToday.append(i)
+	return render_template("logtoday.html", logInfoToday = logInfoToday)
+
+
+def search_plot():
+	logMonth = log.db.systemLog.find({"Year": {'$eq':str(date.today().year)}, "Month":{'$eq':str(date.today().month)}})
+	monthStats = {}
+	for m in logMonth:
+		if "searchbook" in m.values():
+			monthStats[m['RequestContent']] = 1+ monthStats.get(m['RequestContent'],0)
+
+	sort_value = sorted(monthStats.values())
+	top_x = []
+	top_y = []
+
+	for key in monthStats:
+
+		if monthStats[key] in sort_value[0:10]:
+			top_x.append(key)
+			top_y.append(monthStats[key])
+	plt.bar(top_x,top_y)
+	plt.title("Top 10 most popular books for review")
+
+	plt.savefig("topReview.png")
+	#plt.show()
+def review_plot():
+	logMonth = log.db.systemLog.find({"Year": {'$eq':str(date.today().year)}, "Month":{'$eq':str(date.today().month)}})
+	monthStats = {}
+	for m in logMonth:
+		if "addreview" in m.values():
+		
+			monthStats[m['RequestContent']] = 1+ monthStats.get(m['RequestContent'],0)
+	sort_value = sorted(monthStats.values())
+	top_x = []
+	top_y = []
+	for key in monthStats:
+		if monthStats[key] in sort_value[0:10]:
+			top_x.append(key)
+			top_y.append(monthStats[key])
+	plt.bar(top_x,top_y)
+	plt.title("Top 10 most searched words")
+
+	plt.savefig("topSearch.png")
+	#plt.show()
+
+@app.route("/statsPlot")
+@login_required	
+def month_Stats():
+	search_plot()
+	review_plot()
+	return render_template("StatsPlot.html")
