@@ -16,8 +16,9 @@ with open(f"{OUTFILE}", mode="w") as f:
     data = cur.fetchall()
     result = []
     for i in data:
-        f.write(i[0])
+       f.write(f'{i[0]}\n')
     con.commit()
 
 
-os.system(f'hdfs dfs -put {OUTFILE} test')
+os.system(f'hdfs dfs -put -f {OUTFILE} test')
+os.system(f'rm {OUTFILE}')
