@@ -1,30 +1,11 @@
-import sys
-from pyspark import SparkContext, SparkConf
-from pyspark.sql.functions import *
+import pyspark
 from pyspark.sql import SparkSession
-import numpy as np
+import pyspark.sql.functions as fns
 
-sc = SparkContext('local[*]')
+sc = pyspark.SparkContext("spark://ec2-3-93-14-131.compute-1.amazonaws.com:7077", "Correlation")
 spark = SparkSession(sc)
 
-reviews = spark.read.csv('kindle_reviews.csv', header=True)
-meta = spark.read.json('meta_Kindle_Store.json')
+reviews = spark.read.csv("hdfs://ec2-3-93-14-131.compute-1.amazonaws.com:9000/user/ubuntu/kindle/kindle_reviews.csv", header=True)
+asinr = reviews.select('asin','reviewText')
+asinrl = asinr.withColumn('reviewLength',fns.length('reviewText'))
 
-rText = reviews.select('asin','reviewText')
-
-asin_avglength = rText.rdd.map(lambda row: (row[0],len(row[1]))).reduceByKey(lambda x,y:x+y)
-
-price = meta.select('asin','price')
-
-df = spark.createDataFrame(asin_avglength)
-
-df.show(10)
-
-#
-#asin_rText_price = rText.join(price).select('*')
-#
-#reviewLengths = asin_rText_price.select('reviewText').rdd.map(lambda x: len(x))
-#
-#asin_rText_price_len = asin_rText_price.join(reviewLengths).select('*')
-#
-#asin_rText_price_len.show(20)
