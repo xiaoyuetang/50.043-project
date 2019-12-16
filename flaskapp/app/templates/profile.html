@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    {% extends "template.html" %}
+    <title>Group9 Book Review System</title>
+    <meta name="description" content="Add a Book Page" />
+    <meta name="author" content="Group9" />
+  </head>
+
+  <body>
+    {% block content %}
+    <div class="container-fluid">
+      <div class="row profile" style="margin:30px 100px">
+        <div class=" col-3 ">
+          <img
+            src="https://images.unsplash.com/photo-1513721032312-6a18a42c8763?w=152&h=152&fit=crop&crop=faces
+            "
+            alt=" "
+          />
+        </div>
+        <div class="col-9 ">
+          <h1 style="display: inline-block; ">janedoe_</h1>
+          <button class="btn btn-secondary btn-sm " style="margin:20px ">
+            Edit Profile
+          </button>
+          <ul class="list-group list-group-horizontal ">
+            <li class="list-group-item ">
+              <span class="badge badge-light ">164</span> reviews
+            </li>
+            <li class="list-group-item ">
+              <span class="badge badge-light ">188</span> followers
+            </li>
+            <li class="list-group-item ">
+              <span class="badge badge-light ">206</span> following
+            </li>
+          </ul>
+          <hr />
+          <small>Personal bio here blabla</small>
+        </div>
+      </div>
+      <!-- End of profile section -->
+    </div>
+    <!-- End of container -->
+    {% endblock %}
+  </body>
+</html>
