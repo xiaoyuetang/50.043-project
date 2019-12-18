@@ -11,3 +11,7 @@ reviews = spark.read.csv("hdfs://ec2-3-93-14-131.compute-1.amazonaws.com:9000/us
 asinr = reviews.select('asin','reviewText')
 asinrl = asinr.withColumn('reviewLength',fns.length('reviewText'))
 meta = spark.read.json(f"{hdfs_addr}/datasets/meta_Kindle_Store.json")
+
+asin_avgl = asinrl.groupBy('asin').avg('reviewLength')
+
+asin_avgl.take(5)
