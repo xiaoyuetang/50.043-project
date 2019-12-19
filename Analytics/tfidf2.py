@@ -1,9 +1,9 @@
-import sys
-import pyspark
+#import sys
+#import pyspark
 from pyspark.mllib.feature import HashingTF, IDF
-from pyspark.sql import SparkSession
+#from pyspark.sql import SparkSession
 from pyspark import SparkContext, SparkConf
-from pyspark.sql.functions import explode
+#from pyspark.sql.functions import explode
 
 sc = SparkContext("local", "Simple App")
 
