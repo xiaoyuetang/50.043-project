@@ -2,7 +2,7 @@ import pyspark
 from pyspark.sql import SparkSession
 import pyspark.sql.functions as fns
 
-hdfs_addr="hdfs://ec2-54-208-153-234.compute-1.amazonaws.com:9000/user/ubuntu"
+hdfs_addr="hdfs://ec2-54-208-153-234.compute-1.amazonaws.com:9000"
 
  sc = pyspark.SparkContext("spark://ec2-54-208-153-234.compute-1.amazonaws.com:7077", "Correlation")
 #sc = pyspark.SparkContext("local", "Correlation")
