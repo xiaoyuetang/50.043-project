@@ -9,7 +9,7 @@ import mysql.connector as sqldb
 import logging
 import logging.handlers
 import os
-pwd = parse.quote("123456789@")
+# pwd = parse.quote("123456789@")
 ################
 
 # metaIp=os.environ['mongodb_ip']

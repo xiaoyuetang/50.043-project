@@ -1,5 +1,5 @@
 from datetime import datetime
-from app import db, log
+from app import db
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 from app import login
@@ -12,22 +12,22 @@ class User(UserMixin, db.Model):
 	posts = db.relationship('Post', backref='author', lazy='dynamic')
 	about_me = db.Column(db.String(140))
 	last_seen = db.Column(db.DateTime, default=datetime.utcnow)
-	
+
 	def __repr__(self):
 		return '<User {}>'.format(self.username)
-		
+
 	def set_password(self, password):
 		self.password_bash = generate_password_hash(password)
-	
+
 	def check_password(self, password):
 		return check_password_hash(self.password_bash, password)
-		
+
 class Post(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
 	body = db.Column(db.String(140))
 	timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
 	user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-	
+
 	def __repr__(self):
 		return '<Post {}>'.format(self.body)
 
@@ -35,7 +35,7 @@ class ReviewerInformation(db.Model):
 	id = db.Column(db.Integer, primary_key=True, autoincrement=True)
 	reviewerID = db.Column(db.String(64), primary_key=True)
 	reviewerName = db.Column(db.String(64), index=True)
-	
+
 	def __repr__(self):
 		return '<Reviewer: {}>'.format(self.reviewerName)
 
@@ -55,7 +55,7 @@ class ReviewerReviews(db.Model):
 	reviewID = db.Column(db.Integer, primary_key=True)
 	asin = db.Column(db.String(64), index=True)
 	reviewerID = db.Column(db.String(64))
-	
+
 	def __repr__(self):
 		return '<Review ID: {}, Review product: {}, Reviewer ID: {}>'.format(self.reviewID, self.asin, self.reviewerID)
 
