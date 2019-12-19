@@ -2,7 +2,7 @@ from app import app
 from flask import render_template, flash, redirect, url_for, request
 from flask_login import current_user, login_user, logout_user, login_required
 from app.forms import LoginForm, ReviewForm, RegistrationForm
-from app import db, log, meta, con
+from app import db, meta, con
 from app.models import User, Review, ReviewerReviews, ReviewerInformation
 from werkzeug.urls import url_parse
 from datetime import datetime, date, time
@@ -81,6 +81,7 @@ def index():
 
 
 @app.route('/search-result',methods=['GET', 'POST'])
+@login_required
 def search():
     # search_input = request.args['search_input']
     search_input = request.args.get('search_input')
@@ -398,12 +399,13 @@ def add_log(request_summary, request_type, request_content, response, user_name,
 	'Year':year,
 	'Month':month,
 	'Day':day}
-	log.db.systemLog.insert(logInfo)
+	meta.db.systemLog.insert(logInfo)
+	# log.db.systemLog.insert(logInfo)
 
 @app.route("/TodayHistory")
 @login_required
 def log_page():
-	logIT = log.db.systemLog.find({"Day": {'$eq':str(date.today().day)},"Year": {'$eq':str(date.today().year)}, "Month":{'$eq':str(date.today().month)}})
+	logIT = meta.db.systemLog.find({"Day": {'$eq':str(date.today().day)},"Year": {'$eq':str(date.today().year)}, "Month":{'$eq':str(date.today().month)}})
 
 	logInfoToday =[]
 	for i in logIT:
@@ -412,7 +414,7 @@ def log_page():
 
 
 def search_plot():
-	logMonth = log.db.systemLog.find({"Year": {'$eq':str(date.today().year)}, "Month":{'$eq':str(date.today().month)}})
+	logMonth = meta.db.systemLog.find({"Year": {'$eq':str(date.today().year)}, "Month":{'$eq':str(date.today().month)}})
 	monthStats = {}
 	for m in logMonth:
 		if "searchbook" in m.values():
@@ -433,7 +435,7 @@ def search_plot():
 	plt.savefig("topReview.png")
 	#plt.show()
 def review_plot():
-	logMonth = log.db.systemLog.find({"Year": {'$eq':str(date.today().year)}, "Month":{'$eq':str(date.today().month)}})
+	logMonth = meta.db.systemLog.find({"Year": {'$eq':str(date.today().year)}, "Month":{'$eq':str(date.today().month)}})
 	monthStats = {}
 	for m in logMonth:
 		if "addreview" in m.values():
