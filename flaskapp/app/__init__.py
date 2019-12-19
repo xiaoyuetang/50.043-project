@@ -8,7 +8,6 @@ from flask_pymongo import PyMongo
 import mysql.connector as sqldb
 import logging
 import logging.handlers
-from urllib import parse
 import os
 pwd = parse.quote("123456789@")
 ################
@@ -22,7 +21,7 @@ pwd = parse.quote("123456789@")
 #################
 
 ssh_address1='ec2-52-42-232-25.us-west-2.compute.amazonaws.com'
-ssh_address2="ec2-52-207-113-15.compute-1.amazonaws.com"
+# ssh_address2="ec2-52-207-113-15.compute-1.amazonaws.com"
 app = Flask(__name__, static_url_path='/static')
 app.config.from_object(Config)
 
@@ -32,7 +31,7 @@ ec2host='ec2-34-220-172-38.us-west-2.compute.amazonaws.com'
 # ec2host='54.189.148.212'
 con= sqldb.connect(host=ec2host, user="root", passwd="", db="flaskproject")
 meta = PyMongo(app,uri="mongodb://books:123456789@"+ssh_address1+":27017/books")
-log = PyMongo(app,uri="mongodb://logadmin:"+pwd+"@"+ssh_address2+":27017/log")
+# log = PyMongo(app,uri="mongodb://logadmin:"+pwd+"@"+ssh_address2+":27017/log")
 
 db = SQLAlchemy(app)
 
