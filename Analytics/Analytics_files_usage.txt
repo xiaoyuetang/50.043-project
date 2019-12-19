@@ -1,10 +1,10 @@
 Correlation:
-	cd 50.043-project/Analytics
+	cd ~/50.043-project/Analytics
 	python3 pearson.py
 	// result will be printed in console
 
 TF-IDF:
-	cd 50.043-project/Analytics
+	cd ~/50.043-project/Analytics
 	python3 tfidf1.py
 	python3 tfidf2.py
-	// result will be in a file called 'tfidf'
+	// result will be written to a file called 'tfidf'
