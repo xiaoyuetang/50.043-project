@@ -14,20 +14,15 @@
       <div class="col-md-8">
         <h2 align="center">Your Reading History</h2>
         <div class="hScroller" style="margin:23px 60px">
-          <hr /> {% for b in books %}
+          <hr /> {% for b in book %}
           <div class="row">
             <div class="col-md-6">
-              <img width="150" height="225" class="hCover" src="{{ b.cover }}" />
+              <img width="300" height="250" class="hCover" src="{{ b.imUrl }}" />
             </div>
             <div class="col-md-6 hDetails">
-              <h4>{{ b.title }}</h4>
-              <h6>
-                <em>{{ b.author }}</em>
-              </h6>
-              {% for t in b.tags %}
-              <span class="badge badge-info">{{ t }}</span>
-              {% endfor %}
-            </div>
+              <h4>{{ b.asin }}</h4>
+              <p>{{b.description[0:300]}}...</p>
+              </div>
           </div>
           <hr />{% endfor %}
         </div>

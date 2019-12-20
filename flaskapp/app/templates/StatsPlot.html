@@ -1,20 +1,212 @@
-<!DOCTYPE html> 
+<!doctype html>
 <html lang="en">
+  <head>
+    {% extends "template.html" %} {% block head %}
+    <meta name="description" content="Book Review Page" />
+    <meta name="author" content="Group9" />
+    <title>Statistics</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+    {% endblock %}
+</head>
+  <body>
+    {% block content %}
+    
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-6">
+          <h2 class="text-center">Top 10 Most Reviewed Books</h2>
+          <canvas id="bars-graph1"></canvas>
+        </div>
+        <div class="col-sm-6">
+          <h2 class="text-center">Top 10 Most Viewed Books</h2>
+          <canvas id="bars-graph2"></canvas>
+        </div>
+        <div class="w-100"></div>
+        <div class="col-sm-6">
+          <h2 class="text-center">Top 10 Most Popular Search</h2>
+          <canvas id="bars-graph3"></canvas>
+        </div>
+        <div class="col-sm-6">
+          <h2 class="text-center">Top 3 Most Popular Tags</h2>
+          <canvas id="pie-graph"></canvas>
+        </div>
+      </div>
+    </div>
+    
+    <script src="static/js/Chart.min.js"></script>
+    <script>
+    
+      // Bar Charts
 
-<head> 
-<meta charset="utf-8" /> 
-<title>Statistics Plot</title> 
-</head> 
- 
-<body> 
-<p>Top 10 Seach of the Month</p> 
-<p> 
-<img src="static/imag/topSearch.png" width="600" height="400" /> 
-</p> 
-<p>Top 10 Popular Books for Reviews</p> 
-<p> 
-<img src="static/imag/topReview.png" width="600" height="400" /> 
-</p> 
+      var barChartData1 = {
+          labels: ['{{top_x_review[0]}}','{{top_x_review[1]}}','{{top_x_review[2]}}','{{top_x_review[3]}}','{{top_x_review[4]}}',
+          '{{top_x_review[5]}}','{{top_x_review[6]}}','{{top_x_review[7]}}','{{top_x_review[8]}}','{{top_x_review[9]}}'],
+          datasets: [
+          {
+              label: "Top 10 Reviewed Books",
+              backgroundColor: [
+              'rgba(255, 99, 132, 0.2)',
+              'rgba(54, 162, 235, 0.2)',
+              'rgba(255, 206, 86, 0.2)',
+              'rgba(75, 192, 192, 0.2)',
+              'rgba(153, 102, 255, 0.2)',
+              'rgba(255, 159, 64, 0.2)',
+              'rgba(255, 99, 132, 0.2)',
+              'rgba(54, 162, 235, 0.2)',
+              'rgba(255, 206, 86, 0.2)',
+              'rgba(75, 192, 192, 0.2)'
+              ],
+              borderColor: [
+              'rgba(255,99,132,1)',
+              'rgba(54, 162, 235, 1)',
+              'rgba(255, 206, 86, 1)',
+              'rgba(75, 192, 192, 1)',
+              'rgba(153, 102, 255, 1)',
+              'rgba(255, 159, 64, 1)',
+              'rgba(255, 206, 86, 1)',
+              'rgba(75, 192, 192, 1)',
+              'rgba(153, 102, 255, 1)',
+              'rgba(255, 159, 64, 1)'
+              ],
+              borderWidth: 1,
+              data: ['{{top_y_review[0]}}','{{top_y_review[1]}}','{{top_y_review[2]}}','{{top_y_review[3]}}','{{top_y_review[4]}}',
+              '{{top_y_review[5]}}','{{top_y_review[6]}}','{{top_y_review[7]}}','{{top_y_review[8]}}','{{top_y_review[9]}}'],
+          }
+          ]
+      };
+      var ctx1 = document.getElementById("bars-graph1").getContext("2d");
+      var BarChart1 = new Chart(ctx1, {
+          type: 'bar',
+          data: barChartData1,
+          responsive : true
+      });
+    
+    
+    
+      // Bar Charts
 
-</body> 
-</html> 
+      var barChartData2 = {
+          labels: ['{{top_x_view[0]}}','{{top_x_view[1]}}','{{top_x_view[2]}}','{{top_x_view[3]}}','{{top_x_view[4]}}',
+          '{{top_x_view[5]}}','{{top_x_view[6]}}','{{top_x_view[7]}}','{{top_x_view[8]}}','{{top_x_view[9]}}'],
+          datasets: [
+          {
+              label: "Top 10 Viewed Books",
+              backgroundColor: [
+              'rgba(255, 99, 132, 0.2)',
+              'rgba(54, 162, 235, 0.2)',
+              'rgba(255, 206, 86, 0.2)',
+              'rgba(75, 192, 192, 0.2)',
+              'rgba(153, 102, 255, 0.2)',
+              'rgba(255, 159, 64, 0.2)',
+              'rgba(255, 99, 132, 0.2)',
+              'rgba(54, 162, 235, 0.2)',
+              'rgba(255, 206, 86, 0.2)',
+              'rgba(75, 192, 192, 0.2)'
+              ],
+              borderColor: [
+              'rgba(255,99,132,1)',
+              'rgba(54, 162, 235, 1)',
+              'rgba(255, 206, 86, 1)',
+              'rgba(75, 192, 192, 1)',
+              'rgba(153, 102, 255, 1)',
+              'rgba(255, 159, 64, 1)',
+              'rgba(255, 206, 86, 1)',
+              'rgba(75, 192, 192, 1)',
+              'rgba(153, 102, 255, 1)',
+              'rgba(255, 159, 64, 1)'
+              ],
+              borderWidth: 1,
+              data: ['{{top_y_view[0]}}','{{top_y_view[1]}}','{{top_y_view[2]}}','{{top_y_view[3]}}','{{top_y_view[4]}}',
+              '{{top_y_view[5]}}','{{top_y_view[6]}}','{{top_y_view[7]}}','{{top_y_view[8]}}','{{top_y_view[9]}}'],
+          }
+          ]
+      };
+      var ctx2 = document.getElementById("bars-graph2").getContext("2d");
+      var BarChart2 = new Chart(ctx2, {
+          type: 'bar',
+          data: barChartData2,
+          responsive : true
+      });
+
+            // Bar Charts
+
+            var barChartData3 = {
+          labels: ['{{top_x_search[0]}}','{{top_x_search[1]}}','{{top_x_search[2]}}','{{top_x_search[3]}}','{{top_x_search[4]}}',
+          '{{top_x_search[5]}}','{{top_x_search[6]}}','{{top_x_search[7]}}','{{top_x_search[8]}}','{{top_x_search[9]}}'],
+          datasets: [
+          {
+              label: "Top 10 Popular Search",
+              backgroundColor: [
+              'rgba(255, 99, 132, 0.2)',
+              'rgba(54, 162, 235, 0.2)',
+              'rgba(255, 206, 86, 0.2)',
+              'rgba(75, 192, 192, 0.2)',
+              'rgba(153, 102, 255, 0.2)',
+              'rgba(255, 159, 64, 0.2)',
+              'rgba(255, 99, 132, 0.2)',
+              'rgba(54, 162, 235, 0.2)',
+              'rgba(255, 206, 86, 0.2)',
+              'rgba(75, 192, 192, 0.2)'
+              ],
+              borderColor: [
+              'rgba(255,99,132,1)',
+              'rgba(54, 162, 235, 1)',
+              'rgba(255, 206, 86, 1)',
+              'rgba(75, 192, 192, 1)',
+              'rgba(153, 102, 255, 1)',
+              'rgba(255, 159, 64, 1)',
+              'rgba(255, 206, 86, 1)',
+              'rgba(75, 192, 192, 1)',
+              'rgba(153, 102, 255, 1)',
+              'rgba(255, 159, 64, 1)'
+              ],
+              borderWidth: 1,
+              data: ['{{top_y_search[0]}}','{{top_y_search[1]}}','{{top_y_search[2]}}','{{top_y_search[3]}}','{{top_y_search[4]}}',
+              '{{top_y_search[5]}}','{{top_y_search[6]}}','{{top_y_search[7]}}','{{top_y_search[8]}}','{{top_y_search[9]}}'],
+          }
+          ]
+      };
+      var ctx3 = document.getElementById("bars-graph3").getContext("2d");
+      var BarChart3 = new Chart(ctx3, {
+          type: 'bar',
+          data: barChartData3,
+          responsive : true
+      });
+
+
+      
+      
+// Data for pie chart
+                    var pieData = {
+                        labels: ['{{top_x_key[0]}}','{{top_x_key[1]}}','{{top_x_key[2]}}'],
+                        datasets: [
+                        {
+                            data: ['{{top_y_key[0]}}','{{top_y_key[1]}}','{{top_y_key[2]}}'],
+                            backgroundColor: [
+                            "#FF6384",
+                            "#36A2EB",
+                            "#FFCE56"
+                            ],
+                            hoverBackgroundColor: [
+                            "#FF6384",
+                            "#36A2EB",
+                            "#FFCE56"
+                            ]
+                        }]
+                    };
+
+                    var ctx = document.getElementById("pie-graph").getContext("2d");
+                    var PieChart = new Chart(ctx,{
+                        type: 'pie',
+                        data: pieData
+                    });
+                    
+                    
+                
+                    
+                    
+                    
+        </script>
+        {% endblock%}
+  </body>
+</html>

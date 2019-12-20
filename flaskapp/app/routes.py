@@ -5,7 +5,7 @@ from app.forms import LoginForm, ReviewForm, RegistrationForm
 from app import db, meta, con
 from app.models import User, Review, ReviewerReviews, ReviewerInformation
 from werkzeug.urls import url_parse
-from datetime import datetime, date, time
+from datetime import datetime, date, time, timedelta
 from mysql.connector import MySQLConnection, Error
 
 
@@ -84,11 +84,16 @@ def index():
 @app.route('/search-result',methods=['GET', 'POST'])
 @login_required
 def search():
-    # search_input = request.args['search_input']
-    search_input = request.args.get('search_input')
-    results = search_book(search_input)
-    add_log("searchbook", "", search_input,  "search book successfully", current_user.username)
-    return render_template('search-result.html', search_input=search_input, search_results = results)
+	# search_input = request.args['search_input']
+	search_input = request.args.get('search_input')
+	results = search_book(search_input)
+	if search_input[0:2] == "B0":
+		add_log("searchbook","",search_input, "search book successfully", current_user.username)
+	#if search_input[0:2] == "B0": 
+	#add_log("searchbook", "", search_input,  "search book successfully", current_user.username)
+	else: 
+		add_log("searchkeyword", "", search_input,  "search keyword successfully", current_user.username)
+	return render_template('search-result.html', search_input=search_input, search_results = results)
 
 def search_book(keyword):
 	query = {'$or':[{'title':{"$regex":keyword,"$options":"i"}},{'author':{"$regex":keyword,"$options":"i"}},
@@ -219,7 +224,7 @@ def review():
 				 "desc": desc, "author": author, "tags": tags}
 	relateds=[]
 	relatedlist=[]
-
+	add_log("viewbook", "", book['asin'],  "view book successfully", current_user.username)
 	if 'also_viewed' in book['related']:
 		relatedlist = book['related']['also_viewed']
 		# relateds = bookinfo(relatedlist)
@@ -369,37 +374,25 @@ def submit_book_info():
 	# 'imUrl':BookImUrl,
 	# 'description':MoreAbtBook}
 	meta.db.metaKindleStoreClean.find_one_and_update({"asin": BookAsin},
-                               {"$set": {"title": BookName,"author": BookAuthor,"imUrl": BookImUrl,"description": MoreAbtBook,"categories": BookCat}},upsert=True)
+							   {"$set": {"title": BookName,"author": BookAuthor,"imUrl": BookImUrl,"description": MoreAbtBook,"categories": BookCat}},upsert=True)
 	add_log("addbook",request.method, request.url, "add book successfully", current_user.username)
 	return render_template("thank-you.html")
 
 @app.route("/history")
 @login_required
 def history():
-	'''
-	Using dummy data for now. Fetch from DB next time.
-	'''
-	b1 = "Harry Potter"
-	c1 = "https://img1-placeit-net.s3-accelerate.amazonaws.com/uploads/stage/stage_image/39885/large_thumb_book-cover-horror-novel-527.jpg"
-	a1 = "A. Dinh"
-	tags1 = ["Art", "Cookbooks"]
-	book1 = {"title": b1, "cover": c1, "author": a1, "tags": tags1}
+	logIT = meta.db.systemLog.find({"RequestSummary":{'$eq':"viewbook"} ,"UserName":{'$eq':str(current_user.username)},
+	 "Day": {'$eq':str(date.today().day)},"Year": {'$eq':str(date.today().year)}, "Month":{'$eq':str(date.today().month)}})
+	logInfoToday =[]
+	book = []
+	for i in logIT:
+		logInfoToday.append(i['RequestContent'])
+	logHistory = set(logInfoToday)
+	for b in logHistory:
+		booki = meta.db.metaKindleStoreClean.find_one({"asin":b})
+		book.append(booki)
 
-	b2 = "Rich Dad Poor Dad"
-	c2 = "https://img2-placeit-net.s3-accelerate.amazonaws.com/uploads/stage/stage_image/37837/large_thumb_stage.jpg"
-	a2 = "B. Dinh"
-	tags2 = ["Self Help", "Thriller", "Graphic Novels"]
-	book2 = {"title": b2, "cover": c2, "author": a2, "tags": tags2}
-
-	b3 = "Lord of The Rings"
-	c3 = "https://i.pinimg.com/236x/82/79/74/827974d98ed5dabfbeecbdae890caebf.jpg"
-	a3 = "C. Dinh"
-	tags3 = ["Business", "Fiction", "Nonfiction"]
-	book3 = {"title": b3, "cover": c3, "author": a3, "tags": tags3}
-
-	books = [book1, book2, book3]
-
-	return render_template("history.html", books=books)
+	return render_template("history.html",book=book)
 
 @app.route("/profile")
 # @app.route("/profile/<username>")
@@ -446,54 +439,84 @@ def log_page():
 		logInfoToday.append(i)
 	return render_template("logtoday.html", logInfoToday = logInfoToday)
 
+@app.route("/SevenHistory")
+@login_required
+def log_seven():
+	now=datetime.now()
+	delta=timedelta(days=7)
+	seven_days=now-delta
 
-def search_plot():
-	logMonth = meta.db.systemLog.find({"Year": {'$eq':str(date.today().year)}, "Month":{'$eq':str(date.today().month)}})
-	monthStats = {}
-	for m in logMonth:
-		if "searchbook" in m.values():
-			monthStats[m['RequestContent']] = 1+ monthStats.get(m['RequestContent'],0)
+	logIT = meta.db.systemLog.find({"Day": {'$gte':str(seven_days.day)},"Year": {'$gte':str(seven_days.year)}, "Month":{'$gte':str(seven_days.month)}})
+	logInfoSeven =[]
+	for i in logIT:
+		logInfoSeven.append(i)
+	return render_template("logseven.html", logInfoSeven = logInfoSeven)
 
-	sort_value = sorted(monthStats.values())
-	top_x = []
-	top_y = []
-
-	for key in monthStats:
-
-		if monthStats[key] in sort_value[0:10]:
-			top_x.append(key)
-			top_y.append(monthStats[key])
-	# plt.bar(top_x,top_y)
-	# plt.title("Top 10 most popular books for review")
-
-	# plt.savefig("topReview.png")
-	#plt.show()
-def review_plot():
-	logMonth = meta.db.systemLog.find({"Year": {'$eq':str(date.today().year)}, "Month":{'$eq':str(date.today().month)}})
-	monthStats = {}
-	for m in logMonth:
-		if "addreview" in m.values():
-
-			monthStats[m['RequestContent']] = 1+ monthStats.get(m['RequestContent'],0)
-	sort_value = sorted(monthStats.values())
-	top_x = []
-	top_y = []
-	for key in monthStats:
-		if monthStats[key] in sort_value[0:10]:
-			top_x.append(key)
-			top_y.append(monthStats[key])
-	# plt.bar(top_x,top_y)
-	# plt.title("Top 10 most searched words")
-
-	# plt.savefig("topSearch.png")
-	#plt.show()
 
 @app.route("/statsPlot")
 @login_required
-def month_Stats():
-	search_plot()
-	review_plot()
-	return render_template("StatsPlot.html")
+def month_stats():
+	#print("???")
+	logMonth = meta.db.systemLog.find({"Year": {'$eq':str(date.today().year)}, "Month":{'$eq':str(date.today().month)}})
+	monthStats_review = {}
+	monthStats_search = {}
+	monthStats_view = {}
+	monthStats_keyword = {}
+	for m in logMonth:
+		if "addreview" in m.values():
+			monthStats_review[m['RequestContent']] = 1+ monthStats_review.get(m['RequestContent'],0)
+		elif "searchbook" in m.values():
+			monthStats_search[m['RequestContent']] = 1+ monthStats_search.get(m['RequestContent'],0)
+		elif "viewbook" in m.values():
+			monthStats_view[m['RequestContent']] = 1+ monthStats_view.get(m['RequestContent'],0)
+		elif "searchkeyword" in m.values():
+			monthStats_keyword[m['RequestContent']] = 1+ monthStats_keyword.get(m['RequestContent'],0)
+	sort_value_review = sorted(monthStats_review.values())[::-1]
+	top_x_review = []
+	top_y_review = []
+	for key in monthStats_review:
+		if monthStats_review[key] in sort_value_review[0:10]:
+			top_x_review.append(key)
+			top_y_review.append(monthStats_review[key])
+
+	
+	sort_value_search = sorted(monthStats_search.values())[::-1]
+
+	top_x_search = []
+	top_y_search = []
+
+	for keys in monthStats_search:
+
+		if monthStats_search[keys] in sort_value_search[0:10]:
+			top_x_search.append(keys)
+			top_y_search.append(monthStats_search[keys])
+
+	sort_value_view = sorted(monthStats_view.values())[::-1]
+	top_x_view = []
+	top_y_view = []
+
+	for v in monthStats_view:
+
+		if monthStats_view[v] in sort_value_view[0:10]:
+			top_x_view.append(v)
+			top_y_view.append(monthStats_view[v])
+
+	sort_value_keyword = sorted(monthStats_keyword.values())[::-1]
+	#print(sort_value_keyword)
+	top_x_key = []
+	top_y_key = []
+
+	for k in monthStats_keyword:
+
+		if monthStats_keyword[k] in sort_value_keyword[0:3]:
+			top_x_key.append(k)
+			top_y_key.append(monthStats_keyword[k])
+
+	#print(top_x_search)
+	return render_template("StatsPlot.html",top_x_review = top_x_review,top_y_review = top_y_review,top_x_search=top_x_search,
+	top_y_search= top_y_search,top_x_view = top_x_view,top_y_view = top_y_view,
+	top_x_key = top_x_key, top_y_key = top_y_key)
+
 
 ################review###############
 def catch_reviews(asin):
@@ -526,7 +549,7 @@ def insert_review(serialNum,asin,helpful,overall,reviewText,reviewTime,reviewID,
 		print("MySQL connection is closed")
 		return("Record inserted successfully into KindleReview table")
 	except Error as error:
-	    print(error)
+		print(error)
 
 def get_last_id():
 	try:
