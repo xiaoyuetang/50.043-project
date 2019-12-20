@@ -11,6 +11,8 @@ from botocore.exceptions import ClientError
 
 key = input("Please enter your aws access key:\n")
 secret_key = input("Please enter your aws secret access key:\n")
+# key='AKIAJCRZFPQYZG2BF36A'
+# secret_key='oHCBX5PzEOyXYpdAmjgoiwnucFnEDMYCYVEYjZQu'
 region_name = 'us-west-2'
 ec2 = boto3.resource('ec2',
     aws_access_key_id=key,
@@ -287,8 +289,8 @@ def main():
     print('This python module will create a AWS EC2 web server instance and execute a web server monitoring script.')
  #####################change security_group_name & key_name
     # security_group_id = 'sg-04db4aa07b4b2d47d'
-    security_group_name='version1'
-    key_name = 'hello'
+    security_group_name=input("Please enter the security group name:\n")
+    key_name = input("Please enter the key name:\n")
     numofinstances=3
 
     instance = create_new_webserver_instance(security_group_name, key_name,numofinstances)
@@ -297,11 +299,11 @@ def main():
     time.sleep(60)
 
     instance[0].reload()
-    execute_commands_in_instance_mysql(iplist[0],key_name)
+    execute_commands_in_instance_mysql(instance[0].public_ip_address,key_name)
     print('sql setup done')
 
     instance[1].reload()
-    execute_commands_in_instance_mongodb(iplist[1],key_name)
+    execute_commands_in_instance_mongodb(instance[1].public_ip_address,key_name)
     print('mongodb setup done')
 
     instance[2].reload()
