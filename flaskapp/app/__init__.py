@@ -12,8 +12,8 @@ import os
 # pwd = parse.quote("123456789@")
 ################
 
-metaIp=os.environ['LC_MONGO_IP']
-mysqlIp=os.environ['LC_MYSQL_IP']
+metaIp=os.environ['LC_MONGOIP']
+mysqlIp=os.environ['LC_MYSQLIP']
 # logIp=os.environ['logmongod_ip']
 
 # log = PyMongo(app,uri="mongodb://logadmin:"+pwd+"@"+logIp+":27017/log")
