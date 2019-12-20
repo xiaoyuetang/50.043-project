@@ -6,7 +6,8 @@ from app import db, meta, con
 from app.models import User, Review, ReviewerReviews, ReviewerInformation
 from werkzeug.urls import url_parse
 from datetime import datetime, date, time
-import matplotlib.pyplot as plt
+from mysql.connector import MySQLConnection, Error
+
 
 @app.route('/addreview', methods=['GET', 'POST'])
 @login_required
@@ -240,44 +241,77 @@ def review():
 		if not current_user.is_authenticated:
 			return redirect(url_for('login'))
 		if 'reviewbutton' in form:
-			id = 000000  # NEED HELP HERE
-			reviewID = 0  # NEED HELP HERE
+			# reviewID = 0  # NEED HELP HERE
 			# asin is pulled already
+
 			print("ASIN IS ", asin)
 			overall = form['overall'].count("\u2605")  # count number of stars
 			reviewText = form['reviewText']
 			reviewTime = get_review_time()
-			reviewerID = "A29cDXC"  # NEED TO GET FROM DB
+			reviewID = "A29cDXC"  # NEED TO GET FROM DB
 			reviewerName = "ASDADS"  # NEED TO GET FROM DB
+			helpful='-1'
 			summary = form['summary']
 			unixReviewTime = int(datetime.utcnow().timestamp())
 			'''
 			Push to DB here !!!
 			'''
+			lastid = get_last_id()
+			eyed = lastid[0]+1
+			result = insert_review(eyed,asin,helpful,overall,reviewText,reviewTime,reviewID,reviewerName,summary,unixReviewTime)
 			print("DONE PUSHING")
 			add_log("addreview",request.method, asin, "add review successfully", current_user.username)
-	#### ####
-
+			return render_template("thank-you.html")
+	#### #### ##############################
 	#### Load Reviews from DB ####
-	review_reviews = ReviewerReviews.query.filter_by(asin=asin).limit(10).all()
-	review_ids = []
-	for i in review_reviews:
-		review_ids.append(i.reviewID)
-	records = Review.query.filter(Review.reviewID.in_(review_ids)).all()
 
+	records = catch_reviews(asin)
 	reviews = []
 	for i in records:
-		name = 'Small Bling Bling'
+		name = i[0]
 		img = 'https://media.istockphoto.com/photos/portrait-of-a-smiling-young-woman-picture-id905456806?k=6&m=905456806&s=612x612&w=0&h=PvYHS82wm1FlEh7_8Owj_OamqJfJ8g3igDrfbA4Xo7I='
-		summary = i.summary
-		text = i.reviewText
-		overall = i.overall
-
-		review = {"name": name, "img": img, "text": text, "summary": summary, "overall": overall}
+		summary = i[1]
+		text = i[5]
+		overall = i[2]
+		print(i[3])
+		if type(i[3])=='str':
+			helpful=[int(j) for j in i[3].strip('[]').split(',')]
+			print(helpful[0])
+		else:
+			helpful=[0,0]
+		review = {"name": name, "img": img, "text": text, "summary": summary, "overall": overall, "helpful": helpful}
 		reviews.append(review)
 	##################
 
 	return render_template("review-page.html", main=main_book, reviews=reviews, relateds=relateds)
+# @app.route("/review", methods=["POST"])
+# @login_required
+# def submit_review():
+# 	submittedreview = request.form
+# 	if 'reviewbutton' in submittedreview:
+# 		# return(submittedreview)
+# 		# return ('submit review clicked')
+# 		text = request.form['reviewText']
+# 		summary = request.form['summary']
+# 		asin = request.form['asin']
+# 		# store the review into database
+# 		new_review = Review(reviewID='20', reviewText=text, summary=summary)
+# 		lastid = get_last_id()
+# 		print(lastid[0])
+# 		eyed = lastid[0]+1
+# 		asin = asin
+# 		helpful = '-1'
+# 		overall = 4
+# 		reviewText = text
+# 		reviewTime = '-1'
+# 		reviewID = '-1'
+# 		reviewerName = 'Small Bling Bling'
+# 		summary = summary
+# 		unixReviewTime = '-2'
+# 		result = insert_review(eyed,asin,helpful,overall,reviewText,reviewTime,reviewID,reviewerName,summary,unixReviewTime)
+# 		return render_template("thank-you.html")
+# 	else:
+# 		return "Hello"
 
 def bookinfo(relatedlist):
 	relateds=[]
@@ -429,10 +463,10 @@ def search_plot():
 		if monthStats[key] in sort_value[0:10]:
 			top_x.append(key)
 			top_y.append(monthStats[key])
-	plt.bar(top_x,top_y)
-	plt.title("Top 10 most popular books for review")
+	# plt.bar(top_x,top_y)
+	# plt.title("Top 10 most popular books for review")
 
-	plt.savefig("topReview.png")
+	# plt.savefig("topReview.png")
 	#plt.show()
 def review_plot():
 	logMonth = meta.db.systemLog.find({"Year": {'$eq':str(date.today().year)}, "Month":{'$eq':str(date.today().month)}})
@@ -448,10 +482,10 @@ def review_plot():
 		if monthStats[key] in sort_value[0:10]:
 			top_x.append(key)
 			top_y.append(monthStats[key])
-	plt.bar(top_x,top_y)
-	plt.title("Top 10 most searched words")
+	# plt.bar(top_x,top_y)
+	# plt.title("Top 10 most searched words")
 
-	plt.savefig("topSearch.png")
+	# plt.savefig("topSearch.png")
 	#plt.show()
 
 @app.route("/statsPlot")
@@ -460,4 +494,47 @@ def month_Stats():
 	search_plot()
 	review_plot()
 	return render_template("StatsPlot.html")
+
+################review###############
+def catch_reviews(asin):
+	myresult=[]
+	try:
+		cur = con.cursor()
+		cur.execute("select reviewerName,summary,overall,helpful,reviewTime,reviewText from KindleReview where asin = %(asin)s;",{'asin': asin})
+		myresult = cur.fetchall()
+		con.commit()
+
+		print("Records for asin " + asin + " fetched from reviews table")
+		# conn.close()
+		# mysql.connection.close()
+		# print("MySQL connection is closed")
+		print(myresult)
+	except Error as error:
+		print(error)
+	return myresult
+
+def insert_review(serialNum,asin,helpful,overall,reviewText,reviewTime,reviewID,reviewerName,summary,unixReviewTime):
+	query1 = "insert into KindleReview(serialNum,asin,helpful,overall,reviewText,reviewTime,reviewID,reviewerName,summary,unixReviewTime) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
+
+	try:
+		cur = con.cursor()
+		cur.execute(query1,[serialNum,asin,helpful,overall,reviewText,reviewTime,reviewID,reviewerName,summary,unixReviewTime])
+		con.commit()
+		print("Record inserted successfully into KindleReview table")
+		# conn.close()
+		# mysql.connection.close()
+		print("MySQL connection is closed")
+		return("Record inserted successfully into KindleReview table")
+	except Error as error:
+	    print(error)
+
+def get_last_id():
+	try:
+		cur = con.cursor()
+		cur.execute('select max(serialNum) from KindleReview')
+		last_id = cur.fetchone()
+		con.commit()
+		return last_id
+	except Error as error:
+		print(error)
 
