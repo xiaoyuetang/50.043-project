@@ -1,20 +1,28 @@
-cd to Analytics folder to use the following ssh commands
-
-NameNode
+---SSH into Namenode---
+cd to Analytics folder and use the following ssh command
 ssh -i "ksdbkey.pem" ubuntu@ec2-54-208-153-234.compute-1.amazonaws.com
 
-DataNode1
-ssh -i "ksdbkey.pem" ubuntu@ec2-54-209-106-174.compute-1.amazonaws.com
-OR
-inside NameNode, use: $ssh dnode1
 
-DataNode2
-ssh -i "ksdbkey.pem" ubuntu@ec2-3-89-50-211.compute-1.amazonaws.com
-OR
-inside NameNode, use: $ssh dnode2
+---Inside Namenode---
+Directories 'hadoop' and 'spark' are in home dir (~).
 
-DataNode3
-ssh -i "ksdbkey.pem" ubuntu@ec2-54-236-235-190.compute-1.amazonaws.com
-OR
-inside NameNode, use: $ssh dnode3
+Start hadoop: 
+start-dfs.sh
+
+Start spark:
+~/spark/sbin/start-all.sh
+
+---Analytics portion---
+For this portion, we cd to the analytics folder, where the .py scripts are located
+
+cd ~/50.043-project/Analytics 
+
+Correlation:
+	python3 pearson.py
+	// result will be printed in console
+
+TF-IDF:
+	python3 tfidf1.py
+	python3 tfidf2.py
+	// result will be written to a file called 'tfidf'
 
