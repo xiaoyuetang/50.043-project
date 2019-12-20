@@ -12,11 +12,10 @@ import os
 # pwd = parse.quote("123456789@")
 ################
 
-# metaIp=os.environ['mongodb_ip']
-# mysqlIp=os.environ['mysql_ip']
+metaIp=os.environ['LC_MONGO_IP']
+mysqlIp=os.environ['LC_MYSQL_IP']
 # logIp=os.environ['logmongod_ip']
-# con= sqldb.connect(host=mysqlIp, user="root", passwd="", db="flaskproject")
-# meta = PyMongo(app,uri="mongodb://books:123456789@"+metaIp+":27017/books")
+
 # log = PyMongo(app,uri="mongodb://logadmin:"+pwd+"@"+logIp+":27017/log")
 #################
 
@@ -28,9 +27,13 @@ app.config.from_object(Config)
 # addr = 'bigdhatta.ceerfqdva59u.ap-southeast-1.rds.amazonaws.com'
 # mysql = MySQL(app)
 ec2host='ec2-34-220-172-38.us-west-2.compute.amazonaws.com'
+######################################################################
+con= sqldb.connect(host=mysqlIp, user="root", passwd="", db="flaskproject")
+meta = PyMongo(app,uri="mongodb://books:123456789@"+metaIp+":27017/books")
+#########################################################################
 # ec2host='54.189.148.212'
-con= sqldb.connect(host=ec2host, user="root", passwd="", db="flaskproject")
-meta = PyMongo(app,uri="mongodb://books:123456789@"+ssh_address1+":27017/books")
+# con= sqldb.connect(host=ec2host, user="root", passwd="", db="flaskproject")
+# meta = PyMongo(app,uri="mongodb://books:123456789@"+ssh_address1+":27017/books")
 # log = PyMongo(app,uri="mongodb://logadmin:"+pwd+"@"+ssh_address2+":27017/log")
 
 db = SQLAlchemy(app)
