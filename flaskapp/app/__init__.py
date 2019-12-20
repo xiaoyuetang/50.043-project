@@ -9,29 +9,33 @@ import mysql.connector as sqldb
 import logging
 import logging.handlers
 import os
-# pwd = parse.quote("123456789@")
+
+####for automation script######
+################
+# file = open('ip.txt','r')
+# for line in file:
+#     ips=line.split(' ')
+#     mysqlIp=ips[0]
+#     metaIp=ips[1]
 ################
 
-# metaIp=os.environ['mongodb_ip']
-# mysqlIp=os.environ['mysql_ip']
-# logIp=os.environ['logmongod_ip']
-# con= sqldb.connect(host=mysqlIp, user="root", passwd="", db="flaskproject")
-# meta = PyMongo(app,uri="mongodb://books:123456789@"+metaIp+":27017/books")
-# log = PyMongo(app,uri="mongodb://logadmin:"+pwd+"@"+logIp+":27017/log")
+
 #################
 
-ssh_address1='ec2-52-42-232-25.us-west-2.compute.amazonaws.com'
-# ssh_address2="ec2-52-207-113-15.compute-1.amazonaws.com"
 app = Flask(__name__, static_url_path='/static')
 app.config.from_object(Config)
 
 # addr = 'bigdhatta.ceerfqdva59u.ap-southeast-1.rds.amazonaws.com'
 # mysql = MySQL(app)
-ec2host='ec2-34-220-172-38.us-west-2.compute.amazonaws.com'
-# ec2host='54.189.148.212'
+######################################################################
+# con= sqldb.connect(host=mysqlIp, user="root", passwd="", db="flaskproject")
+# meta = PyMongo(app,uri="mongodb://books:123456789@"+metaIp+":27017/books")
+#########################################################################
+ec2host='34.220.172.38'
+ssh_address1='52.42.232.25'
 con= sqldb.connect(host=ec2host, user="root", passwd="", db="flaskproject")
 meta = PyMongo(app,uri="mongodb://books:123456789@"+ssh_address1+":27017/books")
-# log = PyMongo(app,uri="mongodb://logadmin:"+pwd+"@"+ssh_address2+":27017/log")
+
 
 db = SQLAlchemy(app)
 
