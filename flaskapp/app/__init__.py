@@ -11,9 +11,14 @@ import logging.handlers
 import os
 # pwd = parse.quote("123456789@")
 ################
+file = open('ip.txt','r')
+for line in file:
+    ips=line.split(' ')
+    mysqlIp=ips[0]
+    metaIp=ips[1]
 
-metaIp=os.environ['LC_MONGOIP']
-mysqlIp=os.environ['LC_MYSQLIP']
+# metaIp=os.environ['LC_MONGOIP']
+# mysqlIp=os.environ['LC_MYSQLIP']
 # logIp=os.environ['logmongod_ip']
 
 # log = PyMongo(app,uri="mongodb://logadmin:"+pwd+"@"+logIp+":27017/log")
