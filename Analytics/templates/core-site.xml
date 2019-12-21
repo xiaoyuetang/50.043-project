@@ -1,5 +1,4 @@
-
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
 <!--
   Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,11 +18,7 @@
 
 <configuration>
     <property>
-        <name>mapreduce.jobtracker.address</name>
-        <value>(NAMENODEIP):54311</value>
-    </property>
-    <property>
-        <name>mapreduce.framework.name</name>
-        <value>yarn</value>
+        <name>fs.defaultFS</name>
+        <value>hdfs://(NAMDENODEIP):9000</value>
     </property>
 </configuration>
