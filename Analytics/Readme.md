@@ -2,7 +2,6 @@
 cd to Analytics folder and use the following ssh command
 ssh -i "ksdbkey.pem" ubuntu@ec2-54-208-153-234.compute-1.amazonaws.com
 
-
 ---Inside Namenode---
 Directories 'hadoop' and 'spark' are in home dir (~).
 
