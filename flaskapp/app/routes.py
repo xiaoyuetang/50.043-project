@@ -431,8 +431,20 @@ def history():
     logHistory = set(logInfoToday)
     for b in logHistory:
         booki = meta.db.metaKindleStoreClean.find_one({"asin": b})
-        book.append(booki)
-    return render_template("history.html", book=book)
+        if 'description' in booki:
+            book.append(booki)
+        else:
+            book['description']='None'
+    TagList = ['Science Fiction', 'satire', 'drama', 'Action and Adventure', 'Romance', 'mystery', 'horror', 'self help', 'guide',
+               'travel', "children's", 'religious', 'science', 'history', 'math', 'anthologies', 'poetry', 'encyclopedia', 'dictionaries', 'comics',
+               'art', 'cookbooks', 'diaries', 'prayer books', 'series', 'trilogies', 'biographies', 'autobiographies', 'fantasy']
+    topbook = meta.db.metaKindleStoreClean.find({'imUrl': {'$exists': True}, 'description': {
+                                            '$exists': True}, 'categories': {'$exists': True}}).limit(20)
+    TopBooks = []
+    for i in topbook:
+        TopBooks.append(i)
+
+    return render_template("history.html", book=book,TagList=TagList,TopBooks=TopBooks)
 
 
 @app.route("/profile")
