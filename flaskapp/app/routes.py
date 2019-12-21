@@ -7,6 +7,8 @@ from app.models import User, Review, ReviewerReviews, ReviewerInformation
 from werkzeug.urls import url_parse
 from datetime import datetime, date, time, timedelta
 from mysql.connector import MySQLConnection, Error
+import random
+import string
 
 
 ####################### below are revisited version ########################
@@ -126,17 +128,38 @@ def register():
 
     if request.method == 'POST':
         if request.form['signupbutton'] == 'Sign up':
-            userid = request.form['new_username']
+            username = request.form['new_username']
             email = request.form['new_email']
             password = request.form['new_password']
 
-            user = User(username=userid, email=email)
+            user = User(username=username, email=email)
             user.set_password(password)
             db.session.add(user)
             db.session.commit()
             flash('Congratulations, you are now a registered user!')
             return redirect(url_for('index'))
     return render_template('signup.html', title='Register')
+
+
+# @app.route('/', methods=['GET', 'POST'])
+# def register():
+#     if current_user.is_authenticated:
+#         flash("You have already logged in!")
+#         return render_template('already_login.html')
+
+#     if request.method == 'POST':
+#         if request.form['signupbutton'] == 'Sign up':
+#             userid = request.form['new_username']
+#             email = request.form['new_email']
+#             password = request.form['new_password']
+
+#             user = User(username=userid, email=email)
+#             user.set_password(password)
+#             db.session.update(user).where(user.username=str(current_user.username)).values(name=new_username)
+#             db.session.commit()
+#             flash('Congratulations, you are now a registered user!')
+#             return redirect(url_for('index'))
+#     return render_template('signup.html', title='Register')
 
 
 @app.route('/logout')
@@ -334,6 +357,66 @@ def submit_book_info():
     add_log("addbook", request.method, request.url,
             "add book successfully", current_user.username)
     return render_template("thank-you.html")
+# add-a-book page
+@app.route("/contact")
+@login_required
+def contact():
+    if str(current_user.username) == "admin":
+        cusor = meta.db.ContactLog.find()
+        print (cusor)
+        result = []
+        for i in cusor:
+            print (i)
+            result.append(i)
+        return render_template("admin-contact.html", result=result)
+    else:
+        return render_template("contact.html")
+@app.route("/contactDetail",methods=['GET'])
+def contactDetail():
+    caseId= request.args.get('caseId')
+    cusor = meta.db.ContactLog.find_one({'caseId':caseId})
+    if request.form["solvebtn"] == 'Solved':
+        caseId = str(request.form["caseId"])
+        meta.db.ContactLog.find_one_and_update(
+            {'caseId': caseId}, {"$set": {"Status": "Solved"}})
+    return render_template('contact-detail.html',cusor=cusor)
+
+# add a new book upon submit
+@app.route("/contact", methods=['POST', 'GET'])
+@login_required
+def submit_contact():
+
+    # Get the book info from contact form
+    if str(current_user.username) != "admin":
+        content = request.form["ContactMe"]
+        username = str(current_user.username)
+        subject = request.form["ContactTitle"]
+        time_stamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        year = str(date.today().year)
+        month = str(date.today().month)
+        day = str(date.today().day)
+        caseId = ''.join(random.choice(string.digits) for i in range(10))
+        contactinfo = {'TimeStamp': time_stamp, 'caseId': caseId,
+                       'Username': username,
+                       'ContactSubject': subject,
+                       'ContactContent': content,
+                       'Status': 'Unsolved',
+                       'Year': year,
+                       'Month': month,
+                       'Day': day}
+        meta.db.ContactLog.insert(contactinfo)
+        print (contactinfo)
+        return render_template("thank-you.html")
+    else:
+
+        cusor = meta.db.ContactLog.find()
+        print (cusor)
+        result = []
+        for i in cusor:
+            print (i)
+            result.append(i)
+
+        return render_template("admin-contact.html", result=result)
 
 
 @app.route("/history")

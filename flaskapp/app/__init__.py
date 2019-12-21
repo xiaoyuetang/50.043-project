@@ -33,6 +33,15 @@ app.config.from_object(Config)
 #########################################################################
 ec2host='35.160.25.169'
 ssh_address1='34.217.109.132'
+#mysqlconfig = {
+#'user': 'root',
+#'password':"",
+#'host': ec2host,
+#'port': '3306',
+#'database': 'flaskproject',
+#'raise_on_warnings': True,}
+
+
 con= sqldb.connect(host=ec2host, user="root", passwd="", db="flaskproject")
 meta = PyMongo(app,uri="mongodb://books:123456789@"+ssh_address1+":27017/books")
 
