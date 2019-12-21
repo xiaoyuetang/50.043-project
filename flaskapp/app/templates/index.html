@@ -54,40 +54,21 @@
 						</div>
 						<div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
 							<div class="carousel-inner">
+
 								<div class="carousel-item active">
 									<div class="carousel-caption">
-										<h4>Boyd W. - BOOK NAME</h4>
-										<p>review review review review review review review review review review review review review review review review
-											review review review </p>
+										<h4>Nelson Mandela</h4>
+										<p>The greatest glory in living lies not in never falling, but in rising every time we fall.</p>
 									</div>
 								</div>
+								{% for i in myresult %}
 								<div class="carousel-item">
 									<div class="carousel-caption">
-										<h4>Diane L -BOOKNAME</h4>
-										<p>review review review review review review review review review review review review review review review review
-											review review review </p>
+										<h4>{{i[0]}}</h4>
+										<p>{{i[1]}}</p>
 									</div>
 								</div>
-								<div class="carousel-item">
-									<div class="carousel-caption">
-										<h4>Randall L - BOOKNAME</h4>
-										<p>review review review review review review review review review review review review review review review review
-											review review review </p>
-									</div>
-								</div>
-								<div class="carousel-item">
-									<div class="carousel-caption">
-										<h3>John D.</h3>
-										<p>review review review review review review review review review review review review review review review review
-											review review review </p>
-									</div>
-								</div>
-								<div class="carousel-item">
-									<div class="carousel-caption">
-										<h3>Jody B.</h3>
-										<p>TEXT</p>
-									</div>
-								</div>
+								{% endfor %}
 							</div>
 							<a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
 								<span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -143,21 +124,11 @@
 							<h5 align="center">Top 20 in Books</h5>
 							<hr/>
 							<ul class="list-group list-group-flush">
-								<li class="list-group-item">Cras justo odio</li>
-								<li class="list-group-item">Dapibus ac facilisis in</li>
-								<li class="list-group-item">Morbi leo risus</li>
-								<li class="list-group-item">Porta ac consectetur ac</li>
-								<li class="list-group-item">Vestibulum at eros</li>
-								<li class="list-group-item">Cras justo odio</li>
-								<li class="list-group-item">Dapibus ac facilisis in</li>
-								<li class="list-group-item">Morbi leo risus</li>
-								<li class="list-group-item">Porta ac consectetur ac</li>
-								<li class="list-group-item">Vestibulum at eros</li>
-								<li class="list-group-item">Cras justo odio</li>
-								<li class="list-group-item">Dapibus ac facilisis in</li>
-								<li class="list-group-item">Morbi leo risus</li>
-								<li class="list-group-item">Porta ac consectetur ac</li>
-								<li class="list-group-item">Vestibulum at eros</li>
+								{% for i in TopBooks %}
+								<a href="{{url_for('review',asin=i['asin'])}}">
+								<li class="list-group-item">{{i['asin']}}</li>
+								</a>
+								{% endfor %}
 							</ul>
 						</div>
 					</div>

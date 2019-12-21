@@ -9,30 +9,6 @@ from datetime import datetime, date, time, timedelta
 from mysql.connector import MySQLConnection, Error
 
 
-@app.route('/addreview', methods=['GET', 'POST'])
-@login_required
-def addreview():
-	form = ReviewForm()
-	if form.validate_on_submit():
-		reviewID = Trial.query.filter_by(reviewID=form.reviewID.data).first()
-		if reviewID is not None:
-			flash('reviewerID already existed')
-			return redirect(url_for('addreview'))
-
-		reviewID = form.reviewID.data
-		overall = form.overall.data
-		reviewText = form.reviewText.data
-
-		# add review to database
-		review = Trial(reviewID=reviewID, overall=overall, reviewText=reviewText)
-		db.session.add(review)
-		db.session.commit()
-
-		next_page = request.args.get('next')
-		if not next_page or url_parse(next_page).netloc != '':
-			next_page = url_for('index')
-		return redirect(next_page)
-	return render_template('add_review.html', title='Add a Review', form=form)
 
 ####################### below are revisited version ########################
 
@@ -41,13 +17,6 @@ def addreview():
 def index():
 
 	############
-
-	# top10_review = Review.query.filter_by(overall=5).limit(35).all()
-	# top10_review_asin = []
-	# for i in top10_review:
-	# 	reviewerReviews = ReviewerReviews.query.filter_by(reviewID=i.reviewID).first()
-	# 	top10_review_asin.append(reviewerReviews.asin)
-	# top10_review_asin = list(dict.fromkeys(top10_review_asin))
 	cur = con.cursor()
 	cur.execute("select distinct asin from KindleReview where overall=5 limit 27")
 	data = cur.fetchall()
@@ -63,11 +32,22 @@ def index():
 
 		if booki != None and len(BookInfoList) <=10:
 			BookInfoList.append(booki)
+	############query top 20#########
+	topbook = meta.db.metaKindleStoreClean.find({'imUrl':{'$exists': True},'description':{'$exists': True},'categories':{'$exists':True}}).limit(20)
+	TopBooks=[]
+	for i in topbook:
+		TopBooks.append(i)
+
 	##########query new arrivals#########
 	newArrivalsTemp = meta.db.metaKindleStoreClean.find({"asin":{'$exists': True},"title":{'$exists': True},"description":{'$exists': True},"categories":{'$exists': True},"imUrl":{'$exists': True},"author":{'$exists': True}})
 	newArrivals = []
 	for i in newArrivalsTemp:
 		newArrivals.append(i)
+	##########query reviews##########
+	cur = con.cursor()
+	cur.execute("select reviewerName,reviewText from KindleReview limit 10;")
+	myresult = cur.fetchall()
+	con.commit()
 
 	################search here#########
 	search_input = None
@@ -78,7 +58,7 @@ def index():
 	'travel', "children's", 'religious', 'science', 'history', 'math', 'anthologies', 'poetry', 'encyclopedia', 'dictionaries', 'comics',
 	'art', 'cookbooks', 'diaries', 'prayer books', 'series', 'trilogies', 'biographies', 'autobiographies', 'fantasy']
 
-	return render_template('index.html',BookInfoList = BookInfoList,newArrivals = newArrivals,TagList=TagList)
+	return render_template('index.html',BookInfoList = BookInfoList,newArrivals = newArrivals,TagList=TagList,TopBooks=TopBooks,myresult=myresult)
 
 
 @app.route('/search-result',methods=['GET', 'POST'])
@@ -89,9 +69,9 @@ def search():
 	results = search_book(search_input)
 	if search_input[0:2] == "B0":
 		add_log("searchbook","",search_input, "search book successfully", current_user.username)
-	#if search_input[0:2] == "B0": 
+	#if search_input[0:2] == "B0":
 	#add_log("searchbook", "", search_input,  "search book successfully", current_user.username)
-	else: 
+	else:
 		add_log("searchkeyword", "", search_input,  "search keyword successfully", current_user.username)
 	return render_template('search-result.html', search_input=search_input, search_results = results)
 
@@ -134,7 +114,7 @@ def register():
 		return redirect(url_for('index'))
 
 	if request.method == 'POST':
-		if request.form['signupbutton'] == 'Sign up':
+		if request.form['signupbutton'] == 'Signup':
 			userid = request.form['new_username']
 			email = request.form['new_email']
 			password = request.form['new_password']
@@ -152,24 +132,6 @@ def logout():
 	logout_user()
 	return redirect(url_for('index'))
 
-# @app.route("/review", methods=["POST"])
-# @login_required
-# def submit_review():
-
-# 	if request.form['button'] == "Log In":
-# 		return render_template("index.html")
-# 	elif request.form['button'] == "Submit Review":
-# 		text = request.form['reviewText']
-# 		summary = request.form['reviewSummary']
-
-# 		# store the review into database
-# 		new_review = Review(reviewID='20', reviewText=text, summary=summary)
-# 		db.session.add(new_review)
-# 		db.session.commit()
-
-# 		return render_template("thank-you.html")
-# 	else:
-# 		return "Hello"
 
 # save the latest log records to database
 @app.before_request
@@ -203,9 +165,18 @@ def review():
 		title = book['title']
 	else:
 		title = book['asin']
-	cover = book['imUrl']
-	desc = book['description']
-	tagslist = book['categories']
+	if 'description' in book:
+		desc = book['description']
+	else:
+		desc='None'
+	if 'imUrl' in book:
+		cover = book['imUrl']
+	else:
+		cover = '/static/imag/unknown.jpeg'
+	if 'categories' in book:
+		tagslist = book['categories']
+	else:
+		tagslist=[]
 	if 'author'in book:
 		author = book['author']
 	else:
@@ -225,14 +196,15 @@ def review():
 	relateds=[]
 	relatedlist=[]
 	add_log("viewbook", "", book['asin'],  "view book successfully", current_user.username)
-	if 'also_viewed' in book['related']:
-		relatedlist = book['related']['also_viewed']
-		# relateds = bookinfo(relatedlist)
-	elif book['related']['also_bought'] is not None:
-		relatedlist = book['related']['also_bought']
-		# relateds = bookinfo(relatedlist)
-	elif 'buy_after_viewing' in book['related']:
-		relatedlist = book['related']['buy_after_viewing']
+	if 'related' in book:
+		if 'also_viewed' in book['related']:
+			relatedlist = book['related']['also_viewed']
+			# relateds = bookinfo(relatedlist)
+		elif book['related']['also_bought'] is not None:
+			relatedlist = book['related']['also_bought']
+			# relateds = bookinfo(relatedlist)
+		elif 'buy_after_viewing' in book['related']:
+			relatedlist = book['related']['buy_after_viewing']
 
 	if len(relatedlist)!=0:
 		relateds = bookinfo(relatedlist)
@@ -278,8 +250,8 @@ def review():
 		summary = i[1]
 		text = i[5]
 		overall = i[2]
-		print(i[3])
-		if type(i[3])=='str':
+		print(type(i[3]))
+		if type(i[3])==str:
 			helpful=[int(j) for j in i[3].strip('[]').split(',')]
 			print(helpful[0])
 		else:
@@ -289,34 +261,7 @@ def review():
 	##################
 
 	return render_template("review-page.html", main=main_book, reviews=reviews, relateds=relateds)
-# @app.route("/review", methods=["POST"])
-# @login_required
-# def submit_review():
-# 	submittedreview = request.form
-# 	if 'reviewbutton' in submittedreview:
-# 		# return(submittedreview)
-# 		# return ('submit review clicked')
-# 		text = request.form['reviewText']
-# 		summary = request.form['summary']
-# 		asin = request.form['asin']
-# 		# store the review into database
-# 		new_review = Review(reviewID='20', reviewText=text, summary=summary)
-# 		lastid = get_last_id()
-# 		print(lastid[0])
-# 		eyed = lastid[0]+1
-# 		asin = asin
-# 		helpful = '-1'
-# 		overall = 4
-# 		reviewText = text
-# 		reviewTime = '-1'
-# 		reviewID = '-1'
-# 		reviewerName = 'Small Bling Bling'
-# 		summary = summary
-# 		unixReviewTime = '-2'
-# 		result = insert_review(eyed,asin,helpful,overall,reviewText,reviewTime,reviewID,reviewerName,summary,unixReviewTime)
-# 		return render_template("thank-you.html")
-# 	else:
-# 		return "Hello"
+
 
 def bookinfo(relatedlist):
 	relateds=[]
@@ -364,17 +309,9 @@ def submit_book_info():
 	BookAsin = request.form['BookAsin']
 	BookImUrl = request.form['BookImUrl']
 	MoreAbtBook = request.form["MoreAbtBook"]
-	# Save book information to the mongoDB
-	# mydict = {'ClientName':ClientName,
-	# 'ClientEmail':ClientEmail,
-	# 'categories':BookCat,
-	# 'asin':BookAsin,
-	# 'title':BookName,
-	# 'author':BookAuthor,
-	# 'imUrl':BookImUrl,
-	# 'description':MoreAbtBook}
+
 	meta.db.metaKindleStoreClean.find_one_and_update({"asin": BookAsin},
-							   {"$set": {"title": BookName,"author": BookAuthor,"imUrl": BookImUrl,"description": MoreAbtBook,"categories": BookCat}},upsert=True)
+                               {"$set": {"title": BookName,"author": BookAuthor,"imUrl": BookImUrl,"description": MoreAbtBook,"categories": BookCat}},upsert=True)
 	add_log("addbook",request.method, request.url, "add book successfully", current_user.username)
 	return render_template("thank-you.html")
 
@@ -391,7 +328,6 @@ def history():
 	for b in logHistory:
 		booki = meta.db.metaKindleStoreClean.find_one({"asin":b})
 		book.append(booki)
-
 	return render_template("history.html",book=book)
 
 @app.route("/profile")
@@ -401,7 +337,6 @@ def profile():
 # def profile(username):
 
 	#user = User.query.filter_by(username=username).first_or_404()
-	# 相关的信息需要什么
 	# posts =
 	# reviews =
 
@@ -479,7 +414,7 @@ def month_stats():
 			top_x_review.append(key)
 			top_y_review.append(monthStats_review[key])
 
-	
+
 	sort_value_search = sorted(monthStats_search.values())[::-1]
 
 	top_x_search = []
@@ -528,9 +463,6 @@ def catch_reviews(asin):
 		con.commit()
 
 		print("Records for asin " + asin + " fetched from reviews table")
-		# conn.close()
-		# mysql.connection.close()
-		# print("MySQL connection is closed")
 		print(myresult)
 	except Error as error:
 		print(error)
@@ -544,12 +476,11 @@ def insert_review(serialNum,asin,helpful,overall,reviewText,reviewTime,reviewID,
 		cur.execute(query1,[serialNum,asin,helpful,overall,reviewText,reviewTime,reviewID,reviewerName,summary,unixReviewTime])
 		con.commit()
 		print("Record inserted successfully into KindleReview table")
-		# conn.close()
-		# mysql.connection.close()
+
 		print("MySQL connection is closed")
 		return("Record inserted successfully into KindleReview table")
 	except Error as error:
-		print(error)
+	    print(error)
 
 def get_last_id():
 	try:

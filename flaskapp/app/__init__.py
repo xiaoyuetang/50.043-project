@@ -31,8 +31,8 @@ app.config.from_object(Config)
 # con= sqldb.connect(host=mysqlIp, user="root", passwd="", db="flaskproject")
 # meta = PyMongo(app,uri="mongodb://books:123456789@"+metaIp+":27017/books")
 #########################################################################
-ec2host='34.213.203.130'
-ssh_address1='54.202.2.120'
+ec2host='35.160.25.169'
+ssh_address1='34.217.109.132'
 con= sqldb.connect(host=ec2host, user="root", passwd="", db="flaskproject")
 meta = PyMongo(app,uri="mongodb://books:123456789@"+ssh_address1+":27017/books")
 
