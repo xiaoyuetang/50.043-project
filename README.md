@@ -12,17 +12,17 @@ Demo: http://54.185.13.103/
 
 **NOTE** DO NOT register using any of the following information because they alrealy exist:
 
-**NOTE** username=susan
+* username=susan
 
-**NOTE** username=yuanyuan
+* username=yuanyuan
 
-**NOTE** username=user
+* username=user
 
-**NOTE** email=susan@qq.com
+* email=susan@qq.com
 
-**NOTE** email=yuanyuan@qq.com
+* email=yuanyuan@qq.com
 
-**NOTE** email=user@qq.com
+* email=user@qq.com
 
 **NOTE** Before you login to another account make sure you log out (to log out, kindly click your profile and there is a dropdown button called Log out)
 
@@ -87,7 +87,7 @@ In your terminal/cml then go to 0.0.0.0
 
 ## Analytics System
 
-All the related scripts as well as README are all in Analytics folder : https://github.com/yqyqyq123/50.043-project/Analytics/Readme.md
+All the related scripts as well as README are all in Analytics folder : https://github.com/yqyqyq123/50.043-project/blob/master/Analytics/Readme.md
 
 ## Screenshots
 ### Home page
