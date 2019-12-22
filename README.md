@@ -6,6 +6,8 @@ In this project, we have built a web application for Kindle book reviews, one th
 
 Demo: http://34.219.79.131/
 
+⚠️⚠️⚠️ **PLEASE DO NOT TRY THE PROFILE PICTUALE UPLOADING FUNCTION BECAUSE AFTER WE PUT THE KEY PAIRS IN PUBLIC, AWS HAS DELETE IT WITHOUT OUR PERMISSION. HOWEVER, IT DID WORK PERFECTLY WITH THE KEY BEFORE.**
+
 **NOTE** You can login as admin by using 👉 username=admin , password=123
 
 **NOTE** You can login as user by using 👉username=hi , password=cat
