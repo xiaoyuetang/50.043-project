@@ -296,7 +296,7 @@ def main():
     instance = create_new_webserver_instance(security_group_name, key_name,numofinstances)
 
     print('Sleeping the program for 60 seconds to let the instance to be configured..')
-    time.sleep(60)
+    time.sleep(90)
 
     instance[0].reload()
     execute_commands_in_instance_mysql(instance[0].public_ip_address,key_name)
