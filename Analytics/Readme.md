@@ -2,7 +2,7 @@
 
 Specify number of nodes to be created in line 132.
 Have your account credentials ready via the AWS CLI, run aws configure.
-AMI is now made public.
+AMI is now made public in the Singapore region/data centre.
 Namenode and datanode IPs can be obtained from python console.
 
 note: memory limitations/errors result in pearson/tfidf not being able to run on these instances, as pyspark refuses to install. Please use the preconfigured server (same settings, just with successful manual pyspark installation) to test the functions.
