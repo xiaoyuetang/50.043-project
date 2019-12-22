@@ -4,7 +4,7 @@ In this project, we have built a web application for Kindle book reviews, one th
 
 ## Getting Started
 
-Demo: 34.219.79.131
+Demo: http://34.219.79.131/
 
 **NOTE** You can login as admin by using 👉 username=admin , password=123
 
