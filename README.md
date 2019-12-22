@@ -88,31 +88,56 @@ In your terminal/cml then go to 0.0.0.0
 All the related scripts as well as README are all in Analytics folder : [Analytics](https://github.com/yqyqyq123/50.043-project/blob/master/Analytics/Readme.md)
 
 ## Screenshots
+
 ### Home page
+
+- new arrival is new added books by admin
+
 ![app demo](screenshot/app-screenshot1.png)
 
 ### Plots for stastics
+
+- one for searching ASIN
+- one for searching key words
+- one for reviewing books
+- one for viewing books
+
 ![app demo](screenshot/app-screenshot7.png)
 
 ### User/Admin edit profile
+
 ![app demo](screenshot/app-screenshot8.png)
 
 ### Add a new book (for admin only)
+
 ![app demo](screenshot/app-screenshot2.png)
 
 ### Contact (Admin side)
+
+- Admin view messages from users
+
 ![app demo](screenshot/app-screenshot3.png)
 
 ### Contact (User side)
+
+- user send messages to admin
+
 ![app demo](screenshot/app-screenshot4.png)
 
 ### History page:
+
+- viewing history
+
 ![app demo](screenshot/app-screenshot5.png)
 
 ### System history (for admin only)
+
+- system history(logs) for admin
+
 ![app demo](screenshot/app-screenshot6.png)
 
 ### Logout before login/signup
+
 ![app demo](screenshot/app-screenshot9.png)
 
 
