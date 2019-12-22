@@ -8,11 +8,13 @@ Demo: http://34.219.79.131/
 
 **NOTE** You can login as admin by using 👉 username=admin , password=123
 
-**NOTE** You can login as user by using 👉username=random , password=cat
+**NOTE** You can login as user by using 👉username=hi , password=cat
 
 **NOTE** DO NOT register using any of the following information because they alrealy exist:
 
 * username=susan
+
+* username=random
 
 * username=yuanyuan
 
