@@ -6,6 +6,28 @@ In this project, we have built a web application for Kindle book reviews, one th
 
 Demo: http://54.185.13.103/
 
+**NOTE** You can login as admin by using 👉 username=admin , password=123
+
+**NOTE** You can login as user by using 👉username=random , password=cat
+
+**NOTE** DO NOT register using any of the following information because they alrealy exist:
+
+**NOTE** username=susan
+
+**NOTE** username=yuanyuan
+
+**NOTE** username=user
+
+**NOTE** email=susan@qq.com
+
+**NOTE** email=yuanyuan@qq.com
+
+**NOTE** email=user@qq.com
+
+**NOTE** Before you login to another account make sure you log out (to log out, kindly click your profile and there is a dropdown button called Log out)
+
+**NOTE** Be patient! It takes some time to load some pages, because we host our databases including server on us-west-2 region 
+
 If you want to recreate by you own, follow the steps under **Automation Script**
 
 
@@ -15,6 +37,7 @@ If you want to recreate by you own, follow the steps under **Automation Script**
 What things you need to install
 
 ```
+python3
 flask
 flask_sqlalchemy
 flask_migrate
@@ -43,9 +66,11 @@ python autoScriptForFrontEnd.py
 ```
 ![cml demo](screenshot/automation1.png)
 
-！in case the security group in your account doesn't fullfil all the requirements then you can type in any name you want as your security group name, in the automation script, it will help you create a security group using the name you provided.
+⚠️ Note you MUST put "" around all the inputs e.g "your-secret-access-key"
 
-! same for key name, you'd better use the key in the same folder as the automation script, if cannot find any keys in the same folder, then just type any name for the key, the script will help you to create one.
+⚠️ in case the security group in your account doesn't fullfil all the requirements then you can type in any name you want as your security group name, in the automation script, it will help you create a security group using the name you provided.
+
+⚠️ same for key name, you'd better use the key in the same folder as the automation script, if cannot find any keys in the same folder, then just type any name for the key, the script will help you to create one.
 3. Go to the IP address printed in the console to view the app
 
 
@@ -62,7 +87,7 @@ In your terminal/cml then go to 0.0.0.0
 
 ## Analytics System
 
-All the related scripts as well as README are all in Analytics folder : [](https://github.com/yqyqyq123/50.043-project/Analytics/Readme.md)
+All the related scripts as well as README are all in Analytics folder : https://github.com/yqyqyq123/50.043-project/Analytics/Readme.md
 
 ## Screenshots
 ### Home page
