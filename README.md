@@ -8,7 +8,7 @@ Demo: http://34.219.79.131/
 
 ⚠️⚠️⚠️ 
 
-**PLEASE DO NOT TRY THE PROFILE PICTUALE UPLOADING FUNCTION becase after we put the s3 key pairs in public, AWS has deleted it without our permission. HOWEVER, IT DID WORK PERFECTLY WITH THE KEY BEFORE.**
+**PLEASE DO NOT TRY THE PROFILE PICTURE UPLOADING FUNCTION becase after we put the s3 key pairs in public, AWS has deleted it without our permission. HOWEVER, IT DID WORK PERFECTLY WITH THE KEY BEFORE.**
 
 **NOTE** You can login as admin by using 👉 username=admin , password=123
 
