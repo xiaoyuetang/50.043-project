@@ -87,7 +87,7 @@ In your terminal/cml then go to 0.0.0.0
 
 ## Analytics System
 
-All the related scripts as well as README are all in Analytics folder : https://github.com/yqyqyq123/50.043-project/blob/master/Analytics/Readme.md
+All the related scripts as well as README are all in Analytics folder : [Analytics](https://github.com/yqyqyq123/50.043-project/blob/master/Analytics/Readme.md)
 
 ## Screenshots
 ### Home page
@@ -131,6 +131,6 @@ All the related scripts as well as README are all in Analytics folder : https://
 * Li Zihao 1002966
 * Tang Xiaoyue 1002968
 * Ng Jen Yang 1003007
-* Khai Sheen
+* Khai Sheen 1002789
 
 
