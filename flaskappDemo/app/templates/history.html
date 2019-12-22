@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  {% extends 'template.html' %} {% block head %}
+  <title>Reading history</title>
+  {% endblock %}
+</head>
+
+<body>
+  {% block content %}
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-8">
+        <h2 align="center">Your Reading History</h2>
+        <div class="hScroller" style="margin:23px 60px">
+          <hr /> {% for b in book %}
+          <div class="row">
+            <div class="col-md-6">
+              <img width="250" height="250" class="hCover" src="{{ b.imUrl }}" />
+            </div>
+            <div class="col-md-6 hDetails">
+              <h4>{{ b.asin }}</h4>
+              <p>{{b.description[0:300]}}...</p>
+              </div>
+          </div>
+          <hr />{% endfor %}
+        </div>
+        <!-- <div class="row">
+            <div class="col-md-4">
+              <img class="hCover" src="{{ cover1 }}" />
+            </div>
+            <div class="hDetails col-md-8">
+              <div class="">
+                <h4>{{ book1 }}</h4>
+                <h6>
+                  <em>{{ author1 }}</em>
+                </h6>
+                <span class="badge badge-info">Art</span>
+                <span class="badge badge-info">Cookbooks</span>
+              </div>
+            </div>
+          </div>
+          <hr />
+
+          <ul>
+            <li>Book1 {{ book1 }}</li>
+            <li>Book2 {{ book2 }}</li>
+            <li>Book3 {{ book3 }}</li>
+          </ul> -->
+      </div>
+      <div class="col-md-4">
+        <div class="row row-adjust" name="HotTags">
+          <div class="col-md-12">
+            <h5 align="center">Hot Tags</h5>    2
+            <hr/>
+            {% for t in TagList %}
+            <a href="{{url_for('search',search_input=t)}}">
+            <span class="badge badge-info">{{ t }}</span>
+            </a>
+            {% endfor %}
+          </div>
+        </div>
+        <div class="row row-adjust" name="Top20">
+          <div class="col-md-12">
+            <div class="mainHeader">
+              <h5 align="center">Top 20 in Books</h5>
+              <hr/>
+              <ul class="list-group list-group-flush">
+                {% for i in TopBooks %}
+                <a href="{{url_for('review',asin=i['asin'])}}">
+                <li class="list-group-item">{{i['asin']}}</li>
+                </a>
+                {% endfor %}
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endblock %}
+</body>
+
+</html>

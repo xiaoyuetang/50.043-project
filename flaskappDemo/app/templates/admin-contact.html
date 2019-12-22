@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {% extends "template.html" %}
+    <title>Group9 Book Review System</title>
+    <meta name="description" content="Add a Book Page" />
+    <meta name="author" content="Group9" />
+</head>
+
+<body>
+    {% block content %}
+    <div class="container-fluid">
+        <div class="row row-adjust">
+            <div class="col-sm-12">
+                <h3 style="margin:40px">Contact List</h3>
+                <table class="table table-striped">
+                    <!-- <caption>History for today</caption> -->
+                    <thead>
+                        <tr align="center">
+                            <th>Case Id</th>
+                            <th>User Name</th>
+                            <th>Subject</th>
+                            <th>Year</th>
+                            <th>Month</th>
+                            <th>Day</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    {% for i in result %}
+                    <tbody>
+                        <tr align="center">
+                            <td>{{i.caseId}}</td>
+                            <td>{{i.Username}}</td>
+                            <td>{{i.ContactSubject}}</td>
+                            <td>{{i.Year}}</td>
+                            <td>{{i.Month}}</td>
+                            <td>{{i.Day}}</td>
+                            <td>{{i.Status}}</td>
+                            <td>
+                                <a href="{{url_for('contactDetail',caseId=i.caseId)}}" class="btn btn-warning btn-xs">Solve</a>
+
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    {% endblock %}
+</body>
+
+</html>
