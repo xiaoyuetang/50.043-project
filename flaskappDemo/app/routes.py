@@ -473,7 +473,8 @@ def profile():
             current_user.username = request.form["username"]
             current_user.about_me = request.form["aboutme"]
             password = request.form["password"]
-            current_user.set_password(password)
+            if current_user.password_bash != password:
+                current_user.set_password(password)
             current_user.email = request.form["email"]
             db.session.commit()
             flash('Your changes have been saved.')
