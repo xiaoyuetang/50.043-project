@@ -1,3 +1,11 @@
+---Automation Script for EC2 launching of Hadoop and Spark---
+Specify number of nodes to be created in line 132.
+Have your account credentials ready via the AWS CLI, run aws configure.
+AMI is now made public.
+Namenode and datanode IPs can be obtained from python console.
+
+note: memory limitations/errors result in pearson/tfidf not being able to run on these instances, as pyspark refuses to install. Please use the preconfigured server (same settings, just with successful manual pyspark installation) to test the functions.
+
 ---SSH into Namenode---
 cd to Analytics folder and use the following ssh command
 ssh -i "ksdbkey.pem" ubuntu@ec2-54-208-153-234.compute-1.amazonaws.com
