@@ -43,6 +43,7 @@ python autoScriptForFrontEnd.py
 ```
 ![cml demo](screenshot/automation1.png)
 ！in case the security group in your account doesn't fullfil all the requirements then you can type in any name you want as your security group name, in the automation script, it will help you create a security group using the name you provided.
+
 ! same for key name, you'd better use the key in the same folder as the automation script, if cannot find any keys in the same folder, then just type any name for the key, the script will help you to create one.
 3. Go to the IP address printed in the console to view the app
 
