@@ -127,10 +127,10 @@ All the related scripts as well as README are all in Analytics folder : [Analyti
 
 ## Authors
 * Gou Yuanyuan 1002972
-* Li Yueqin 
+* Li Yueqin 1002992
 * Li Zihao 1002966
 * Tang Xiaoyue 1002968
 * Ng Jen Yang 1003007
-* Khai Sheen 1002789
+* Yong Khai Sheen 1002789
 
 
