@@ -1,46 +1,77 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    {% extends "template.html" %}
-    <title>Group9 Book Review System</title>
-    <meta name="description" content="Add a Book Page" />
-    <meta name="author" content="Group9" />
-  </head>
 
-  <body>
-    {% block content %}
-    <div class="container-fluid">
-      <div class="row profile" style="margin:30px 100px">
-        <div class=" col-3 ">
-          <img
-            src="https://images.unsplash.com/photo-1513721032312-6a18a42c8763?w=152&h=152&fit=crop&crop=faces
-            "
-            alt=" "
-          />
-        </div>
-        <div class="col-9 ">
-          <h1 style="display: inline-block; ">janedoe_</h1>
-          <button class="btn btn-secondary btn-sm " style="margin:20px ">
-            Edit Profile
-          </button>
-          <ul class="list-group list-group-horizontal ">
-            <li class="list-group-item ">
-              <span class="badge badge-light ">164</span> reviews
-            </li>
-            <li class="list-group-item ">
-              <span class="badge badge-light ">188</span> followers
-            </li>
-            <li class="list-group-item ">
-              <span class="badge badge-light ">206</span> following
-            </li>
-          </ul>
-          <hr />
-          <small>Personal bio here blabla</small>
-        </div>
+<head>
+  {% extends "template.html" %}
+  <title>Group9 Book Review System</title>
+  <meta name="description" content="Add a Book Page" />
+  <meta name="author" content="Group9" />
+</head>
+
+<body>
+  {% block content %}
+  <div class="container-fluid">
+    <div class="row profile" style="margin:30px 100px">
+      <div class=" col-2 ">
+        <img width="100" height="100" src="{{userinfo.userimage}}" alt=" " />
       </div>
-      <!-- End of profile section -->
+      <div class="col-10 ">
+        <h1 style="display: inline-block; ">{{userinfo.username}}</h1>
+        <hr />
+      </div>
     </div>
-    <!-- End of container -->
-    {% endblock %}
-  </body>
+    <div class="row profile" style="margin:30px 100px">
+      <div class=" col-12 ">
+        <form class="border border-light p-5" style="margin:0 60px" method="POST" enctype="multipart/form-data">
+
+          <h4 class="text-center">Personal Profile</h4>
+          <!-- Image -->
+          <label>Profile Image</label>
+          <div class="input-group mb-4">
+            <div class="custom-file">
+              <input type="file" id="avatar" name="image" accept="image/png, image/jpeg">
+            </div>
+          </div>
+
+          <!-- Name -->
+          <label>User Name</label>
+          <input name="username" type="text" class="form-control mb-4" value={{userinfo.username}}>
+
+          <!-- Email -->
+          <label>Email Address</label>
+          <input name="email" type="email" class="form-control mb-4" value={{userinfo.useremail}}>
+
+          <!-- Password -->
+          <label>Hashed Password</label>
+          <input name="password" type="text" class="form-control mb-4" value={{userinfo.userpassword}}>
+
+          <!-- About Me -->
+          <label>About Me</label>
+          <div class="form-group">
+            <textarea name="aboutme" class="form-control rounded-0" id="exampleFormControlTextarea2" rows="3" placeholder="About me...">{{userinfo.useraboutme}}</textarea>
+          </div>
+          <div class="text-center">
+            <input name="savechanges" class="btn btn-info" type="submit" value="Save Changes" />
+          </div>
+          <br/>
+          <div style="color:orange">
+            ⚠️ Note:
+            <ul>
+              <li>
+                When uploading profile image, please only use images in jpg/jpeg/png format
+              </li>
+              <li>
+                For password, the hashed version of your current password is shown. When you change it, just type the unhashed version.
+              </li>
+            </ul>
+          </div>
+        </form>
+      </div>
+    </div>
+    <!-- End of profile section -->
+  </div>
+  <!-- End of container -->
+  {% endblock %}
+</body>
+
 </html>

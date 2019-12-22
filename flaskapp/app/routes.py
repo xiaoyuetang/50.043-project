@@ -9,9 +9,26 @@ from datetime import datetime, date, time, timedelta
 from mysql.connector import MySQLConnection, Error
 import random
 import string
+import boto3
+import botocore
 
 
 ####################### below are revisited version ########################
+def getuserimage():
+    if current_user.is_authenticated:
+
+        userimginfo = meta.db.userprofile.find_one({'userid': current_user.id})
+        if userimginfo==None:
+            userimage = '/static/imag/profile.png'
+        elif 'image' not in userimginfo.keys():
+            userimage = '/static/imag/profile.png'
+        else:
+            userimage = userimginfo['image']
+    else:
+        userimage = '/static/imag/profile.png'
+
+    return userimage
+
 
 @app.route('/', methods=['GET', 'POST'])
 # @app.route('/index')
@@ -63,7 +80,9 @@ def index():
                'travel', "children's", 'religious', 'science', 'history', 'math', 'anthologies', 'poetry', 'encyclopedia', 'dictionaries', 'comics',
                'art', 'cookbooks', 'diaries', 'prayer books', 'series', 'trilogies', 'biographies', 'autobiographies', 'fantasy']
 
-    return render_template('index.html', BookInfoList=BookInfoList, newArrivals=newArrivals, TagList=TagList, TopBooks=TopBooks, myresult=myresult)
+    #####################
+    userimage = getuserimage()
+    return render_template('index.html', BookInfoList=BookInfoList, newArrivals=newArrivals, TagList=TagList, TopBooks=TopBooks, myresult=myresult, userimage=userimage)
 
 
 @app.route('/search-result', methods=['GET', 'POST'])
@@ -80,7 +99,8 @@ def search():
     else:
         add_log("searchkeyword", "", search_input,
                 "search keyword successfully", current_user.username)
-    return render_template('search-result.html', search_input=search_input, search_results=results)
+    userimage = getuserimage()
+    return render_template('search-result.html', search_input=search_input, search_results=results, userimage=userimage)
 
 
 def search_book(keyword):
@@ -98,9 +118,10 @@ def search_book(keyword):
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    userimage = getuserimage()
     if current_user.is_authenticated:
         flash("You have already logged in!")
-        return render_template('already_login.html')
+        return render_template('already_login.html', userimage=userimage)
 
     if request.method == 'POST':
         if request.form['loginbutton'] == 'Log In':
@@ -117,14 +138,16 @@ def login():
             if not next_page or url_parse(next_page).netloc != '':
                 next_page = url_for('index')
             return redirect(next_page)
-    return render_template('login.html')
+
+    return render_template('login.html', userimage=userimage)
 
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
+    userimage = getuserimage()
     if current_user.is_authenticated:
         flash("You have already logged in!")
-        return render_template('already_login.html')
+        return render_template('already_login.html', userimage=userimage)
 
     if request.method == 'POST':
         if request.form['signupbutton'] == 'Sign up':
@@ -138,28 +161,7 @@ def register():
             db.session.commit()
             flash('Congratulations, you are now a registered user!')
             return redirect(url_for('index'))
-    return render_template('signup.html', title='Register')
-
-
-# @app.route('/', methods=['GET', 'POST'])
-# def register():
-#     if current_user.is_authenticated:
-#         flash("You have already logged in!")
-#         return render_template('already_login.html')
-
-#     if request.method == 'POST':
-#         if request.form['signupbutton'] == 'Sign up':
-#             userid = request.form['new_username']
-#             email = request.form['new_email']
-#             password = request.form['new_password']
-
-#             user = User(username=userid, email=email)
-#             user.set_password(password)
-#             db.session.update(user).where(user.username=str(current_user.username)).values(name=new_username)
-#             db.session.commit()
-#             flash('Congratulations, you are now a registered user!')
-#             return redirect(url_for('index'))
-#     return render_template('signup.html', title='Register')
+    return render_template('signup.html', title='Register', userimage=userimage)
 
 
 @app.route('/logout')
@@ -176,24 +178,25 @@ def before_request():
         db.session.commit()
 
 # edit user profile
-@app.route('/edit_profile', methods=['GET', 'POST'])
-@login_required
-def edit_profile():
-    form = EditProfileForm(current_user.username)
-    if form.validate_on_submit():
-        current_user.username = form.username.data
-        current_user.about_me = form.about_me.data
-        db.session.commit()
-        flash('Your changes have been saved.')
-        return redirect(url_for('edit_profile'))
-    elif request.method == 'GET':
-        form.username.data = current_user.username
-        form.about_me.data = current_user.about_me
-    return render_template('edit_profile.html', title='Edit Profile', form=form)
+# @app.route('/edit_profile', methods=['GET', 'POST'])
+# @login_required
+# def edit_profile():
+#     form = EditProfileForm(current_user.username)
+#     if form.validate_on_submit():
+#         current_user.username = form.username.data
+#         current_user.about_me = form.about_me.data
+#         db.session.commit()
+#         flash('Your changes have been saved.')
+#         return redirect(url_for('edit_profile'))
+#     elif request.method == 'GET':
+#         form.username.data = current_user.username
+#         form.about_me.data = current_user.about_me
+#     return render_template('edit_profile.html', title='Edit Profile', form=form)
 
 # Description / write a review
 @app.route("/review", methods=['GET', 'POST'])
 def review():
+    userimage = getuserimage()
     asin = request.args.get('asin')
     book = meta.db.metaKindleStoreClean.find_one({"asin": asin})
     if 'title'in book:
@@ -276,7 +279,7 @@ def review():
             print("DONE PUSHING")
             add_log("addreview", request.method, asin,
                     "add review successfully", current_user.username)
-            return render_template("thank-you.html")
+            return render_template("thank-you.html", userimage=userimage)
     #### #### ##############################
     #### Load Reviews from DB ####
 
@@ -299,7 +302,7 @@ def review():
         reviews.append(review)
     ##################
 
-    return render_template("review-page.html", main=main_book, reviews=reviews, relateds=relateds)
+    return render_template("review-page.html", main=main_book, reviews=reviews, relateds=relateds, userimage=userimage)
 
 
 def bookinfo(relatedlist):
@@ -332,16 +335,17 @@ def bookinfo(relatedlist):
 @app.route("/add-a-book")
 @login_required
 def add_a_book():
+    userimage = getuserimage()
     if str(current_user.username) == "admin":
-        return render_template("add-a-book.html")
+        return render_template("add-a-book.html", userimage=userimage)
     else:
-        return render_template("admin.html")
+        return render_template("admin.html", userimage=userimage)
 
 # add a new book upon submit
 @app.route("/add-a-book", methods=['POST'])
 @login_required
 def submit_book_info():
-
+    userimage = getuserimage()
     # Get the book info from add-a-book form
     ClientName = request.form['ClientName']
     ClientEmail = request.form['ClientEmail']
@@ -356,11 +360,12 @@ def submit_book_info():
                                                      {"$set": {"title": BookName, "author": BookAuthor, "imUrl": BookImUrl, "description": MoreAbtBook, "categories": BookCat}}, upsert=True)
     add_log("addbook", request.method, request.url,
             "add book successfully", current_user.username)
-    return render_template("thank-you.html")
+    return render_template("thank-you.html", userimage=userimage)
 # add-a-book page
 @app.route("/contact")
 @login_required
 def contact():
+    userimage = getuserimage()
     if str(current_user.username) == "admin":
         cusor = meta.db.ContactLog.find()
         print (cusor)
@@ -368,24 +373,27 @@ def contact():
         for i in cusor:
             print (i)
             result.append(i)
-        return render_template("admin-contact.html", result=result)
+        return render_template("admin-contact.html", result=result, userimage=userimage)
     else:
-        return render_template("contact.html")
-@app.route("/contactDetail",methods=['GET'])
+        return render_template("contact.html", userimage=userimage)
+
+
+@app.route("/contactDetail", methods=['GET'])
 def contactDetail():
-    caseId= request.args.get('caseId')
-    cusor = meta.db.ContactLog.find_one({'caseId':caseId})
+    userimage = getuserimage()
+    caseId = request.args.get('caseId')
+    cusor = meta.db.ContactLog.find_one({'caseId': caseId})
     if request.form["solvebtn"] == 'Solved':
         caseId = str(request.form["caseId"])
         meta.db.ContactLog.find_one_and_update(
             {'caseId': caseId}, {"$set": {"Status": "Solved"}})
-    return render_template('contact-detail.html',cusor=cusor)
+    return render_template('contact-detail.html', cusor=cusor, userimage=userimage)
 
 # add a new book upon submit
 @app.route("/contact", methods=['POST', 'GET'])
 @login_required
 def submit_contact():
-
+    userimage = getuserimage()
     # Get the book info from contact form
     if str(current_user.username) != "admin":
         content = request.form["ContactMe"]
@@ -406,7 +414,7 @@ def submit_contact():
                        'Day': day}
         meta.db.ContactLog.insert(contactinfo)
         print (contactinfo)
-        return render_template("thank-you.html")
+        return render_template("thank-you.html", userimage=userimage)
     else:
 
         cusor = meta.db.ContactLog.find()
@@ -416,12 +424,13 @@ def submit_contact():
             print (i)
             result.append(i)
 
-        return render_template("admin-contact.html", result=result)
+        return render_template("admin-contact.html", result=result, userimage=userimage)
 
 
 @app.route("/history")
 @login_required
 def history():
+    userimage = getuserimage()
     logIT = meta.db.systemLog.find({"RequestSummary": {'$eq': "viewbook"}, "UserName": {'$eq': str(current_user.username)},
                                     "Day": {'$eq': str(date.today().day)}, "Year": {'$eq': str(date.today().year)}, "Month": {'$eq': str(date.today().month)}})
     logInfoToday = []
@@ -434,30 +443,62 @@ def history():
         if 'description' in booki:
             book.append(booki)
         else:
-            book['description']='None'
+            book['description'] = 'None'
     TagList = ['Science Fiction', 'satire', 'drama', 'Action and Adventure', 'Romance', 'mystery', 'horror', 'self help', 'guide',
                'travel', "children's", 'religious', 'science', 'history', 'math', 'anthologies', 'poetry', 'encyclopedia', 'dictionaries', 'comics',
                'art', 'cookbooks', 'diaries', 'prayer books', 'series', 'trilogies', 'biographies', 'autobiographies', 'fantasy']
     topbook = meta.db.metaKindleStoreClean.find({'imUrl': {'$exists': True}, 'description': {
-                                            '$exists': True}, 'categories': {'$exists': True}}).limit(20)
+        '$exists': True}, 'categories': {'$exists': True}}).limit(20)
     TopBooks = []
     for i in topbook:
         TopBooks.append(i)
 
-    return render_template("history.html", book=book,TagList=TagList,TopBooks=TopBooks)
+    return render_template("history.html", book=book, TagList=TagList, TopBooks=TopBooks, userimage=userimage)
 
 
-@app.route("/profile")
-# @app.route("/profile/<username>")
+@app.route("/profile", methods=['POST', 'GET'])
 @login_required
 def profile():
-    # def profile(username):
+    userimage = getuserimage()
+    username = current_user.username
+    useraboutme = current_user.about_me
+    userpassword = current_user.password_bash
+    useremail = current_user.email
 
-    # user = User.query.filter_by(username=username).first_or_404()
-    # posts =
-    # reviews =
+    userinfo = {'username': username, 'useraboutme': useraboutme,
+                'userpassword': userpassword, 'useremail': useremail, 'userimage': userimage}
+    if request.method == "POST":
+        if request.form["savechanges"] == 'Save Changes':
+            userimage = request.files["image"]
+            current_user.username = request.form["username"]
+            current_user.about_me = request.form["aboutme"]
+            password = request.form["password"]
+            current_user.set_password(password)
+            current_user.email = request.form["email"]
+            db.session.commit()
+            flash('Your changes have been saved.')
 
-    return render_template("profile.html")
+            if request.files["image"].filename != '':
+                uploadimage(userimage)
+
+            return redirect(url_for('profile'))
+
+    return render_template("profile.html", userinfo=userinfo, userimage=userimage)
+
+
+def uploadimage(image):
+    key = 'AKIAJOPGJTE5OZD4BEFQ'
+    secret_key = '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'
+    region_name = 'us-west-2'
+    s3 = boto3.resource('s3',
+                        aws_access_key_id=key,
+                        aws_secret_access_key=secret_key,
+                        region_name=region_name)
+    s3.Bucket('500043projectimages').put_object(
+        ACL='public-read', Key=str(current_user.id)+'.jpg', Body=image)
+    meta.db.userprofile.find_one_and_update({'userid': current_user.id}, {"$set": {
+                                            'image':
+                                            'https://500043projectimages.s3-us-west-2.amazonaws.com/'+str(current_user.id)+'.jpg'}}, upsert=True)
 
 
 def get_review_time():
@@ -486,8 +527,9 @@ def add_log(request_summary, request_type, request_content, response, user_name,
 @app.route("/TodayHistory")
 @login_required
 def log_page():
+    userimage = getuserimage()
     if str(current_user.username) != "admin":
-        return render_template("admin.html")
+        return render_template("admin.html", userimage=userimage)
     else:
         logIT = meta.db.systemLog.find({"Day": {'$eq': str(date.today().day)}, "Year": {
             '$eq': str(date.today().year)}, "Month": {'$eq': str(date.today().month)}})
@@ -495,14 +537,15 @@ def log_page():
         logInfoToday = []
         for i in logIT:
             logInfoToday.append(i)
-        return render_template("logtoday.html", logInfoToday=logInfoToday)
+        return render_template("logtoday.html", logInfoToday=logInfoToday, userimage=userimage)
 
 
 @app.route("/SevenHistory")
 @login_required
 def log_seven():
+    userimage = getuserimage()
     if str(current_user.username) != "admin":
-        return render_template("admin.html")
+        return render_template("admin.html", userimage=userimage)
     else:
         now = datetime.now()
         delta = timedelta(days=7)
@@ -513,13 +556,14 @@ def log_seven():
         logInfoSeven = []
         for i in logIT:
             logInfoSeven.append(i)
-        return render_template("logseven.html", logInfoSeven=logInfoSeven)
+        return render_template("logseven.html", logInfoSeven=logInfoSeven, userimage=userimage)
 
 
 @app.route("/statsPlot")
 @login_required
 def month_stats():
     # print("???")
+    userimage = getuserimage()
     logMonth = meta.db.systemLog.find({"Year": {'$eq': str(
         date.today().year)}, "Month": {'$eq': str(date.today().month)}})
     monthStats_review = {}
@@ -582,7 +626,7 @@ def month_stats():
     # print(top_x_search)
     return render_template("StatsPlot.html", top_x_review=top_x_review, top_y_review=top_y_review, top_x_search=top_x_search,
                            top_y_search=top_y_search, top_x_view=top_x_view, top_y_view=top_y_view,
-                           top_x_key=top_x_key, top_y_key=top_y_key)
+                           top_x_key=top_x_key, top_y_key=top_y_key, userimage=userimage)
 
 
 ################review###############
