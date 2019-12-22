@@ -5,6 +5,7 @@ from datetime import datetime
 from flask_migrate import Migrate
 from flask_login import LoginManager
 from flask_pymongo import PyMongo
+from flask_mysqldb import MySQL
 import mysql.connector as sqldb
 import logging
 import logging.handlers
@@ -32,8 +33,13 @@ app.config.from_object(Config)
 ec2host='35.160.25.169'
 ssh_address1='34.217.109.132'
 
-
-con= sqldb.connect(host=ec2host, user="root", passwd="", db="flaskproject")
+app.config['MYSQL_HOST']=ec2host
+app.config['MYSQL_USER']='root'
+app.config['MYSQL_PASSWORD']=''
+app.config['MYSQL_DB']='flaskproject'
+mysql=MySQL(app)
+#con = mysql.connection.cursor()
+#con= sqldb.connect(host=ec2host, user="root", passwd="", db="flaskproject")
 meta = PyMongo(app,uri="mongodb://books:123456789@"+ssh_address1+":27017/books")
 
 

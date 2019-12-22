@@ -2,7 +2,7 @@ from app import app
 from flask import render_template, flash, redirect, url_for, request
 from flask_login import current_user, login_user, logout_user, login_required
 from app.forms import LoginForm, ReviewForm, RegistrationForm
-from app import db, meta, con
+from app import db, meta, mysql
 from app.models import User, Review, ReviewerReviews, ReviewerInformation
 from werkzeug.urls import url_parse
 from datetime import datetime, date, time, timedelta
@@ -18,7 +18,7 @@ def getuserimage():
     if current_user.is_authenticated:
 
         userimginfo = meta.db.userprofile.find_one({'userid': current_user.id})
-        if userimginfo==None:
+        if userimginfo == None:
             userimage = '/static/imag/profile.png'
         elif 'image' not in userimginfo.keys():
             userimage = '/static/imag/profile.png'
@@ -35,7 +35,8 @@ def getuserimage():
 def index():
 
     ############
-    cur = con.cursor()
+    #    con=mysql.connection.cursor()
+    cur = mysql.connection.cursor()
     cur.execute(
         "select distinct asin from KindleReview where overall=5 limit 27")
     data = cur.fetchall()
@@ -66,10 +67,12 @@ def index():
     for i in newArrivalsTemp:
         newArrivals.append(i)
     ##########query reviews##########
-    cur = con.cursor()
+    cur = mysql.connection.cursor()
+#    cur = con.cursor()
     cur.execute("select reviewerName,reviewText from KindleReview limit 10;")
     myresult = cur.fetchall()
-    con.commit()
+    mysql.connection.commit()
+#    con.commit()
 
     ################search here#########
     search_input = None
@@ -233,8 +236,10 @@ def review():
                  "desc": desc, "author": author, "tags": tags}
     relateds = []
     relatedlist = []
-    add_log("viewbook", "", book['asin'],
-            "view book successfully", current_user.username)
+
+    if current_user.is_authenticated:
+        add_log("viewbook", "", book['asin'],
+                "view book successfully", current_user.username)
     if 'related' in book:
         if 'also_viewed' in book['related']:
             relatedlist = book['related']['also_viewed']
@@ -291,9 +296,9 @@ def review():
         summary = i[1]
         text = i[5]
         overall = i[2]
-        print(type(i[3]))
-        if type(i[3]) == str:
-            helpful = [int(j) for j in i[3].strip('[]').split(',')]
+        print(str(i[3]))
+        if i[3] != None:
+            helpful = [int(j) for j in str(i[3]).strip('[]').split(',')]
             print(helpful[0])
         else:
             helpful = [0, 0]
@@ -634,11 +639,13 @@ def month_stats():
 def catch_reviews(asin):
     myresult = []
     try:
-        cur = con.cursor()
+
+        #        cur = con.cursor()
+        cur = mysql.connection.cursor()
         cur.execute("select reviewerName,summary,overall,helpful,reviewTime,reviewText from KindleReview where asin = %(asin)s;", {
                     'asin': asin})
         myresult = cur.fetchall()
-        con.commit()
+        mysql.connection.commit()
 
         print("Records for asin " + asin + " fetched from reviews table")
         print(myresult)
@@ -651,10 +658,10 @@ def insert_review(serialNum, asin, helpful, overall, reviewText, reviewTime, rev
     query1 = "insert into KindleReview(serialNum,asin,helpful,overall,reviewText,reviewTime,reviewID,reviewerName,summary,unixReviewTime) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
 
     try:
-        cur = con.cursor()
+        cur = mysql.connection.cursor()
         cur.execute(query1, [serialNum, asin, helpful, overall, reviewText,
                              reviewTime, reviewID, reviewerName, summary, unixReviewTime])
-        con.commit()
+        mysql.connection.commit()
         print("Record inserted successfully into KindleReview table")
 
         print("MySQL connection is closed")
@@ -665,10 +672,10 @@ def insert_review(serialNum, asin, helpful, overall, reviewText, reviewTime, rev
 
 def get_last_id():
     try:
-        cur = con.cursor()
+        cur = mysql.connection.cursor()
         cur.execute('select max(serialNum) from KindleReview')
         last_id = cur.fetchone()
-        con.commit()
+        mysql.connection.commit()
         return last_id
     except Error as error:
         print(error)
