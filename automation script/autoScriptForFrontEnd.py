@@ -255,9 +255,10 @@ def execute_commands_in_instance_server(public_ip_address,key_name,iplist):
     text=' '.join(iplist)
     cmd5='echo '+text+'> ip.txt'
     cmd6='echo '+text+'> /home/ubuntu/50.043-project/flaskapp/ip.txt'
-    cmd7='sudo python3 /home/ubuntu/50.043-project/flaskapp/50043-project.py'
+    cmd7='wget https://kindlemetadata.s3-us-west-2.amazonaws.com/flask_setup.sh'
+    cmd8='screen -d -m bash flask_setup.sh'
 
-    cmds=[cmd1,cmd2,cmd3,cmd4,cmd5,cmd6,cmd7]
+    cmds=[cmd1,cmd2,cmd3,cmd4,cmd5,cmd6,cmd7,cmd8]
 
     try:
 
@@ -312,7 +313,7 @@ def main():
     iplist=[instance[0].public_ip_address,instance[1].public_ip_address]
 
     execute_commands_in_instance_server(instance[2].public_ip_address,key_name,iplist)
-    print('server setup done')
+    print('server setup done, can view in:',instance[2].public_ip_address)
 
 
 if __name__ == '__main__':
