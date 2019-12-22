@@ -1,4 +1,5 @@
 ---Automation Script for EC2 launching of Hadoop and Spark---
+
 Specify number of nodes to be created in line 132.
 Have your account credentials ready via the AWS CLI, run aws configure.
 AMI is now made public.
