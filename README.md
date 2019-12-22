@@ -52,13 +52,13 @@ End with an example of getting some data out of the system or using it for a lit
 @GYY
 
 ## Screenshots
-![app demo](app-screenshot1.png)
-![app demo](app-screenshot7.png)
-![app demo](app-screenshot2.png)
-![app demo](app-screenshot3.png)
-![app demo](app-screenshot4.png)
-![app demo](app-screenshot5.png)
-![app demo](app-screenshot6.png)
+![app demo](screenshot/app-screenshot1.png)
+![app demo](screenshot/app-screenshot7.png)
+![app demo](screenshot/app-screenshot2.png)
+![app demo](screenshot/app-screenshot3.png)
+![app demo](screenshot/app-screenshot4.png)
+![app demo](screenshot/app-screenshot5.png)
+![app demo](screenshot/app-screenshot6.png)
 
 
 ## Built With
