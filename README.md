@@ -53,23 +53,39 @@ End with an example of getting some data out of the system or using it for a lit
 
 ## Run it locally
 
-@GYY
+Clone or download a copy here and follow the steps:
+```
+cd /50.043-project/flaskappDemo
+python 50043-project.py
+```
+In your terminal/cml then go to 0.0.0.0
+
+## Analytics System
+
+All the related scripts as well as README are all in Analytics folder : yqyqyq123/50.043-project/Analytics/
 
 ## Screenshots
 ### Home page
 ![app demo](screenshot/app-screenshot1.png)
+
 ### Plots for stastics
 ![app demo](screenshot/app-screenshot7.png)
+
 ### User/Admin edit profile
 ![app demo](screenshot/app-screenshot8.png)
+
 ### Add a new book (for admin only)
 ![app demo](screenshot/app-screenshot2.png)
+
 ### Contact (Admin side)
 ![app demo](screenshot/app-screenshot3.png)
+
 ### Contact (User side)
 ![app demo](screenshot/app-screenshot4.png)
+
 ### History page:
 ![app demo](screenshot/app-screenshot5.png)
+
 ### System history (for admin only)
 ![app demo](screenshot/app-screenshot6.png)
 
@@ -78,15 +94,15 @@ End with an example of getting some data out of the system or using it for a lit
 
 * [Bootstrap](https://getbootstrap.com/) - The CSS web framework used
 * [Flask](https://maven.apache.org/) - Micro web framework written in Python
-* @GYY
+* [AWS](https://aws.amazon.com) - Amazon Web Service
 
 
 ## Authors
-* Gou Yuanyuan
-* Li Yueqin
-* Li Zihao
-* Tang Xiaoyue
-* JenYang 
-* KS
+* Gou Yuanyuan 1002972
+* Li Yueqin 
+* Li Zihao 1002966
+* Tang Xiaoyue 1002968
+* Ng Jen Yang 1003007
+* Khai Sheen
 
 
