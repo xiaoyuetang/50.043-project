@@ -56,6 +56,8 @@ Home page
 ![app demo](screenshot/app-screenshot1.png)
 Plots for stastics
 ![app demo](screenshot/app-screenshot7.png)
+User/Admin edit profile
+![app demo](screenshot/app-screenshot8.png)
 Add a new book (for admin only)
 ![app demo](screenshot/app-screenshot2.png)
 Contact (Admin side)
