@@ -62,7 +62,7 @@ In your terminal/cml then go to 0.0.0.0
 
 ## Analytics System
 
-All the related scripts as well as README are all in Analytics folder : [https://github.com/yqyqyq123/50.043-project/](Analytics)
+All the related scripts as well as README are all in Analytics folder : [https://github.com/yqyqyq123/50.043-project/Analytics]
 
 ## Screenshots
 ### Home page
