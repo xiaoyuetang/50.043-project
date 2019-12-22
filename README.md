@@ -114,6 +114,9 @@ All the related scripts as well as README are all in Analytics folder : https://
 ### System history (for admin only)
 ![app demo](screenshot/app-screenshot6.png)
 
+### Logout before login/signup
+![app demo](screenshot/app-screenshot9.png)
+
 
 ## Built With
 
