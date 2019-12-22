@@ -41,7 +41,7 @@ app.config['MYSQL_DB'] = 'flaskproject'
 mysql = MySQL(app)
 #con = mysql.connection.cursor()
 #con= sqldb.connect(host=ec2host, user="root", passwd="", db="flaskproject")
-#meta = PyMongo(app,uri="mongodb://books:123456789@"+ssh_address1+":27017/books")
+# meta = PyMongo(app,uri="mongodb://books:123456789@"+ssh_address1+":27017/books")
 
 
 db = SQLAlchemy(app)
