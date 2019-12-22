@@ -25,3 +25,6 @@ TF-IDF:
 	python3 tfidf2.py
 	// result will be written to a file called 'tfidf'
 
+Number of nodes: 
+  Without automation script:
+    The defualt number of nodes is 4. If you want to run on 2 nodes, then you can manually turn off 2 machines and the run on     2 out of 4 nodes.
