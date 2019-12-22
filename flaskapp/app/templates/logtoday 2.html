@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {% extends "template.html" %} {% block head %}
+    <meta name="description" content="Book Review Page" />
+    <meta name="author" content="Group9" />
+    <title>Book Review of (Title)</title>
+    {% endblock %}
+</head>
+
+<body>
+    {% block content %}
+    <div class="container-fluid">
+        <div class="row row-adjust">
+            <div class="col-sm-12">
+                <h3 style="margin:40px">History for Today</h3>
+                <h3 style="margin:40px"><a href="/SevenHistory">History for Recent 7 days</a></h3>
+                <table class="table table-striped">
+                    <!-- <caption>History for today</caption> -->
+                    <thead>
+                        <tr align="center">
+                            <th>Time</th>
+                            <th>RequestSummary</th>
+                            <th>RequestType</th>
+                            <th>RequestContent</th>
+                            <th>Response</th>
+                            <th>UserName</th>
+                            <th>Year</th>
+                            <th>Month</th>
+                            <th>Day</th>
+                        </tr>
+                    </thead>
+                    {% for i in logInfoToday %}
+                    <tbody>
+                        <tr align="center">
+                            <td>{{i.TimeStamp}}</td>
+                            <td>{{i.RequestSummary}}</td>
+                            <td>{{i.RequestType}}</td>
+                            <td>{{i.RequestContent}}</td>
+                            <td>{{i.Response}}</td>
+                            <td>{{i.UserName}}</td>
+                            <td>{{i.Year}}</td>
+                            <td>{{i.Month}}</td>
+                            <td>{{i.Day}}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    {% endblock%}
+</body>
+
+</html>

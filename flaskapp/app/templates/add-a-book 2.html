@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {% extends "template.html" %}
+    <title>Group9 Book Review System</title>
+    <meta name="description" content="Add a Book Page" />
+    <meta name="author" content="Group9" />
+</head>
+
+<body>
+    {% block content %}
+    <div class="container-fluid">
+        <div class="row add-book-form" style="margin:30px 200px" name="BookForm">
+            <div class="col-md-12">
+                <!-- Default form contact -->
+                <form class="text-center border border-light p-5" method="POST">
+
+                    <h4>Add a Book</h4>
+                    <!-- Name -->
+                    <input name="ClientName" type="text" class="form-control mb-4" placeholder="Your Name">
+
+                    <!-- Email -->
+                    <input name="ClientEmail" type="email" class="form-control mb-4" placeholder="Your E-mail">
+
+                    <label>Book Information</label>
+                    <!-- Book Cat -->
+                    <select name="BookCat" class="browser-default custom-select mb-4">
+                        <option value="" disabled selected>Choose Categories</option>
+                        <option value="Art">Art</option>
+                        <option value="Literature">Literature</option>
+                        <option value="Fiction">Fiction</option>
+                        <option value="Education">Education</option>
+                    </select>
+
+                    <!-- Book Name -->
+                    <input name="BookName" type="text" class="form-control mb-4" placeholder="Book Name">
+                    <!-- Author -->
+                    <input name="BookAuthor" type="text" id="defaultContactFormAuthor" class="form-control mb-4" placeholder="Author">
+                    <!-- asin -->
+                    <input name="BookAsin" type="text" id="defaultContactFormAuthor" class="form-control mb-4" placeholder="Asin">
+                    <!-- imUrl -->
+                    <input name="BookImUrl" type="text" id="defaultContactFormAuthor" class="form-control mb-4" placeholder="imUrl">
+                    <!-- More? -->
+                    <div class="form-group">
+                        <textarea name="MoreAbtBook" class="form-control rounded-0" id="exampleFormControlTextarea2" rows="3" placeholder="More?"></textarea>
+                    </div>
+
+                    <!-- Copy -->
+                    <!-- <div class="custom-control custom-checkbox mb-4">
+                        <input type="checkbox" class="custom-control-input">
+                        <label class="custom-control-label" for="defaultContactFormCopy">Send me a copy of this message</label>
+                    </div> -->
+
+                    <!-- Send button -->
+                    <input class="btn btn-info btn-block mt-4" type="submit" value="Send" />
+
+                </form>
+                <!-- Default form contact -->
+            </div>
+        </div>
+    </div>
+    {% endblock %}
+</body>
+
+</html>
