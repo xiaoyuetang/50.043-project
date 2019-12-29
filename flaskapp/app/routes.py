@@ -493,8 +493,8 @@ def profile():
 
 
 def uploadimage(image):
-    key = 'AKIAJOPGJTE5OZD4BEFQ'
-    secret_key = '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'
+    key = 'AKIAIXA6VZKCC4UPYH3A'
+    secret_key = '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'
     region_name = 'us-west-2'
     s3 = boto3.resource('s3',
                         aws_access_key_id=key,
